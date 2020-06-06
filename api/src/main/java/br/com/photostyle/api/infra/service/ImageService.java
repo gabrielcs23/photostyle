@@ -19,14 +19,17 @@ public class ImageService {
     @Autowired
     private AmazonS3 amazonClient;
 
+    @Autowired
+    private AmazonConstants constants;
+
     private String buildImageUrl(String fileName) {
-        return "http://s3." + AmazonConstants.REGION + ".amazonaws.com/" + AmazonConstants.BUCKET + "/" + fileName;
+        return "http://s3." + constants.getRegion() + ".amazonaws.com/" + constants.getBucket() + "/" + fileName;
     }
 
     public String saveImage(MultipartFile image) {
         try {
             amazonClient.putObject(
-                    new PutObjectRequest(AmazonConstants.BUCKET,
+                    new PutObjectRequest(constants.getBucket(),
                             image.getOriginalFilename(), image.getInputStream(),
                             null)
                     .withCannedAcl(CannedAccessControlList.PublicRead));
@@ -41,7 +44,7 @@ public class ImageService {
     public void deleteImage(String imageUrl) {
         String fileName = imageUrl.substring(imageUrl.lastIndexOf("/") + 1);
         try {
-            amazonClient.deleteObject(new DeleteObjectRequest(AmazonConstants.BUCKET, fileName));
+            amazonClient.deleteObject(new DeleteObjectRequest(constants.getBucket(), fileName));
         } catch (AmazonClientException e) {
             e.printStackTrace();
             throw new RuntimeException(e);

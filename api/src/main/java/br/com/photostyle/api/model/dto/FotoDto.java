@@ -1,0 +1,36 @@
+package br.com.photostyle.api.model.dto;
+
+import org.springframework.web.multipart.MultipartFile;
+
+public class FotoDto {
+
+    private Long id;
+
+    private String url;
+
+    private MultipartFile foto;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public MultipartFile getFoto() {
+        return foto;
+    }
+
+    public void setFoto(MultipartFile foto) {
+        this.foto = foto;
+    }
+}

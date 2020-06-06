@@ -1,0 +1,90 @@
+package br.com.photostyle.api.service;
+
+import br.com.photostyle.api.model.adapter.FotoAdapter;
+import br.com.photostyle.api.model.adapter.TurmaAdapter;
+import br.com.photostyle.api.model.dto.AlunoDto;
+import br.com.photostyle.api.model.dto.FotoDto;
+import br.com.photostyle.api.model.dto.TurmaDto;
+import br.com.photostyle.api.model.entity.EscolaEntity;
+import br.com.photostyle.api.model.entity.FotoEntity;
+import br.com.photostyle.api.model.entity.TurmaEntity;
+import br.com.photostyle.api.repository.TurmaRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+
+import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+public class TurmaService extends BaseService<TurmaEntity, TurmaDto> {
+
+    @Autowired
+    private TurmaRepository repository;
+
+    @Autowired
+    private AlunoService alunoService;
+
+    @Autowired
+    private FotoService fotoService;
+
+    public TurmaService(TurmaRepository repository, TurmaAdapter adapter) {
+        super(repository, adapter);
+    }
+
+    @Transactional
+    public List<TurmaDto> cadastrarTurmasEmEscola(EscolaEntity escola, List<TurmaDto> turmas) {
+        if (!CollectionUtils.isEmpty(turmas)) {
+            return turmas.stream()
+                    .map(turmaDto -> {
+                        TurmaEntity turmaEntity;
+                        if (turmaDto.getId() != null) {
+                            turmaEntity = getEntityPorId(turmaDto.getId());
+                        } else {
+                            turmaEntity = adapter.dtoToEntity(turmaDto);
+                            turmaEntity.setEscola(escola);
+                            turmaEntity = repository.save(turmaEntity);
+                        }
+                        return adapter.entityToDto(turmaEntity);
+                    }).collect(Collectors.toList());
+        }
+        return new ArrayList<>();
+    }
+
+    public List<TurmaDto> entityListToDtoList(List<TurmaEntity> turmas) {
+        return adapter.entityListToDtoList(turmas);
+    }
+
+    public List<AlunoDto> getAlunos(Long id) {
+        return alunoService.getAlunosByTurmaId(id);
+    }
+
+    public List<AlunoDto> cadastrarAlunos(Long id, List<AlunoDto> alunos) {
+        TurmaEntity turma = getEntityPorId(id);
+        return alunoService.cadastrasAlunosEmTurma(turma, alunos);
+    }
+
+    @Transactional
+    public void removerFoto(TurmaEntity turma, Long idFoto) {
+        List<FotoEntity> fotos = turma.getFotos();
+        if (!CollectionUtils.isEmpty(fotos)) {
+            List<FotoEntity> fotosFiltradas = fotos.stream()
+                    .filter(foto -> !foto.getId().equals(idFoto))
+                    .collect(Collectors.toList());
+            turma.setFotos(fotosFiltradas);
+            repository.save(turma);
+            fotoService.remover(idFoto);
+        }
+    }
+
+    @Transactional
+    public FotoDto adicionarFoto(TurmaEntity turma, FotoDto fotoNova) {
+        FotoEntity fotoEntity = fotoService.upload(fotoNova);
+        turma.getFotos().add(fotoEntity);
+        repository.save(turma);
+
+        return fotoService.entityToDto(fotoEntity);
+    }
+}

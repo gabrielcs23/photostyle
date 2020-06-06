@@ -1,0 +1,72 @@
+package br.com.photostyle.api.model.adapter;
+
+import br.com.photostyle.api.model.dto.AlunoDto;
+import br.com.photostyle.api.model.dto.EscolaDto;
+import br.com.photostyle.api.model.dto.FotoDto;
+import br.com.photostyle.api.model.dto.TurmaDto;
+import br.com.photostyle.api.model.entity.EscolaEntity;
+import br.com.photostyle.api.model.entity.TurmaEntity;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Component
+public class TurmaAdapter extends BaseAdapter<TurmaEntity, TurmaDto> {
+
+    @Autowired
+    FotoAdapter fotoAdapter;
+
+    @Override
+    public TurmaEntity dtoToEntity(TurmaDto dto) {
+        TurmaEntity entity = new TurmaEntity();
+        entity.setId(dto.getId());
+        entity.setNome(dto.getNome());
+        return entity;
+    }
+
+    @Override
+    public TurmaDto entityToDto(TurmaEntity entity) {
+        TurmaDto dto = createBasicDto(entity);
+
+        if (!CollectionUtils.isEmpty(entity.getAlunos())) {
+            List<AlunoDto> alunos = entity.getAlunos().stream().map(alunoEntity -> {
+                AlunoDto alunoDto = new AlunoDto();
+                alunoDto.setId(alunoEntity.getId());
+                alunoDto.setMatricula(alunoEntity.getMatricula());
+                alunoDto.setNome(alunoEntity.getNome());
+                alunoDto.setEscola(dto.getEscola());
+                alunoDto.setTurma(dto);
+                return alunoDto;
+            }).collect(Collectors.toList());
+            dto.setAlunos(alunos);
+        }
+
+        if (!CollectionUtils.isEmpty(entity.getFotos())) {
+            List<FotoDto> fotos = fotoAdapter.entityListToDtoList(entity.getFotos());
+            dto.setFotos(fotos);
+        }
+
+        return dto;
+    }
+
+    @Override
+    public List<TurmaDto> entityListToDtoList(List<TurmaEntity> turmaEntityList) {
+        return turmaEntityList.stream().map(this::createBasicDto).collect(Collectors.toList());
+    }
+
+    private TurmaDto createBasicDto(TurmaEntity entity) {
+        TurmaDto dto = new TurmaDto();
+        dto.setNome(entity.getNome());
+
+        EscolaEntity escolaEntity = entity.getEscola();
+        EscolaDto escolaDto = new EscolaDto();
+        escolaDto.setNome(escolaEntity.getNome());
+        escolaDto.setId(escolaEntity.getId());
+        dto.setEscola(escolaDto);
+        return dto;
+    }
+
+}

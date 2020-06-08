@@ -1,7 +1,7 @@
 import React from 'react';
 import BasePage from '../BasePage/BasePage';
 import Carousel from '../Utils/Carousel/Carousel';
-import AreaAcesso from '../../AreaAcesso/AreaAcesso';
+import AreaAcesso from './AreaAcesso/AreaAcesso';
 
 class Home extends BasePage {
 

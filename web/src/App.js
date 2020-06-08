@@ -3,10 +3,10 @@ import 'materialize-css/dist/css/materialize.min.css'
 import React from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
-import NotFound from './Components/Pages/NotFound/NotFound'
-import Home from './Components/Pages/Home/Home'
-import Sobre from './Components/Pages/Sobre/Sobre';
-import Contato from './Components/Pages/Contato/Contato';
+import NotFound from './Pages/NotFound/NotFound'
+import Home from './Pages/Home/Home'
+import Sobre from './Pages/Sobre/Sobre';
+import Contato from './Pages/Contato/Contato';
 
 function App() {
     return (

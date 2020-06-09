@@ -7,6 +7,7 @@ import NotFound from './Pages/NotFound/NotFound'
 import Home from './Pages/Home/Home'
 import Sobre from './Pages/Sobre/Sobre';
 import Contato from './Pages/Contato/Contato';
+import AreaAdmin from './Pages/AreaAdmin/AreaAdmin';
 
 function App() {
     return (
@@ -15,6 +16,7 @@ function App() {
                 <Route path="/" exact={true} component={Home} />
                 <Route path="/sobre" exact={true} component={Sobre} />
                 <Route path="/contato" exact={true} component={Contato} />
+                <Route path="/admin" component={AreaAdmin} />
                 <Route component={NotFound} />
             </Switch>
         </BrowserRouter>

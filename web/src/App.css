@@ -8,8 +8,16 @@
 
 .sidenav {
   margin-top: 4.3rem !important;
-  width: 250px;
+  width: 250px !important;
   z-index: 1 !important;
+}
+
+.text-center {
+  text-align: center !important;
+}
+
+.card {
+  cursor: pointer;
 }
 
 .mt-1 {

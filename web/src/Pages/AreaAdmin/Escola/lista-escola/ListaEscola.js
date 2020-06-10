@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import EscolaService from '../EscolaService';
+import EscolaCard from './EscolaCard';
 
 class ListaEscola extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            listaEscolas: undefined
+            listaEscolas: []
         }
     }
 
@@ -15,15 +16,32 @@ class ListaEscola extends Component {
             .then(lista => this.setState({listaEscolas : lista}));
     }
 
+    handleClick = () => {
+        const { pathname } = this.props.history.location;
+        this.props.history.push(pathname + '/novo');
+    }
+
     render() {
+        const lista = this.state.listaEscolas.slice();
+        const listaCards = lista.map((escola, idx) => {
+            return <EscolaCard key={idx} escola={escola} />
+        });
+
         return (
-            <div className="row">
-                <div className="col s1">
-                    <button className="btn-floating btn-large waves-effect waves-light blue"><i className="material-icons">add</i></button>
+            <div>
+                <div className="row">
+                    <div className="col s1">
+                        <button 
+                            className="btn-floating btn-large waves-effect waves-light blue"
+                            onClick={this.handleClick}
+                            >
+                            <i className="material-icons">add</i>
+                        </button>
+                    </div>
                 </div>
-                {/* <div className="col s1 offset-s10">
-                    <button disabled className="btn-floating btn-large waves-effect waves-light red"><i className="material-icons">delete_forever</i></button>
-                </div> */}
+                <div classNameName="row">
+                    {listaCards}
+                </div>
             </div>
         )
     }

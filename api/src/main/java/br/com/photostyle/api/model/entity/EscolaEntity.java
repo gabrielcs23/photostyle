@@ -15,12 +15,10 @@ import java.util.List;
 public class EscolaEntity extends BaseEntity {
 
     @Column(name = "NOME", nullable = false, unique = true)
-    @NotNull
     @NotEmpty
     private String nome;
 
     @OneToMany(mappedBy = "escola", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    @NotNull
     private List<TurmaEntity> turmas;
 
     public String getNome() {

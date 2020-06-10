@@ -6,6 +6,7 @@ import br.com.photostyle.api.model.entity.EscolaEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,6 +39,8 @@ public class EscolaAdapter extends BaseAdapter<EscolaEntity, EscolaDto>{
                     })
                     .collect(Collectors.toList());
             dto.setTurmas(turmasDto);
+        } else {
+            dto.setTurmas(new ArrayList<>());
         }
         return dto;
     }

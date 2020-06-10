@@ -2,7 +2,7 @@ class Aluno {
     id;
     nome;
     matricula;
-    codAcesso
+    codAcesso;
     escola;
     turma;
     irmaoRel;

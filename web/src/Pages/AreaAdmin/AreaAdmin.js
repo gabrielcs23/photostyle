@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import { Route, NavLink } from 'react-router-dom';
 import BasePage from "../BasePage/BasePage";
 import ListaEscola from "./Escola/lista-escola/ListaEscola"
+import EscolaForm from './Escola/EscolaForm';
 
 class AreaAdmin extends BasePage {
 
@@ -33,6 +34,7 @@ class AreaAdmin extends BasePage {
                     </div>
                     <div className="col s10">
                         <Route path="/admin/escola" exact={true} component={ListaEscola} />
+                        <Route path="/admin/escola/novo" exact={true} component={EscolaForm} />
                     </div>
                 </div>
             </Fragment>

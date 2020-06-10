@@ -1,3 +1,4 @@
+import './AreaAdmin.css'
 import React, { Fragment } from 'react';
 import { Route, NavLink } from 'react-router-dom';
 import BasePage from "../BasePage/BasePage";
@@ -18,23 +19,31 @@ class AreaAdmin extends BasePage {
     renderPage() {
         return (
             <Fragment>
-                <ul className="sidenav sidenav-fixed">
-                    <li>
-                        <NavLink to="/admin/escola"><i className="material-icons">account_balance</i>Escola</NavLink>
-                    </li>
-                    <li>
-                        <a href="#item2"><i className="material-icons">menu_book</i>Turma</a>
-                        </li>
-                    <li>
-                        <a href="#item3"><i className="material-icons">school</i>Aluno</a>
-                    </li>
-                </ul>
-                <div className="row mt-1">
-                    <div className="col s2">
-                    </div>
-                    <div className="col s10">
-                        <Route path="/admin/escola" exact={true} component={ListaEscola} />
-                        <Route path="/admin/escola/novo" exact={true} component={EscolaForm} />
+                <div className="container">
+                    <nav className="breadcrumb-nav">
+                        <div className="nav-wrapper white mt-1">
+                            <div className="center-align">
+                                <NavLink to="/admin/escola" className="breadcrumb">
+                                    <i className="material-icons">account_balance</i>
+                                    <span className="pl-2">Escola</span>
+                                </NavLink>
+                                
+                                <a href="#!" className="breadcrumb">
+                                    <i className="material-icons">menu_book</i>
+                                    <span className="pl-2">Turma</span>
+                                </a>
+                                <a href="#!" className="breadcrumb">
+                                    <i className="material-icons">school</i>
+                                    <span className="pl-2">Aluno</span>
+                                </a>
+                            </div>
+                        </div>
+                    </nav>
+                    <div className="row mt-3">
+                        <div className="col s12">
+                            <Route path="/admin/escola" exact={true} component={ListaEscola} />
+                            <Route path="/admin/escola/novo" exact={true} component={EscolaForm} />
+                        </div>
                     </div>
                 </div>
             </Fragment>

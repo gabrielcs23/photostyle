@@ -30,7 +30,7 @@ class ListaEscola extends Component {
         return (
             <div>
                 <div className="row">
-                    <div className="col s1">
+                    <div className="col float-right">
                         <button 
                             className="btn-floating btn-large waves-effect waves-light blue"
                             onClick={this.handleClick}
@@ -39,7 +39,7 @@ class ListaEscola extends Component {
                         </button>
                     </div>
                 </div>
-                <div classNameName="row">
+                <div className="row">
                     {listaCards}
                 </div>
             </div>

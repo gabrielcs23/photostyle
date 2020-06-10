@@ -34,7 +34,23 @@ class EscolaForm extends Component {
         return (
             <form>
                 <div className="row">
-                    <div className="input-field col s6">
+                    <div className="col s12">
+                        <div className="float-right">
+                            <button 
+                                className="btn waves-effect waves-light blue btn-small"
+                                onClick={this.submitForm}
+                                type="button"
+                                >
+                                <span className="d-inline-flex">
+                                    <i className="material-icons">save</i>
+                                    <span className="pl-2">Salvar</span>
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="input-field col s12">
                         <label htmlFor="nome">Nome da Escola</label>
                         <input 
                             className="validate"
@@ -44,17 +60,6 @@ class EscolaForm extends Component {
                             value={nome}
                             onChange={this.inputChangeHandler}
                         />
-                    </div>
-                    <div className="col s6">
-                        <button 
-                            className="btn waves-effect waves-light blue btn-small"
-                            onClick={this.submitForm}
-                            type="button"
-                            >
-                            <span>
-                                <i className="material-icons">save</i>
-                            </span>
-                        </button>
                     </div>
                 </div>
             </form>

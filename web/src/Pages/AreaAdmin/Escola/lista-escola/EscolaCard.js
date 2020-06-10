@@ -7,14 +7,14 @@ const EscolaCard = (props) => {
     const { escola } = props;
 
     return (
-        <div className="col s6 m3">
+        <div className="col s6 m4">
             <div className={`card blue-grey lighten-1 ${hovered ? 'z-depth-5' : 'z-depth-2'}`}
                 onMouseEnter={toggleHover}
                 onMouseLeave={toggleHover}
             >
-                <div className="card-content white-text">
+                <div className="card-content center-align white-text">
                     <div className="card-title">
-                        <div style={{textAlign: "center"}}>{escola.nome}</div>
+                        <span>{escola.nome}</span>
                     </div>
                     <p>Turmas: {escola.turmas.length}</p>
                 </div>

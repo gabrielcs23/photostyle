@@ -37,17 +37,32 @@ class AreaAdmin extends BasePage {
                             <div className="center-align">
                                 <NavLink to={Rotas.ESCOLA_LISTA} onClick={this.resetState} className="breadcrumb">
                                     <i className="material-icons">account_balance</i>
-                                    <span className="pl-2">Escola</span>
+                                    <span className="pl-2">
+                                        {this.state.escola ? this.state.escola.nome : 'Escola'}
+                                    </span>
                                 </NavLink>
                                 
-                                <a href="#!" className="breadcrumb">
-                                    <i className="material-icons">menu_book</i>
-                                    <span className="pl-2">Turma</span>
-                                </a>
-                                <a href="#!" className="breadcrumb">
-                                    <i className="material-icons">school</i>
-                                    <span className="pl-2">Aluno</span>
-                                </a>
+                                {this.state.escola ? 
+                                    (
+                                        <a href="#!" className="breadcrumb">
+                                            <i className="material-icons">menu_book</i>
+                                            <span className="pl-2">
+                                                {this.state.turma ? this.state.escola.turma : 'Turma'}
+                                            </span>
+                                        </a>
+                                    ) : ''
+                                }
+
+                                {this.state.escola && this.state.turma ?
+                                    (
+                                        <a href="#!" className="breadcrumb">
+                                            <i className="material-icons">school</i>
+                                            <span className="pl-2">
+                                                {this.state.aluno ? this.state.escola.aluno : 'Aluno'}
+                                            </span>
+                                        </a>
+                                    ) : ''
+                                }
                             </div>
                         </div>
                     </nav>

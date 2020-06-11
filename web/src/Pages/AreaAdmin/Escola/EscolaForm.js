@@ -1,31 +1,65 @@
 import React, { Component } from 'react';
 import EscolaService from './EscolaService';
-import Escola from '../../../Model/Escola'
+import Escola from '../../../Model/Escola';
+import FormValidator from '../form-utils/FormValidator';
+import PopUp from '../../Utils/pop-up/PopUp'
 
 class EscolaForm extends Component {
     
     constructor(props) {
         super(props);
 
-        this.state = {
-            nome: ''
+        this.validador = new FormValidator([
+            {
+                campo: 'nome',
+                metodo: 'isEmpty',
+                validoQuando: false,
+                mensagem: 'Entre com um nome'
+            },
+        ]);
+
+        this.stateInicial = {
+            nome: '',
+            validacao: this.validador.valido(),
+            canSubmit: false
         }
+
+        this.state = this.stateInicial;
+
     }
 
     inputChangeHandler = (event) => {
         const { name, value } = event.target;
 
         this.setState({
-            [name]: value
+            [name]: value,
+            canSubmit: this.state.canSubmit ? this.state.canSubmit : !this.state.canSubmit
         });
     }
 
     submitForm = () => {
-        const escola = new Escola(this.state.nome);
-        console.log(escola)
-        EscolaService.postEscola(escola)
-            .then(res => res.data)
-            .then(escola => console.log(escola))
+        this.setState({canSubmit: false});
+        const validacao = this.validador.valida(this.state);
+
+        if (validacao.isValid) {
+            const escola = new Escola(this.state.nome);
+            EscolaService.postEscola(escola)
+                .then(res => res.data)
+                .then(() => {
+                    this.setState(this.stateInicial);
+                    PopUp.sucesso('Escola cadastrada com sucesso');
+                })
+                .catch(error => {
+                    this.setState(this.stateInicial);
+                    PopUp.erro(error);
+                });
+        } else {
+            const { nome } = validacao;
+            const campos = [nome];
+
+            const camposInvalidos = campos.filter(elem => elem.isInvalid);
+            camposInvalidos.forEach(campo => PopUp.erro(campo.message));
+        }
     }
 
     render() {
@@ -38,6 +72,7 @@ class EscolaForm extends Component {
                         <div className="float-right">
                             <button 
                                 className="btn waves-effect waves-light blue btn-small"
+                                disabled={!this.state.canSubmit}
                                 onClick={this.submitForm}
                                 type="button"
                                 >

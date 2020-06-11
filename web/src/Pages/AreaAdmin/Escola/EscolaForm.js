@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Rotas from '../AreaAdminRotas';
 import EscolaService from './EscolaService';
 import Escola from '../../../Model/Escola';
 import FormValidator from '../form-utils/FormValidator';
@@ -45,8 +46,10 @@ class EscolaForm extends Component {
             const escola = new Escola(this.state.nome);
             EscolaService.postEscola(escola)
                 .then(res => res.data)
-                .then(() => {
-                    this.setState(this.stateInicial);
+                .then(escola => {
+                    this.props.seleciona(escola);
+                    // TODO mudar para turma form
+                    this.props.history.push(Rotas.ESCOLA_LISTA);
                     PopUp.sucesso('Escola cadastrada com sucesso');
                 })
                 .catch(error => {
@@ -64,7 +67,6 @@ class EscolaForm extends Component {
 
     render() {
         const { nome } = this.state;
-
         return (
             <form>
                 <div className="row">

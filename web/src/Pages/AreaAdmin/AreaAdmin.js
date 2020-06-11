@@ -1,6 +1,7 @@
 import './AreaAdmin.css'
 import React, { Fragment } from 'react';
 import { Route, NavLink } from 'react-router-dom';
+import Rotas from './AreaAdminRotas';
 import BasePage from "../BasePage/BasePage";
 import ListaEscola from "./Escola/lista-escola/ListaEscola"
 import EscolaForm from './Escola/EscolaForm';
@@ -9,11 +10,22 @@ class AreaAdmin extends BasePage {
 
     constructor(props) {
         super(props);
-        this.state = {
+
+        this.stateInicial = {
             escola: undefined,
             turma: undefined,
             aluno: undefined
-        }
+        };
+
+        this.state = this.stateInicial;
+    }
+
+    selecionarEscola = escola => {
+        this.setState({escola: escola});
+    }
+
+    resetState = () => {
+        this.setState(this.stateInicial);
     }
 
     renderPage() {
@@ -23,7 +35,7 @@ class AreaAdmin extends BasePage {
                     <nav className="breadcrumb-nav">
                         <div className="nav-wrapper white mt-1">
                             <div className="center-align">
-                                <NavLink to="/admin/escola" className="breadcrumb">
+                                <NavLink to={Rotas.ESCOLA_LISTA} onClick={this.resetState} className="breadcrumb">
                                     <i className="material-icons">account_balance</i>
                                     <span className="pl-2">Escola</span>
                                 </NavLink>
@@ -41,8 +53,12 @@ class AreaAdmin extends BasePage {
                     </nav>
                     <div className="row mt-3">
                         <div className="col s12">
-                            <Route path="/admin/escola" exact={true} component={ListaEscola} />
-                            <Route path="/admin/escola/novo" exact={true} component={EscolaForm} />
+                            <Route path={Rotas.ESCOLA_LISTA} exact={true} render={routeProps => (
+                                <ListaEscola {...routeProps} seleciona={this.selecionarEscola} />
+                            )} />
+                            <Route path={Rotas.ESCOLA_NOVO} exact={true} render={routeProps => (
+                                <EscolaForm {...routeProps} seleciona={this.selecionarEscola} />
+                            )} />
                         </div>
                     </div>
                 </div>

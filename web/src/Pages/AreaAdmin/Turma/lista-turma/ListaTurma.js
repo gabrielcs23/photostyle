@@ -2,35 +2,41 @@ import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
 import PopUp from '../../../Utils/pop-up/PopUp';
 import Rotas from '../../AreaAdminRotas';
-import EscolaService from '../EscolaService';
-import EscolaCard from './EscolaCard';
+import TurmaService from '../TurmaService';
+import TurmaCard from './TurmaCard';
 
-class ListaEscola extends Component {
+class ListaTurma extends Component {
 
     constructor(props) {
         super(props);
+        
+        this.escola = props.escola;
         this.state = {
-            listaEscolas: []
+            listaTurmas: []
         }
     }
 
     componentDidMount() {
-        EscolaService.getList()
-            .then(lista => this.setState({listaEscolas : lista}))
-            .catch(error => PopUp.erro(error));
+        if(this.props.escola != null) {
+            TurmaService.getListPorEscola(this.escola.id)
+                .then(lista => this.setState({listaTurmas : lista}))
+                .catch(error => PopUp.erro(error));
+        } else {
+            this.props.history.push(Rotas.ESCOLA_LISTA);
+        }
     }
 
     render() {
-        const lista = this.state.listaEscolas.slice();
-        const listaCards = lista.map((escola, idx) => {
-            return <EscolaCard key={idx} escola={escola} seleciona={() => this.props.seleciona(escola)} />
+        const lista = this.state.listaTurmas.slice();
+        const listaCards = lista.map((turma, idx) => {
+            return <TurmaCard key={idx} turma={turma} seleciona={() => this.props.seleciona(turma)} />
         });
 
         return (
             <div>
                 <div className="row">
                     <div className="col float-right">
-                        <NavLink to={Rotas.ESCOLA_NOVO}>
+                        <NavLink to={Rotas.TURMA_NOVO}>
                             <button 
                                 className="btn-floating btn-large waves-effect waves-light blue"
                                 >
@@ -47,4 +53,4 @@ class ListaEscola extends Component {
     }
 
 }
-export default ListaEscola;
+export default ListaTurma;

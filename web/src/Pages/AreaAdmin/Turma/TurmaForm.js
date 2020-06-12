@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import Rotas from '../AreaAdminRotas';
-import EscolaService from './EscolaService';
-import Escola from '../../../Model/Escola';
+import TurmaService from './TurmaService';
+import Turma from '../../../Model/Turma';
 import FormValidator from '../form-utils/FormValidator';
 import PopUp from '../../Utils/pop-up/PopUp'
 
-class EscolaForm extends Component {
-    
+class TurmaForm extends Component {
+
     constructor(props) {
         super(props);
 
@@ -21,13 +21,19 @@ class EscolaForm extends Component {
 
         this.stateInicial = {
             nome: '',
-            apelido: '',
+            escola: this.props.escola,
+            fotos: [],
             validacao: this.validador.valido(),
             canSubmit: false
         }
 
         this.state = this.stateInicial;
+    }
 
+    componentDidMount() {
+        if(this.props.escola == null) {
+            this.props.history.push(Rotas.ESCOLA_LISTA);  
+        }
     }
 
     inputChangeHandler = (event) => {
@@ -44,13 +50,15 @@ class EscolaForm extends Component {
         const validacao = this.validador.valida(this.state);
 
         if (validacao.isValid) {
-            const escola = new Escola(this.state.nome);
-            escola.apelido = this.state.apelido;
-            EscolaService.postEscola(escola)
+            debugger;
+            const turma = new Turma(this.state.nome, this.state.escola);
+            turma.fotos = this.state.fotos;
+            TurmaService.postTurma(turma)
                 .then(res => res.data)
-                .then(escola => {
-                    this.props.seleciona(escola);
-                    this.props.history.push(Rotas.TURMA_NOVO);
+                .then(turma => {
+                    this.props.seleciona(turma);
+                    // TODO mudar para aluno form
+                    this.props.history.push(Rotas.TURMA_LISTA);
                     PopUp.sucesso('Escola cadastrada com sucesso');
                 })
                 .catch(error => {
@@ -66,7 +74,7 @@ class EscolaForm extends Component {
     }
 
     render() {
-        const { nome, apelido } = this.state;
+        const { nome } = this.state;
         return (
             <form>
                 <div className="row">
@@ -88,7 +96,7 @@ class EscolaForm extends Component {
                 </div>
                 <div className="row">
                     <div className="input-field col s12">
-                        <label htmlFor="nome">Nome da Escola</label>
+                        <label htmlFor="nome">Nome da Turma</label>
                         <input 
                             className="validate"
                             id="nome"
@@ -99,22 +107,9 @@ class EscolaForm extends Component {
                         />
                     </div>
                 </div>
-                <div className="row">
-                    <div className="input-field col s6">
-                        <label htmlFor="apelido">Apelido</label>
-                        <input 
-                            id="nome"
-                            type="text"
-                            name="apelido"
-                            value={apelido}
-                            onChange={this.inputChangeHandler}
-                        />
-                    </div>
-                </div>
             </form>
         )
     }
 
-
 }
-export default EscolaForm;
+export default TurmaForm;

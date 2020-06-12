@@ -1,6 +1,7 @@
 class Escola {
     id;
     nome;
+    apelido;
     turmas;
 
     constructor(nome) {

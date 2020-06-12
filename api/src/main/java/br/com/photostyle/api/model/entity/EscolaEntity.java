@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Entity
@@ -15,8 +13,10 @@ import java.util.List;
 public class EscolaEntity extends BaseEntity {
 
     @Column(name = "NOME", nullable = false, unique = true)
-    @NotEmpty
     private String nome;
+
+    @Column(name = "APELIDO")
+    private String apelido;
 
     @OneToMany(mappedBy = "escola", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<TurmaEntity> turmas;
@@ -27,6 +27,14 @@ public class EscolaEntity extends BaseEntity {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public String getApelido() {
+        return apelido;
+    }
+
+    public void setApelido(String apelido) {
+        this.apelido = apelido;
     }
 
     public List<TurmaEntity> getTurmas() {

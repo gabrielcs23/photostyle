@@ -38,7 +38,10 @@ class AreaAdmin extends BasePage {
                                 <NavLink to={Rotas.ESCOLA_LISTA} onClick={this.resetState} className="breadcrumb">
                                     <i className="material-icons">account_balance</i>
                                     <span className="pl-2">
-                                        {this.state.escola ? this.state.escola.nome : 'Escola'}
+                                        { this.state.escola ? 
+                                            this.state.escola.apelido ? this.state.escola.apelido
+                                            : this.state.escola.nome
+                                            : 'Escola'}
                                     </span>
                                 </NavLink>
                                 

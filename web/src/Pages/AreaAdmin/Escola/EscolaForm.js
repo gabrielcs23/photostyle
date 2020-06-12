@@ -21,6 +21,7 @@ class EscolaForm extends Component {
 
         this.stateInicial = {
             nome: '',
+            apelido: '',
             validacao: this.validador.valido(),
             canSubmit: false
         }
@@ -44,6 +45,7 @@ class EscolaForm extends Component {
 
         if (validacao.isValid) {
             const escola = new Escola(this.state.nome);
+            escola.apelido = this.state.apelido;
             EscolaService.postEscola(escola)
                 .then(res => res.data)
                 .then(escola => {
@@ -66,7 +68,7 @@ class EscolaForm extends Component {
     }
 
     render() {
-        const { nome } = this.state;
+        const { nome, apelido } = this.state;
         return (
             <form>
                 <div className="row">
@@ -95,6 +97,18 @@ class EscolaForm extends Component {
                             type="text"
                             name="nome"
                             value={nome}
+                            onChange={this.inputChangeHandler}
+                        />
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="input-field col s6">
+                        <label htmlFor="apelido">Apelido</label>
+                        <input 
+                            id="nome"
+                            type="text"
+                            name="apelido"
+                            value={apelido}
                             onChange={this.inputChangeHandler}
                         />
                     </div>

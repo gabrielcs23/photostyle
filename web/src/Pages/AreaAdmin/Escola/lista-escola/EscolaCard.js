@@ -13,10 +13,14 @@ const EscolaCard = (props) => {
                 onMouseLeave={toggleHover}
                 onClick={props.seleciona}
             >
-                <div className="card-content center-align white-text">
-                    <div className="card-title">
+                <div className="card-content white-text">
+                    <div className="card-title center-align">
                         <span>{escola.nome}</span>
                     </div>
+                    <p className="center align">
+                        {escola.apelido ? `Apelido: ${escola.apelido}` : ''}
+                        &nbsp;
+                    </p>
                     <p>Turmas: {escola.turmas.length}</p>
                 </div>
             </div>

@@ -18,6 +18,7 @@ public class EscolaAdapter extends BaseAdapter<EscolaEntity, EscolaDto>{
         EscolaEntity entity = new EscolaEntity();
         entity.setId(dto.getId());
         entity.setNome(dto.getNome());
+        entity.setApelido(dto.getApelido());
         return entity;
     }
 
@@ -29,6 +30,7 @@ public class EscolaAdapter extends BaseAdapter<EscolaEntity, EscolaDto>{
         EscolaDto dto = new EscolaDto();
         dto.setId(entity.getId());
         dto.setNome(entity.getNome());
+        dto.setApelido(entity.getApelido());
         if (!CollectionUtils.isEmpty(entity.getTurmas())){
             List<TurmaDto> turmasDto = entity.getTurmas().stream()
                     .map(turmaEntity -> {

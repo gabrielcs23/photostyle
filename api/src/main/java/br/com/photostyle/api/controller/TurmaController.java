@@ -39,9 +39,15 @@ public class TurmaController {
         return ResponseEntity.ok(dto);
     }
 
+    @GetMapping("/por-escola/{idEscola}")
+    public ResponseEntity<List<TurmaDto>> getTurmasPorEscolaId(@PathVariable Long idEscola) {
+        List<TurmaDto> turmas = turmaService.getTurmasPorEscolaId(idEscola);
+        return ResponseEntity.ok(turmas);
+    }
+
     @PostMapping
-    public ResponseEntity<TurmaDto> criar(@RequestBody @Valid TurmaDto entityNew, UriComponentsBuilder uriBuilder) {
-        TurmaDto dtoCreated = turmaService.criar(entityNew);
+    public ResponseEntity<TurmaDto> criar(@RequestBody @Valid TurmaDto novaTurma, UriComponentsBuilder uriBuilder) {
+        TurmaDto dtoCreated = turmaService.cadastrarTurma(novaTurma);
 
         URI uri = uriBuilder.path(RESOURCE_URL + "/{id}").buildAndExpand(dtoCreated.getId()).toUri();
 

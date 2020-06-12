@@ -25,6 +25,9 @@ public class TurmaService extends BaseService<TurmaEntity, TurmaDto> {
     private TurmaRepository repository;
 
     @Autowired
+    private EscolaService escolaService;
+
+    @Autowired
     private AlunoService alunoService;
 
     @Autowired
@@ -32,6 +35,18 @@ public class TurmaService extends BaseService<TurmaEntity, TurmaDto> {
 
     public TurmaService(TurmaRepository repository, TurmaAdapter adapter) {
         super(repository, adapter);
+    }
+
+    @Transactional
+    public TurmaDto cadastrarTurma(TurmaDto turma) {
+        EscolaEntity escola = escolaService.getEntityPorId(turma.getEscola().getId());
+        if (escola == null) {
+            return null;
+        }
+        TurmaEntity turmaEntity = adapter.dtoToEntity(turma);
+        turmaEntity.setEscola(escola);
+        turmaEntity = repository.save(turmaEntity);
+        return adapter.entityToDto(turmaEntity);
     }
 
     @Transactional
@@ -51,6 +66,11 @@ public class TurmaService extends BaseService<TurmaEntity, TurmaDto> {
                     }).collect(Collectors.toList());
         }
         return new ArrayList<>();
+    }
+
+    public List<TurmaDto> getTurmasPorEscolaId(Long idEscola) {
+        List<TurmaEntity> turmas = repository.getTurmaEntitiesByEscola_Id(idEscola);
+        return entityListToDtoList(turmas);
     }
 
     public List<TurmaDto> entityListToDtoList(List<TurmaEntity> turmas) {
@@ -87,4 +107,5 @@ public class TurmaService extends BaseService<TurmaEntity, TurmaDto> {
 
         return fotoService.entityToDto(fotoEntity);
     }
+
 }

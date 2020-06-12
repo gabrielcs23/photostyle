@@ -54,17 +54,20 @@ public class TurmaAdapter extends BaseAdapter<TurmaEntity, TurmaDto> {
 
     @Override
     public List<TurmaDto> entityListToDtoList(List<TurmaEntity> turmaEntityList) {
-        return turmaEntityList.stream().map(this::createBasicDto).collect(Collectors.toList());
+        return turmaEntityList.stream().map(this::entityToDto).collect(Collectors.toList());
     }
 
     private TurmaDto createBasicDto(TurmaEntity entity) {
         TurmaDto dto = new TurmaDto();
+        dto.setId(entity.getId());
         dto.setNome(entity.getNome());
 
         EscolaEntity escolaEntity = entity.getEscola();
         EscolaDto escolaDto = new EscolaDto();
-        escolaDto.setNome(escolaEntity.getNome());
         escolaDto.setId(escolaEntity.getId());
+        escolaDto.setNome(escolaEntity.getNome());
+        escolaDto.setApelido(escolaEntity.getApelido());
+
         dto.setEscola(escolaDto);
         return dto;
     }

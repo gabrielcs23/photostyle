@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import './TurmaCard.css';
+import CardActions from '../../../Utils/CardActions/CardActions';
 
 const TurmaCard = (props) => {
     const [hovered, setHovered] = useState(false);
@@ -8,34 +10,29 @@ const TurmaCard = (props) => {
 
     return (
         <div className="col s6 m4">
-            <div className={`card blue-grey lighten-1 ${hovered ? 'z-depth-5' : 'z-depth-2'}`}
+            <div className={`card horizontal blue-grey lighten-1 ${hovered ? 'z-depth-5' : 'z-depth-2'}`}
                 onMouseEnter={toggleHover}
                 onMouseLeave={toggleHover}
-                onClick={props.seleciona}
             >
-                <div className="card-content white-text">
-                    <div className="card-title center-align">
+                <div className="card-image"
+                    onClick={props.selecionar}
+                >
+                    <img src="https://www.bournemouthecho.co.uk/resources/images/9348617?type=responsive-gallery-fullscreen" alt='' />
+                </div>
+
+                <CardActions editar={props.editar} excluir={props.excluir} />
+
+                <div className="card-content center-align white-text"
+                    onClick={props.seleciona}
+                >
+                    <div className="card-title mb-0">
                         <span>{turma.nome}</span>
                     </div>
-                    <div className="row mb-0">
-                        {/* Visível apenas de telas md para baixo */}
-                        <div className="col s12 hide-on-large-only">
-                            <p>Alunos: {turma.alunos ? turma.alunos.length : '0'}</p>  
-                        </div>
-                        <div className="col s12 hide-on-large-only">
-                            <p>Fotos: {turma.fotos ? turma.fotos.length : '0'}</p>
-                        </div>
+                    <p>Alunos: {turma.alunos ? turma.alunos.length : '0'}</p>
+                    <p>Fotos: {turma.fotos ? turma.fotos.length : '0'}</p>
 
-                        {/* Visível apenas de telas lg para cima */}
-                        <div className="col l6 left-align hide-on-med-and-down">
-                            <p>Alunos: {turma.alunos ? turma.alunos.length : '0'}</p>  
-                        </div>
-                        <div className="col l6 right-align hide-on-med-and-down">
-                            <p>Fotos: {turma.fotos ? turma.fotos.length : '0'}</p>
-                        </div>
-
-                    </div>
                 </div>
+
             </div>
         </div>
     );

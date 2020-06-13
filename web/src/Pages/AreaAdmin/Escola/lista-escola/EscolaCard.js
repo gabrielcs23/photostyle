@@ -11,7 +11,7 @@ const EscolaCard = (props) => {
             <div className={`card blue-grey lighten-1 ${hovered ? 'z-depth-5' : 'z-depth-2'}`}
                 onMouseEnter={toggleHover}
                 onMouseLeave={toggleHover}
-                onClick={props.seleciona}
+                onClick={props.selecionar}
             >
                 <div className="card-content white-text">
                     <div className="card-title center-align">

@@ -87,16 +87,16 @@ class AreaAdmin extends BasePage {
                     <div className="row mt-3">
                         <div className="col s12">
                             <Route path={Rotas.ESCOLA_LISTA} exact={true} render={routeProps => (
-                                <ListaEscola {...routeProps} seleciona={this.selecionarEscola} />
+                                <ListaEscola {...routeProps} selecionar={this.selecionarEscola} />
                             )} />
                             <Route path={Rotas.ESCOLA_NOVO} exact={true} render={routeProps => (
-                                <EscolaForm {...routeProps} seleciona={this.selecionarEscola} />
+                                <EscolaForm {...routeProps} selecionar={this.selecionarEscola} />
                             )} />
                             <Route path={Rotas.TURMA_LISTA} exact={true} render={routeProps => (
-                                <ListaTurma {...routeProps} escola={this.state.escola} seleciona={this.selecionarTurma} />
+                                <ListaTurma {...routeProps} escola={this.state.escola} selecionar={this.selecionarTurma} />
                             )} />
                             <Route path={Rotas.TURMA_NOVO} exact={true} render={routeProps => (
-                                <TurmaForm {...routeProps} escola={this.state.escola} seleciona={this.selecionarTurma} />
+                                <TurmaForm {...routeProps} escola={this.state.escola} selecionar={this.selecionarTurma} />
                             )} />
                         </div>
                     </div>

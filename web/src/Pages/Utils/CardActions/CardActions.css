@@ -1,0 +1,19 @@
+.btn-floating.halfway-fab.left {
+    left: -5px;
+    top: -10px;
+    bottom: auto;
+}
+
+.left-fab {
+    left: 2.5rem;
+}
+
+.left-fab:last-child {
+    left: 5.3rem;
+}
+
+.btn-floating.halfway-fab {
+    right: -5px;
+    top: -10px;
+    bottom: auto;
+}

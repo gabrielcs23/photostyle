@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import './TurmaCard.css';
 import CardActions from '../../../Utils/CardActions/CardActions';
+import ModalConfirmarExclusao from '../../../Utils/Modal/Modal';
 
 const TurmaCard = (props) => {
     const [hovered, setHovered] = useState(false);
     const toggleHover = () => setHovered(!hovered);
 
     const { turma } = props;
+    
+    const idModal = `modal-confirmar-exclusao-${turma.id}`
 
     return (
         <div className="col s6 m4">
@@ -20,12 +23,12 @@ const TurmaCard = (props) => {
                     <img src="https://www.bournemouthecho.co.uk/resources/images/9348617?type=responsive-gallery-fullscreen" alt='' />
                 </div>
 
-                <CardActions editar={props.editar} excluir={props.excluir} />
+                <CardActions idModal={idModal} editar={props.editar} />
 
-                <div className="card-content center-align white-text"
-                    onClick={props.seleciona}
+                <div className="card-content card-foto center-align white-text"
+                    onClick={props.selecionar}
                 >
-                    <div className="card-title mb-0">
+                    <div className="card-title mb-0 text-truncate">
                         <span>{turma.nome}</span>
                     </div>
                     <p>Alunos: {turma.alunos ? turma.alunos.length : '0'}</p>
@@ -34,6 +37,28 @@ const TurmaCard = (props) => {
                 </div>
 
             </div>
+
+            <ModalConfirmarExclusao
+                idModal={idModal}
+                titulo={`Excluir ${turma.nome}?`}
+                mensagem={(
+                    <div>
+                        <p>Tem certeza de que deseja excluir a turma {turma.nome}?</p>
+                        { turma.alunos || turma.fotos ? 
+                            <>
+                                <p>Também serão excluídos:</p>
+                                <ul className="browser-default">
+                                    {turma.alunos ? <li className="browser-default">{turma.alunos.length} alunos</li> : null}
+                                    {turma.fotos ? <li className="browser-default">{turma.fotos.length} fotos</li> : null}
+                                </ul>
+                            </>
+                            :
+                            null
+                        }
+                    </div>
+                )}
+                confirmar={props.excluir}
+            />
         </div>
     );
 }

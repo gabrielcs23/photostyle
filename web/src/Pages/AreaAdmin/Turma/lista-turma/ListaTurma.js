@@ -26,13 +26,24 @@ class ListaTurma extends Component {
         }
     }
 
+    remover(id, idx) {
+        TurmaService.deleteTurma(id)
+            .then(() => {
+                let novaLista = this.state.listaTurmas.slice();
+                novaLista.splice(idx, 1);
+                this.setState({listaTurmas: novaLista});
+                PopUp.sucesso('Turma removida com sucesso');
+            })
+            .catch(error => PopUp.erro(error));
+    }
+
     render() {
         const lista = this.state.listaTurmas.slice();
         const listaCards = lista.map((turma, idx) => {
-            return <TurmaCard key={idx} turma={turma}
+            return <TurmaCard key={turma.id} turma={turma}
                         selecionar={() => this.props.selecionar(turma)}
                         editar={() => console.log('edição')}
-                        excluir={() => console.log('remoção')}
+                        excluir={() => this.remover(turma.id, idx)}
                     />
         });
 

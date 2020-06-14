@@ -3,6 +3,10 @@ import M from "materialize-css";
 import './CardActions.css';
 
 class CardActions extends Component {
+    constructor(props) {
+        super(props);
+        this.idModal = this.props.idModal;
+    }
 
     componentDidMount() {
         const options = {
@@ -32,14 +36,15 @@ class CardActions extends Component {
                         >
                             <i className="large material-icons">mode_edit</i>
                         </button>
-                        <button className="left-fab btn-floating halfway-fab waves-effect waves-light red"
+                        <button className="left-fab btn-floating halfway-fab waves-effect waves-light red modal-trigger"
+                            data-target={this.idModal}
                             onClick={this.props.excluir}
                         >
                             <i className="material-icons">delete_forever</i>
                         </button>
                     </li>
                 </ul>
-        </div>
+            </div>
         )
     }
 

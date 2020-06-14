@@ -1,3 +1,11 @@
-.card-content {
-    width: 100%;
+.card-content.card-foto {
+    max-width: 50%;
+}
+
+ul.browser-default {
+    list-style-type: initial !important;
+}
+
+ul.browser-default li {
+    list-style-type: initial !important;
 }

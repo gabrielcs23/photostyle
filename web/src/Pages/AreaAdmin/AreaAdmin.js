@@ -64,7 +64,7 @@ class AreaAdmin extends BasePage {
                                     (
                                         <NavLink to={Rotas.TURMA_LISTA} onClick={this.resetTurma} className="breadcrumb">
                                             <i className="material-icons">menu_book</i>
-                                            <span className="pl-2">
+                                            <span className="pl-2 text-truncate">
                                                 {this.state.turma ? this.state.turma.nome : 'Turma'}
                                             </span>
                                         </NavLink>
@@ -75,7 +75,7 @@ class AreaAdmin extends BasePage {
                                     (
                                         <a href="#!" className="breadcrumb">
                                             <i className="material-icons">school</i>
-                                            <span className="pl-2">
+                                            <span className="pl-2 text-truncate">
                                                 {this.state.aluno ? this.state.escola.aluno : 'Aluno'}
                                             </span>
                                         </a>

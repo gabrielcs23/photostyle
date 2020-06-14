@@ -50,13 +50,12 @@ class TurmaForm extends Component {
         const validacao = this.validador.valida(this.state);
 
         if (validacao.isValid) {
-            debugger;
             const turma = new Turma(this.state.nome, this.state.escola);
             turma.fotos = this.state.fotos;
             TurmaService.postTurma(turma)
                 .then(res => res.data)
                 .then(turma => {
-                    this.props.seleciona(turma);
+                    this.props.selecionar(turma);
                     // TODO mudar para aluno form
                     this.props.history.push(Rotas.TURMA_LISTA);
                     PopUp.sucesso('Escola cadastrada com sucesso');

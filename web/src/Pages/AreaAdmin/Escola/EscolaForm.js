@@ -49,7 +49,7 @@ class EscolaForm extends Component {
             EscolaService.postEscola(escola)
                 .then(res => res.data)
                 .then(escola => {
-                    this.props.seleciona(escola);
+                    this.props.selecionar(escola);
                     this.props.history.push(Rotas.TURMA_NOVO);
                     PopUp.sucesso('Escola cadastrada com sucesso');
                 })

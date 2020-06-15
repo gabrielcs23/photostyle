@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { NavLink } from 'react-router-dom';
 import Rotas from '../AreaAdminRotas';
 import EscolaService from './EscolaService';
 import Escola from '../../../Model/Escola';
@@ -55,6 +56,7 @@ class EscolaForm extends Component {
                 })
                 .catch(error => {
                     PopUp.erro(error);
+                    this.setState({canSubmit: true});
                 });
         } else {
             const { nome } = validacao;
@@ -70,22 +72,30 @@ class EscolaForm extends Component {
         return (
             <form>
                 <div className="row">
-                    <div className="col s12">
-                        <div className="float-right">
+                    <div className="col left">
+                        <NavLink to={Rotas.ESCOLA_LISTA}>
                             <button 
-                                className="btn waves-effect waves-light blue btn-small"
-                                disabled={!this.state.canSubmit}
-                                onClick={this.submitForm}
-                                type="button"
+                                className="btn btn-small waves-effect waves-light grey darken-1"
                                 >
-                                <span className="d-inline-flex">
-                                    <i className="material-icons">save</i>
-                                    <span className="pl-2">Salvar</span>
-                                </span>
+                                Cancelar
                             </button>
-                        </div>
+                        </NavLink>
+                    </div>
+                    <div className="col right">
+                        <button
+                            className="btn btn-small waves-effect waves-light blue"
+                            disabled={!this.state.canSubmit}
+                            onClick={this.submitForm}
+                            type="button"
+                            >
+                            <span className="d-inline-flex">
+                                <i className="material-icons">save</i>
+                                <span className="pl-2">Salvar</span>
+                            </span>
+                        </button>
                     </div>
                 </div>
+                
                 <div className="row">
                     <div className="input-field col s12">
                         <label htmlFor="nome">Nome da Escola</label>

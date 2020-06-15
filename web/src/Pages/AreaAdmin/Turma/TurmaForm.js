@@ -3,7 +3,8 @@ import Rotas from '../AreaAdminRotas';
 import TurmaService from './TurmaService';
 import Turma from '../../../Model/Turma';
 import FormValidator from '../form-utils/FormValidator';
-import PopUp from '../../Utils/pop-up/PopUp'
+import PopUp from '../../Utils/pop-up/PopUp';
+import M from 'materialize-css';
 
 class TurmaForm extends Component {
 
@@ -19,19 +20,46 @@ class TurmaForm extends Component {
             },
         ]);
 
-        this.stateInicial = {
-            nome: '',
-            escola: this.props.escola,
-            fotos: [],
-            validacao: this.validador.valido(),
-            canSubmit: false
-        }
+        const { match: { params } } = this.props;
 
-        this.state = this.stateInicial;
+        if (!params.id) {
+            this.state = {
+                id: '',
+                nome: '',
+                escola: this.props.escola,
+                alunos: [],
+                fotos: [],
+                validacao: this.validador.valido(),
+                canSubmit: false
+            }
+        } else {
+            this.state = {
+                id: params.id,
+                nome: '',
+                escola: '',
+                alunos: [],
+                fotos: [],
+                validacao: this.validador.valido(),
+                canSubmit: false
+            }
+        }
     }
 
     componentDidMount() {
-        if(this.props.escola == null) {
+        if(this.state.id) {
+            TurmaService.getPorId(this.state.id)
+                .then(turma => {
+                    this.setState({
+                        id: turma.id,
+                        nome: turma.nome,
+                        escola: turma.escola,
+                        alunos: turma.alunos ? turma.alunos : [],
+                        fotos: turma.fotos ? turma.fotos : []
+                    });
+                    M.updateTextFields();
+                })
+                .catch(error => PopUp.erro(error));
+        } else if(this.props.escola == null) {
             this.props.history.push(Rotas.ESCOLA_LISTA);  
         }
     }
@@ -52,13 +80,23 @@ class TurmaForm extends Component {
         if (validacao.isValid) {
             const turma = new Turma(this.state.nome, this.state.escola);
             turma.fotos = this.state.fotos;
+            if (this.state.id) {
+                turma.id = this.state.id;
+                turma.alunos = this.state.alunos;
+            }
+
             TurmaService.postTurma(turma)
                 .then(res => res.data)
                 .then(turma => {
-                    this.props.selecionar(turma);
-                    // TODO mudar para aluno form
-                    this.props.history.push(Rotas.TURMA_LISTA);
-                    PopUp.sucesso('Escola cadastrada com sucesso');
+                    if(this.state.id) {
+                        this.props.history.push(Rotas.TURMA_LISTA);
+                        PopUp.sucesso('Turma atualizada com sucesso');
+                    } else {
+                        this.props.selecionar(turma);
+                        // TODO mudar para aluno novo
+                        this.props.history.push(Rotas.TURMA_LISTA);
+                        PopUp.sucesso('Turma cadastrada com sucesso');
+                    }
                 })
                 .catch(error => {
                     PopUp.erro(error);

@@ -12,7 +12,6 @@ class Modal extends Component {
             mensagem: this.props.mensagem,
             idModal: this.props.idModal
         }
-        console.log(this.props.idModal)
     }
 
     componentDidMount() {

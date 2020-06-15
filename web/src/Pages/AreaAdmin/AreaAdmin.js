@@ -1,6 +1,6 @@
 import './AreaAdmin.css'
 import React, { Fragment } from 'react';
-import { Route, NavLink } from 'react-router-dom';
+import { Route, NavLink, Switch } from 'react-router-dom';
 import Rotas from './AreaAdminRotas';
 import BasePage from "../BasePage/BasePage";
 import ListaEscola from "./Escola/lista-escola/ListaEscola"
@@ -29,6 +29,10 @@ class AreaAdmin extends BasePage {
 
     selecionarTurma = turma => {
         this.setState({turma: turma});
+    }
+
+    editarTurma = (id) => {
+        this.props.history.push(Rotas.TURMA_EDICAO.replace(':id', id));
     }
 
     resetState = () => {
@@ -86,18 +90,23 @@ class AreaAdmin extends BasePage {
                     </nav>
                     <div className="row mt-3">
                         <div className="col s12">
-                            <Route path={Rotas.ESCOLA_LISTA} exact={true} render={routeProps => (
-                                <ListaEscola {...routeProps} selecionar={this.selecionarEscola} />
-                            )} />
-                            <Route path={Rotas.ESCOLA_NOVO} exact={true} render={routeProps => (
-                                <EscolaForm {...routeProps} selecionar={this.selecionarEscola} />
-                            )} />
-                            <Route path={Rotas.TURMA_LISTA} exact={true} render={routeProps => (
-                                <ListaTurma {...routeProps} escola={this.state.escola} selecionar={this.selecionarTurma} />
-                            )} />
-                            <Route path={Rotas.TURMA_NOVO} exact={true} render={routeProps => (
-                                <TurmaForm {...routeProps} escola={this.state.escola} selecionar={this.selecionarTurma} />
-                            )} />
+                            <Switch>
+                                <Route path={Rotas.ESCOLA_LISTA} exact={true} render={routeProps => (
+                                    <ListaEscola {...routeProps} selecionar={this.selecionarEscola} />
+                                )} />
+                                <Route path={Rotas.ESCOLA_NOVO} exact={true} render={routeProps => (
+                                    <EscolaForm {...routeProps} selecionar={this.selecionarEscola} />
+                                )} />
+                                <Route path={Rotas.TURMA_LISTA} exact={true} render={routeProps => (
+                                    <ListaTurma {...routeProps} escola={this.state.escola} selecionar={this.selecionarTurma} editar={this.editarTurma} />
+                                )} />
+                                <Route path={Rotas.TURMA_EDICAO} exact={true} render={routeProps => (
+                                    <TurmaForm {...routeProps} />
+                                )} />
+                                <Route path={Rotas.TURMA_NOVO} exact={true} render={routeProps => (
+                                    <TurmaForm {...routeProps} escola={this.state.escola} selecionar={this.selecionarTurma} />
+                                )} />
+                            </Switch>
                         </div>
                     </div>
                 </div>

@@ -42,7 +42,7 @@ class ListaTurma extends Component {
         const listaCards = lista.map((turma, idx) => {
             return <TurmaCard key={turma.id} turma={turma}
                         selecionar={() => this.props.selecionar(turma)}
-                        editar={() => console.log('edição')}
+                        editar={() => this.props.editar(turma.id)}
                         excluir={() => this.remover(turma.id, idx)}
                     />
         });

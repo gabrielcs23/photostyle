@@ -50,7 +50,7 @@ class ListaTurma extends Component {
         return (
             <div>
                 <div className="row">
-                    <div className="col float-right">
+                    <div className="col right">
                         <NavLink to={Rotas.TURMA_NOVO}>
                             <button 
                                 className="btn-floating btn-large waves-effect waves-light blue"

@@ -29,7 +29,7 @@ class ListaEscola extends Component {
         return (
             <div>
                 <div className="row">
-                    <div className="col float-right">
+                    <div className="col right">
                         <NavLink to={Rotas.ESCOLA_NOVO}>
                             <button 
                                 className="btn-floating btn-large waves-effect waves-light blue"

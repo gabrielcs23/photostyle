@@ -1,7 +1,5 @@
 package br.com.photostyle.api.model.dto;
 
-import java.util.List;
-
 public class AlunoDto {
 
     private Long id;

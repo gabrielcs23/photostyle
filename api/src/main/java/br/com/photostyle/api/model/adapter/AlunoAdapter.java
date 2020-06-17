@@ -70,6 +70,7 @@ public class AlunoAdapter extends BaseAdapter<AlunoEntity, AlunoDto> {
         EscolaEntity escolaEntity = entity.getEscola();
         escolaDto.setId(escolaEntity.getId());
         escolaDto.setNome(escolaEntity.getNome());
+        escolaDto.setApelido(escolaEntity.getApelido());
 
         TurmaDto turmaDto = new TurmaDto();
         TurmaEntity turmaEntity = entity.getTurma();

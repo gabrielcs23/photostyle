@@ -42,12 +42,18 @@ public class AlunoService extends BaseService<AlunoEntity, AlunoDto> {
     @Override
     @Transactional
     public AlunoDto criar(AlunoDto aluno) {
-        AlunoEntity entityNova = adapter.dtoToEntity(aluno);
+        TurmaEntity turma = turmaService.getEntityPorId(aluno.getTurma().getId());
+        if (turma == null) {
+            return null;
+        }
+        AlunoEntity alunoEntity = adapter.dtoToEntity(aluno);
+        alunoEntity.setTurma(turma);
+        alunoEntity.setEscola(turma.getEscola());
         if (aluno.getFoto() != null) {
             FotoEntity fotoEntity = fotoService.upload(aluno.getFoto());
-            entityNova.setFoto(fotoEntity);
+            alunoEntity.setFoto(fotoEntity);
         }
-        AlunoEntity entitySaved = repository.save(entityNova);
+        AlunoEntity entitySaved = repository.save(alunoEntity);
         return adapter.entityToDto(entitySaved);
     }
 

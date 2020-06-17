@@ -1,6 +1,6 @@
 class Foto {
     id;
     url;
-    foto;
+    formData;
 }
 export default Foto;

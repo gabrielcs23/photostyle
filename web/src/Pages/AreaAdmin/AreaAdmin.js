@@ -7,6 +7,8 @@ import ListaEscola from "./Escola/lista-escola/ListaEscola"
 import EscolaForm from './Escola/EscolaForm';
 import ListaTurma from './Turma/lista-turma/ListaTurma';
 import TurmaForm from './Turma/TurmaForm';
+import ListaAluno from './Aluno/lista-aluno/ListaAluno';
+import AlunoForm from './Aluno/AlunoForm';
 
 class AreaAdmin extends BasePage {
 
@@ -29,10 +31,19 @@ class AreaAdmin extends BasePage {
 
     selecionarTurma = turma => {
         this.setState({turma: turma});
+        this.props.history.push(Rotas.ALUNO_LISTA);
     }
 
     editarTurma = (id) => {
         this.props.history.push(Rotas.TURMA_EDICAO.replace(':id', id));
+    }
+
+    selecionarAluno = aluno => {
+        this.setState({aluno: aluno});
+    }
+
+    editarAluno = (id) => {
+        this.props.history.push(Rotas.ALUNO_EDICAO.replace(':id', id));
     }
 
     resetState = () => {
@@ -97,6 +108,8 @@ class AreaAdmin extends BasePage {
                                 <Route path={Rotas.ESCOLA_NOVO} exact={true} render={routeProps => (
                                     <EscolaForm {...routeProps} selecionar={this.selecionarEscola} />
                                 )} />
+
+
                                 <Route path={Rotas.TURMA_LISTA} exact={true} render={routeProps => (
                                     <ListaTurma {...routeProps} escola={this.state.escola} selecionar={this.selecionarTurma} editar={this.editarTurma} />
                                 )} />
@@ -105,6 +118,17 @@ class AreaAdmin extends BasePage {
                                 )} />
                                 <Route path={Rotas.TURMA_NOVO} exact={true} render={routeProps => (
                                     <TurmaForm {...routeProps} escola={this.state.escola} selecionar={this.selecionarTurma} />
+                                )} />
+
+
+                                <Route path={Rotas.ALUNO_LISTA} exact={true} render={routeProps => (
+                                    <ListaAluno {...routeProps} turma={this.state.turma} selecionar={this.selecionarAluno} editar={this.editarAluno} />
+                                )} />
+                                <Route path={Rotas.ALUNO_EDICAO} exact={true} render={routeProps => (
+                                    <AlunoForm {...routeProps} />
+                                )} />
+                                <Route path={Rotas.ALUNO_NOVO} exact={true} render={routeProps => (
+                                    <AlunoForm {...routeProps} turma={this.state.turma} selecionar={this.selecionarAluno} />
                                 )} />
                             </Switch>
                         </div>

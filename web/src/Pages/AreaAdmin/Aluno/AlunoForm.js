@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
 import Rotas from '../AreaAdminRotas';
-import TurmaService from './TurmaService';
-import Turma from '../../../Model/Turma';
+import AlunoService from './AlunoService';
+import Aluno from '../../../Model/Aluno';
 import FormValidator from '../form-utils/FormValidator';
 import PopUp from '../../Utils/pop-up/PopUp';
 import M from 'materialize-css';
 
-class TurmaForm extends Component {
+class AlunoForm extends Component {
 
     constructor(props) {
         super(props);
@@ -19,17 +19,25 @@ class TurmaForm extends Component {
                 validoQuando: false,
                 mensagem: 'Entre com um nome'
             },
+            {
+                campo: 'matricula',
+                metodo: 'isEmpty',
+                validoQuando: false,
+                mensagem: 'Entre com uma matrícula'
+            },
         ]);
 
         const { match: { params } } = this.props;
 
         if (!params.id) {
+            const { turma } = this.props;
             this.state = {
                 id: '',
                 nome: '',
-                escola: this.props.escola,
-                alunos: [],
-                fotos: [],
+                matricula: '',
+                escola: turma ? turma.escola : '',
+                turma: turma,
+                foto: null,
                 validacao: this.validador.valido(),
                 canSubmit: false
             }
@@ -37,9 +45,10 @@ class TurmaForm extends Component {
             this.state = {
                 id: params.id,
                 nome: '',
+                matricula: '',
                 escola: '',
-                alunos: [],
-                fotos: [],
+                turma: '',
+                foto: null,
                 validacao: this.validador.valido(),
                 canSubmit: false
             }
@@ -48,19 +57,20 @@ class TurmaForm extends Component {
 
     componentDidMount() {
         if(this.state.id) {
-            TurmaService.getPorId(this.state.id)
-                .then(turma => {
+            AlunoService.getPorId(this.state.id)
+                .then(aluno => {
                     this.setState({
-                        id: turma.id,
-                        nome: turma.nome,
-                        escola: turma.escola,
-                        alunos: turma.alunos ? turma.alunos : [],
-                        fotos: turma.fotos ? turma.fotos : []
+                        id: aluno.id,
+                        nome: aluno.nome,
+                        matricula: aluno.matricula,
+                        escola: aluno.escola,
+                        turma: aluno.turma,
+                        foto: aluno.foto,
                     });
                     M.updateTextFields();
                 })
                 .catch(error => PopUp.erro(error));
-        } else if(this.props.escola == null) {
+        } else if(this.props.turma == null) {
             this.props.history.push(Rotas.ESCOLA_LISTA);  
         }
     }
@@ -79,23 +89,24 @@ class TurmaForm extends Component {
         const validacao = this.validador.valida(this.state);
 
         if (validacao.isValid) {
-            const turma = new Turma(this.state.nome, this.state.escola);
-            turma.fotos = this.state.fotos;
+            const aluno = new Aluno(this.state.nome, this.state.matricula, this.state.escola, this.state.turma);
+            aluno.foto = this.state.foto;
             if (this.state.id) {
-                turma.id = this.state.id;
-                turma.alunos = this.state.alunos;
+                aluno.id = this.state.id;
+                // TODO
+                // aluno.irmaoRel = this.state.irmaoRel;
             }
 
-            TurmaService.postTurma(turma)
+            AlunoService.postAluno(aluno)
                 .then(res => res.data)
-                .then(turma => {
+                .then(aluno => {
                     if(this.state.id) {
-                        this.props.history.push(Rotas.TURMA_LISTA);
-                        PopUp.sucesso('Turma atualizada com sucesso');
+                        this.props.history.push(Rotas.ALUNO_LISTA);
+                        PopUp.sucesso('Aluno(a) atualizado(a) com sucesso');
                     } else {
-                        this.props.selecionar(turma);
-                        this.props.history.push(Rotas.ALUNO_NOVO);
-                        PopUp.sucesso('Turma cadastrada com sucesso');
+                        this.props.selecionar(aluno);
+                        this.props.history.push(Rotas.ALUNO_LISTA);
+                        PopUp.sucesso('Aluno(a) cadastrado(a) com sucesso');
                     }
                 })
                 .catch(error => {
@@ -112,12 +123,12 @@ class TurmaForm extends Component {
     }
 
     render() {
-        const { nome } = this.state;
+        const { nome, matricula } = this.state;
         return (
             <form>
                 <div className="row">
                     <div className="col left">
-                        <NavLink to={Rotas.TURMA_LISTA}>
+                        <NavLink to={Rotas.ALUNO_LISTA}>
                             <button 
                                 className="btn btn-small waves-effect waves-light grey darken-1"
                                 >
@@ -141,7 +152,7 @@ class TurmaForm extends Component {
                 </div>
                 <div className="row">
                     <div className="input-field col s12">
-                        <label htmlFor="nome">Nome da Turma</label>
+                        <label htmlFor="nome">Nome do Aluno</label>
                         <input 
                             className="validate"
                             id="nome"
@@ -152,9 +163,22 @@ class TurmaForm extends Component {
                         />
                     </div>
                 </div>
+                <div className="row">
+                    <div className="input-field col s6">
+                        <label htmlFor="matricula">Matrícula</label>
+                        <input 
+                            className="validate"
+                            id="matricula"
+                            type="text"
+                            name="matricula"
+                            value={matricula}
+                            onChange={this.inputChangeHandler}
+                        />
+                    </div>
+                </div>
             </form>
-        )
+        );
     }
 
 }
-export default TurmaForm;
+export default AlunoForm;

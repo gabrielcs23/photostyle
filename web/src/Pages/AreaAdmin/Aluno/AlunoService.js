@@ -1,0 +1,28 @@
+import axios from 'axios';
+import ServiceConstants from '../../Utils/ServiceUtils/ServiceConstants'
+
+const BASE_URL = ServiceConstants.BACKEND_URL + '/aluno';
+
+const AlunoService = {
+
+    getListPorTurma: async (idTurma) => {
+        const res = await axios.get(BASE_URL + `/por-turma/${idTurma}`);
+        return res.data;
+    },
+
+    getPorId: async (id) => {
+        const res = await axios.get(BASE_URL + `/${id}`)
+        return res.data;
+    },
+
+    postAluno: async (aluno) => {
+        const res = await axios.post(BASE_URL, aluno);
+        return res.data;
+    },
+
+    deleteAluno: async (id) => {
+        await axios.delete(BASE_URL + `/${id}`);
+    }
+
+}
+export default AlunoService;

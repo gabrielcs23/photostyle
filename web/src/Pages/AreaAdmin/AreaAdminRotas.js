@@ -7,6 +7,7 @@ const AreaAdminRotas = {
     TURMA_EDICAO: '/admin/turma/:id/editar',
 
     ALUNO_LISTA: '/admin/aluno',
-    ALUNO_NOVO: '/admin/aluno/novo'
+    ALUNO_NOVO: '/admin/aluno/novo',
+    ALUNO_EDICAO: '/admin/aluno/:id/editar',
 }
 export default AreaAdminRotas;

@@ -11,8 +11,10 @@ const AlunoCard = (props) => {
     const idModal = `modal-confirmar-exclusao-${aluno.id}`
 
     return (
-        <div className="col s6 m4">
-            <div className={`card horizontal blue-grey lighten-1 ${hovered ? 'z-depth-5' : 'z-depth-2'}`}
+        <div className="col s12 m6 xl4">
+            <CardActions idModal={idModal} editar={props.editar} />
+            
+            <div className={`card small blue-grey lighten-1 ${hovered ? 'z-depth-5' : 'z-depth-2'}`}
                 onMouseEnter={toggleHover}
                 onMouseLeave={toggleHover}
             >
@@ -22,9 +24,8 @@ const AlunoCard = (props) => {
                     <img src="https://www.bournemouthecho.co.uk/resources/images/9348617?type=responsive-gallery-fullscreen" alt='' />
                 </div>
 
-                <CardActions idModal={idModal} editar={props.editar} />
 
-                <div className="card-content card-foto center-align white-text"
+                <div className="card-content center-align white-text"
                     onClick={props.selecionar}
                 >
                     <div className="card-title mb-0 text-truncate">

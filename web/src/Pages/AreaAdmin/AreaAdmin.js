@@ -51,7 +51,10 @@ class AreaAdmin extends BasePage {
     }
 
     resetTurma = () => {
-        this.setState({turma: this.stateInicial.turma});
+        this.setState({
+            turma: this.stateInicial.turma,
+            aluno: this.stateInicial.aluno
+        });
     }
 
     resetAluno = () => {
@@ -88,12 +91,12 @@ class AreaAdmin extends BasePage {
 
                                 {this.state.escola && this.state.turma ?
                                     (
-                                        <a href="#!" className="breadcrumb">
+                                        <NavLink to={Rotas.ALUNO_LISTA} onClick={this.resetAluno} className="breadcrumb">
                                             <i className="material-icons">school</i>
                                             <span className="pl-2 text-truncate">
-                                                {this.state.aluno ? this.state.escola.aluno : 'Aluno'}
+                                                {this.state.aluno ? this.state.aluno.nome : 'Aluno'}
                                             </span>
-                                        </a>
+                                        </NavLink>
                                     ) : ''
                                 }
                             </div>

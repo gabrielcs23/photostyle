@@ -13,12 +13,14 @@ const TurmaCard = (props) => {
 
     return (
         <div className="col s12 m6 xl4">
-            <CardActions idModal={idModal} editar={props.editar} />
 
             <div className={`card small blue-grey lighten-1 ${hovered ? 'z-depth-5' : 'z-depth-2'}`}
                 onMouseEnter={toggleHover}
                 onMouseLeave={toggleHover}
             >
+                
+                <CardActions idModal={idModal} editar={props.editar} />
+
                 <div className="card-image"
                     onClick={props.selecionar}
                 >

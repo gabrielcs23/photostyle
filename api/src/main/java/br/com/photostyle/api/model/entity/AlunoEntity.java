@@ -1,14 +1,10 @@
 package br.com.photostyle.api.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
 import javax.persistence.*;
 
 @Entity
 @Table(name = "ALUNO")
 @SequenceGenerator(name = "sequence_gen", sequenceName = "aluno_seq", initialValue = 1, allocationSize = 1)
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class AlunoEntity extends BaseEntity {
 
     @Column(name = "NOME", nullable = false)

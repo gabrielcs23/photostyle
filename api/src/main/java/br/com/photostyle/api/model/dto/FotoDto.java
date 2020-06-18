@@ -1,7 +1,10 @@
 package br.com.photostyle.api.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.springframework.web.multipart.MultipartFile;
 
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class FotoDto {
 
     private Long id;

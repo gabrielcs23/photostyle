@@ -10,6 +10,11 @@ const TurmaService = {
         return res.data;
     },
 
+    getListNomesPorEscola: async (idEscola) => {
+        const res = await axios.get(BASE_URL + `/nomes/por-escola/${idEscola}`);
+        return res.data;
+    },
+
     getPorId: async (id) => {
         const res = await axios.get(BASE_URL + `/${id}`)
         return res.data;

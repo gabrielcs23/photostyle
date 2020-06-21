@@ -41,7 +41,6 @@ class ListaAluno extends Component {
         const lista = this.state.listaAlunos.slice();
         const listaCards = lista.map((aluno, idx) => {
             return <AlunoCard key={aluno.id} aluno={aluno}
-                        selecionar={() => this.props.selecionar(aluno)}
                         editar={() => this.props.editar(aluno.id)}
                         excluir={() => this.remover(aluno.id, idx)}
                     />

@@ -6,6 +6,7 @@ import Aluno from '../../../Model/Aluno';
 import FormValidator from '../form-utils/FormValidator';
 import PopUp from '../../Utils/pop-up/PopUp';
 import M from 'materialize-css';
+import IrmaoForm from './irmao-form/IrmaoForm';
 
 class AlunoForm extends Component {
 
@@ -29,8 +30,8 @@ class AlunoForm extends Component {
 
         const { match: { params } } = this.props;
 
+        const { turma } = this.props;
         if (!params.id) {
-            const { turma } = this.props;
             this.state = {
                 id: '',
                 nome: '',
@@ -38,6 +39,7 @@ class AlunoForm extends Component {
                 escola: turma ? turma.escola : '',
                 turma: turma,
                 foto: null,
+                irmaoRel: null,
                 validacao: this.validador.valido(),
                 canSubmit: false
             }
@@ -46,9 +48,10 @@ class AlunoForm extends Component {
                 id: params.id,
                 nome: '',
                 matricula: '',
-                escola: '',
-                turma: '',
+                escola: turma ? turma.escola : '',
+                turma: turma,
                 foto: null,
+                irmaoRel: null,
                 validacao: this.validador.valido(),
                 canSubmit: false
             }
@@ -66,6 +69,7 @@ class AlunoForm extends Component {
                         escola: aluno.escola,
                         turma: aluno.turma,
                         foto: aluno.foto,
+                        irmaoRel: aluno.irmaoRel
                     });
                     M.updateTextFields();
                 })
@@ -89,25 +93,17 @@ class AlunoForm extends Component {
         const validacao = this.validador.valida(this.state);
 
         if (validacao.isValid) {
-            const aluno = new Aluno(this.state.nome, this.state.matricula, this.state.escola, this.state.turma);
-            aluno.foto = this.state.foto;
-            if (this.state.id) {
-                aluno.id = this.state.id;
-                // TODO
-                // aluno.irmaoRel = this.state.irmaoRel;
-            }
+            const aluno = this.getAluno();
 
             AlunoService.postAluno(aluno)
                 .then(res => res.data)
-                .then(aluno => {
+                .then(() => {
                     if(this.state.id) {
-                        this.props.history.push(Rotas.ALUNO_LISTA);
                         PopUp.sucesso('Aluno(a) atualizado(a) com sucesso');
                     } else {
-                        this.props.selecionar(aluno);
-                        this.props.history.push(Rotas.ALUNO_LISTA);
                         PopUp.sucesso('Aluno(a) cadastrado(a) com sucesso');
                     }
+                    this.props.history.push(Rotas.ALUNO_LISTA);
                 })
                 .catch(error => {
                     PopUp.erro(error);
@@ -120,6 +116,20 @@ class AlunoForm extends Component {
             const camposInvalidos = campos.filter(elem => elem.isInvalid);
             camposInvalidos.forEach(campo => PopUp.erro(campo.message));
         }
+    }
+
+    getAluno() {
+        const aluno = new Aluno(this.state.nome, this.state.matricula, this.state.escola, this.state.turma);
+        aluno.foto = this.state.foto;
+        if (this.state.id) {
+            aluno.id = this.state.id;
+            aluno.irmaoRel = this.state.irmaoRel;
+        }
+        return aluno;
+    }
+
+    relacionarIrmao() {
+
     }
 
     render() {
@@ -176,6 +186,11 @@ class AlunoForm extends Component {
                         />
                     </div>
                 </div>
+
+                {this.state.escola ? 
+                    <IrmaoForm escolaId={this.state.escola.id} relacionarIrmao={this.relacionarIrmao()} />
+                    : null
+                }
             </form>
         );
     }

@@ -10,6 +10,11 @@ const AlunoService = {
         return res.data;
     },
 
+    getListNomesPorTurma: async (idTurma) => {
+        const res = await axios.get(BASE_URL + `/nomes/por-turma/${idTurma}`);
+        return res.data;
+    },
+
     getPorId: async (id) => {
         const res = await axios.get(BASE_URL + `/${id}`)
         return res.data;

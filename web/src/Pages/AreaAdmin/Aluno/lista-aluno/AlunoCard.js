@@ -20,16 +20,12 @@ const AlunoCard = (props) => {
                 
                 <CardActions idModal={idModal} editar={props.editar} />
 
-                <div className="card-image"
-                    onClick={props.selecionar}
-                >
+                <div className="card-image">
                     <img src="https://www.bournemouthecho.co.uk/resources/images/9348617?type=responsive-gallery-fullscreen" alt='' />
                 </div>
 
 
-                <div className="card-content center-align white-text"
-                    onClick={props.selecionar}
-                >
+                <div className="card-content center-align white-text">
                     <div className="card-title mb-0 text-truncate">
                         <span>{aluno.nome}</span>
                     </div>

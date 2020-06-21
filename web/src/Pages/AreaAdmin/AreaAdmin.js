@@ -38,10 +38,6 @@ class AreaAdmin extends BasePage {
         this.props.history.push(Rotas.TURMA_EDICAO.replace(':id', id));
     }
 
-    selecionarAluno = aluno => {
-        this.setState({aluno: aluno});
-    }
-
     editarAluno = (id) => {
         this.props.history.push(Rotas.ALUNO_EDICAO.replace(':id', id));
     }
@@ -125,13 +121,13 @@ class AreaAdmin extends BasePage {
 
 
                                 <Route path={Rotas.ALUNO_LISTA} exact={true} render={routeProps => (
-                                    <ListaAluno {...routeProps} turma={this.state.turma} selecionar={this.selecionarAluno} editar={this.editarAluno} />
+                                    <ListaAluno {...routeProps} turma={this.state.turma} editar={this.editarAluno} />
                                 )} />
                                 <Route path={Rotas.ALUNO_EDICAO} exact={true} render={routeProps => (
-                                    <AlunoForm {...routeProps} />
+                                    <AlunoForm {...routeProps} turma={this.state.turma} />
                                 )} />
                                 <Route path={Rotas.ALUNO_NOVO} exact={true} render={routeProps => (
-                                    <AlunoForm {...routeProps} turma={this.state.turma} selecionar={this.selecionarAluno} />
+                                    <AlunoForm {...routeProps} turma={this.state.turma} />
                                 )} />
                             </Switch>
                         </div>

@@ -45,6 +45,12 @@ public class TurmaController {
         return ResponseEntity.ok(turmas);
     }
 
+    @GetMapping("/nomes/por-escola/{idEscola}")
+    public ResponseEntity<List<TurmaDto>> getTurmasNomesPorEscolaId(@PathVariable Long idEscola) {
+        List<TurmaDto> turmas = turmaService.getTurmasNomesPorEscolaId(idEscola);
+        return ResponseEntity.ok(turmas);
+    }
+
     @PostMapping
     public ResponseEntity<TurmaDto> criar(@RequestBody @Valid TurmaDto novaTurma, UriComponentsBuilder uriBuilder) {
         TurmaDto dtoCreated = turmaService.cadastrarTurma(novaTurma);

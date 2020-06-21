@@ -72,4 +72,12 @@ public class TurmaAdapter extends BaseAdapter<TurmaEntity, TurmaDto> {
         return dto;
     }
 
+    public List<TurmaDto> entityListDtoNomesList(List<TurmaEntity> turmas) {
+        return turmas.stream().map(turmaEntity -> {
+            TurmaDto turmaDto = new TurmaDto();
+            turmaDto.setId(turmaEntity.getId());
+            turmaDto.setNome(turmaEntity.getNome());
+            return turmaDto;
+        }).collect(Collectors.toList());
+    }
 }

@@ -84,4 +84,12 @@ public class AlunoAdapter extends BaseAdapter<AlunoEntity, AlunoDto> {
         return dto;
     }
 
+    public List<AlunoDto> entityListToDtoNomesList(List<AlunoEntity> alunos) {
+        return alunos.stream().map(alunoEntity -> {
+            AlunoDto alunoDto = new AlunoDto();
+            alunoDto.setId(alunoEntity.getId());
+            alunoDto.setNome(alunoEntity.getNome());
+            return alunoDto;
+        }).collect(Collectors.toList());
+    }
 }

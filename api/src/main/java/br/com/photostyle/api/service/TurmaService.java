@@ -1,6 +1,5 @@
 package br.com.photostyle.api.service;
 
-import br.com.photostyle.api.model.adapter.FotoAdapter;
 import br.com.photostyle.api.model.adapter.TurmaAdapter;
 import br.com.photostyle.api.model.dto.AlunoDto;
 import br.com.photostyle.api.model.dto.FotoDto;
@@ -23,6 +22,9 @@ public class TurmaService extends BaseService<TurmaEntity, TurmaDto> {
 
     @Autowired
     private TurmaRepository repository;
+
+    @Autowired
+    private TurmaAdapter adapter;
 
     @Autowired
     private EscolaService escolaService;
@@ -71,6 +73,11 @@ public class TurmaService extends BaseService<TurmaEntity, TurmaDto> {
     public List<TurmaDto> getTurmasPorEscolaId(Long idEscola) {
         List<TurmaEntity> turmas = repository.getTurmaEntitiesByEscola_Id(idEscola);
         return entityListToDtoList(turmas);
+    }
+
+    public List<TurmaDto> getTurmasNomesPorEscolaId(Long idEscola) {
+        List<TurmaEntity> turmas = repository.getTurmaEntitiesByEscola_Id(idEscola);
+        return adapter.entityListDtoNomesList(turmas);
     }
 
     public List<TurmaDto> entityListToDtoList(List<TurmaEntity> turmas) {

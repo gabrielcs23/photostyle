@@ -45,6 +45,12 @@ public class AlunoController {
         return ResponseEntity.ok(alunos);
     }
 
+    @GetMapping("/nomes/por-turma/{idTurma}")
+    public ResponseEntity<List<AlunoDto>> getAlunosNomesPorTurmaId(@PathVariable Long idTurma) {
+        List<AlunoDto> alunos = alunoService.getAlunosNomesByTurmaId(idTurma);
+        return ResponseEntity.ok(alunos);
+    }
+
     @PostMapping
     public ResponseEntity<AlunoDto> criar(@RequestBody @Valid AlunoDto entityNew, UriComponentsBuilder uriBuilder) {
         AlunoDto entityCreated = alunoService.criar(entityNew);

@@ -27,6 +27,9 @@ public class AlunoService extends BaseService<AlunoEntity, AlunoDto> {
     private AlunoRepository repository;
 
     @Autowired
+    private AlunoAdapter adapter;
+
+    @Autowired
     private IrmaoService irmaoService;
 
     @Autowired
@@ -62,6 +65,10 @@ public class AlunoService extends BaseService<AlunoEntity, AlunoDto> {
         return adapter.entityListToDtoList(alunos);
     }
 
+    public List<AlunoDto> getAlunosNomesByTurmaId(Long idTurma) {
+        List<AlunoEntity> alunos = repository.getAlunoEntitiesByTurma_Id(idTurma);
+        return adapter.entityListToDtoNomesList(alunos);
+    }
 
     @Transactional
     public FotoDto uploadFoto(AlunoEntity aluno, FotoDto foto) {

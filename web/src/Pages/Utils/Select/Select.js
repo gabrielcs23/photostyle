@@ -6,15 +6,22 @@ class Select extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            options: props.options,
-            label: props.label,
-            disabled: props.disabled,
             selecionado: ''
         }
     }
 
     componentDidMount() {
-        M.FormSelect.init(this.Select);
+        this.formSelect = M.FormSelect.init(this.Select);
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if(this.props.disabled !== prevProps.disabled) {
+            if(this.state.selecionado !== prevState.selecionado) {
+                this.setState({selecionado: ''});
+            }
+            this.formSelect.destroy();
+            this.formSelect = M.FormSelect.init(this.Select);
+        }
     }
 
     select(event) {
@@ -24,13 +31,11 @@ class Select extends Component {
     }
 
     render() {
-        const option = this.state.options.slice().map((option, idx) => (
+        const option = this.props.options.slice().map((option, idx) => (
             <option value={idx} key={option.id}>
                 {option.nome}
             </option>
         ));
-        
-        console.log(this.state.disabled)
 
         return (
             <>
@@ -40,12 +45,12 @@ class Select extends Component {
                     }}
                     value={this.state.selecionado}
                     onChange={event => this.select(event)}
-                    disabled={this.state.disabled}
+                    disabled={this.props.disabled}
                 >
                     <option value="" disabled={true}>Selecione</option>
                     {option}
                 </select>
-                <label>{this.state.label}</label>
+                <label>{this.props.label}</label>
             </>
         )
     }

@@ -14,7 +14,6 @@ class IrmaoSelect extends Component {
             alunos: [],
             irmao: props.irmao ? props.irmao : '',
             disabled: props.disabled,
-            disabledAlunos: true
         }
     }
 
@@ -35,12 +34,11 @@ class IrmaoSelect extends Component {
             .then(alunos => {
                 if (alunos.length === 0) {
                     PopUp.aviso('Esta turma não possui alunos');
-                    this.setState({disabledAlunos: true});
+                    this.setState({alunos: []});
                 } else {
-                    this.setState({alunos: alunos, disabledAlunos: false});
+                    this.setState({alunos: alunos});
                 }
             })
-            .then(() => console.log(this.state.disabledAlunos))
             .catch(error => PopUp.erro(error));
     }
 
@@ -58,24 +56,20 @@ class IrmaoSelect extends Component {
         return (
             <div className="row">
                 <div className="input-field col s12 m6">
-                    {this.state.turmas.length === 0 ? null:
-                        <Select 
-                            label={'Turmas'}
-                            options={this.state.turmas.slice()}
-                            disabled={false}
-                            selecionar={idx => this.selecionarTurma(idx)}
-                        />
-                    }
+                    <Select 
+                        label={'Turmas'}
+                        options={this.state.turmas}
+                        disabled={this.state.turmas.length === 0}
+                        selecionar={idx => this.selecionarTurma(idx)}
+                    />
                 </div>
                 <div className="input-field col s12 m6">
-                    {this.state.alunos.length === 0 ? null:
-                        <Select 
-                            label={'Alunos'}
-                            options={this.state.alunos.slice()}
-                            disabled={this.state.disabledAlunos}
-                            selecionar={idx => this.selecionarIrmao(idx)}
-                        />
-                    }
+                    <Select 
+                        label={'Alunos'}
+                        options={this.state.alunos}
+                        disabled={this.state.alunos.length === 0}
+                        selecionar={idx => this.selecionarIrmao(idx)}
+                    />
                 </div>
             </div>
         )

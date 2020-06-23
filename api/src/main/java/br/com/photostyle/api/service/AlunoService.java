@@ -52,11 +52,22 @@ public class AlunoService extends BaseService<AlunoEntity, AlunoDto> {
         AlunoEntity alunoEntity = adapter.dtoToEntity(aluno);
         alunoEntity.setTurma(turma);
         alunoEntity.setEscola(turma.getEscola());
+
         if (aluno.getFoto() != null) {
             FotoEntity fotoEntity = fotoService.upload(aluno.getFoto());
             alunoEntity.setFoto(fotoEntity);
         }
+
         AlunoEntity entitySaved = repository.save(alunoEntity);
+
+        if (aluno.getIrmaoRel() != null && !CollectionUtils.isEmpty(aluno.getIrmaoRel().getIrmaos())) {
+            List<Long> idsIrmaos = aluno.getIrmaoRel().getIrmaos()
+                    .stream()
+                    .map(AlunoDto::getId)
+                    .collect(Collectors.toList());
+            irmaoService.relacionaIrmaos(entitySaved, idsIrmaos);
+        }
+
         return adapter.entityToDto(entitySaved);
     }
 

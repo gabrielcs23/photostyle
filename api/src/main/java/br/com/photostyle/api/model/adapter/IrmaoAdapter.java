@@ -1,8 +1,10 @@
 package br.com.photostyle.api.model.adapter;
 
 import br.com.photostyle.api.model.dto.AlunoDto;
+import br.com.photostyle.api.model.dto.FotoDto;
 import br.com.photostyle.api.model.dto.IrmaoRelDto;
 import br.com.photostyle.api.model.dto.TurmaDto;
+import br.com.photostyle.api.model.entity.AlunoEntity;
 import br.com.photostyle.api.model.entity.IrmaoRelEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -16,10 +18,21 @@ public class IrmaoAdapter {
     @Autowired
     private FotoAdapter fotoAdapter;
 
+    public IrmaoRelEntity dtoToEntity(IrmaoRelDto dto) {
+        IrmaoRelEntity entity = new IrmaoRelEntity();
+        entity.setId(dto.getId());
+
+        return entity;
+    }
+
     public IrmaoRelDto entityToDto(IrmaoRelEntity entity) {
         IrmaoRelDto dto = new IrmaoRelDto();
         dto.setId(entity.getId());
-        dto.setFotos(fotoAdapter.entityListToDtoList(entity.getFotos()));
+
+        if (entity.getFotos() != null) {
+            List<FotoDto> fotos = fotoAdapter.entityListToDtoList(entity.getFotos());
+            dto.setFotos(fotos);
+        }
 
         List<AlunoDto> irmaos = entity.getIrmaos().stream()
                 .map(irmaoEntity -> {

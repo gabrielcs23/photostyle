@@ -94,7 +94,6 @@ class AlunoForm extends Component {
 
         if (validacao.isValid) {
             const aluno = this.getAluno();
-
             AlunoService.postAluno(aluno)
                 .then(res => res.data)
                 .then(() => {
@@ -128,8 +127,12 @@ class AlunoForm extends Component {
         return aluno;
     }
 
-    relacionarIrmao() {
-
+    relacionarIrmao(irmaoRel) {
+        if (this.validador.valida(this.state)) {
+            this.setState({irmaoRel: irmaoRel, canSubmit: true})
+        } else {
+            this.setState({irmaoRel: irmaoRel});
+        }
     }
 
     render() {
@@ -150,7 +153,7 @@ class AlunoForm extends Component {
                         <button
                             className="btn btn-small waves-effect waves-light blue"
                             disabled={!this.state.canSubmit}
-                            onClick={this.submitForm}
+                            onClick={() => this.submitForm()}
                             type="button"
                             >
                             <span className="d-inline-flex">
@@ -188,7 +191,11 @@ class AlunoForm extends Component {
                 </div>
 
                 {this.state.escola ? 
-                    <IrmaoForm escolaId={this.state.escola.id} relacionarIrmao={this.relacionarIrmao()} />
+                    <IrmaoForm 
+                        escolaId={this.state.escola.id}
+                        relacionarIrmao={irmaoRel => this.relacionarIrmao(irmaoRel)}
+                        alunoId={this.state.id}
+                    />
                     : null
                 }
             </form>

@@ -40,29 +40,39 @@ public class IrmaoService {
     }
 
     private IrmaoRelDto criaRelacionamento(AlunoEntity aluno, List<Long> idsIrmaos) {
+        IrmaoRelEntity rel = new IrmaoRelEntity();
+
         List<AlunoEntity> irmaos = idsIrmaos.stream()
-                .map(id -> alunoService.getEntityPorId(id))
+                .map(id -> {
+                    AlunoEntity irmao = alunoService.getEntityPorId(id);
+                    irmao.setIrmaoRel(rel);
+                    return irmao;
+                })
                 .collect(Collectors.toList());
+
+        aluno.setIrmaoRel(rel);
         irmaos.add(aluno);
 
-        IrmaoRelEntity rel = new IrmaoRelEntity();
         rel.setIrmaos(irmaos);
-        rel = repository.save(rel);
+        IrmaoRelEntity entitySaved = repository.save(rel);
 
-        return adapter.entityToDto(rel);
+        return adapter.entityToDto(entitySaved);
     }
 
     private IrmaoRelDto mergeRelacionamento(IrmaoRelEntity relExistente, AlunoEntity aluno, List<Long> idsIrmaos) {
         List<AlunoEntity> irmaosNaoRelacionados = relExistente.getIrmaos().stream()
                 .filter(irmao -> !idsIrmaos.contains(irmao.getId()))
+                .peek(irmao -> irmao.setIrmaoRel(relExistente))
                 .collect(Collectors.toList());
+
+        aluno.setIrmaoRel(relExistente);
         irmaosNaoRelacionados.add(aluno);
 
         relExistente.getIrmaos().addAll(irmaosNaoRelacionados);
 
-        relExistente = repository.save(relExistente);
+        IrmaoRelEntity entitySaved = repository.save(relExistente);
 
-        return adapter.entityToDto(relExistente);
+        return adapter.entityToDto(entitySaved);
     }
 
 //    @Transactional

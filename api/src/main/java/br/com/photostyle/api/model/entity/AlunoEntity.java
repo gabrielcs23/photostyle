@@ -21,7 +21,7 @@ public class AlunoEntity extends BaseEntity {
     @JoinColumn(name = "TRM_ID", nullable = false)
     private TurmaEntity turma;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "RL_IRMAO_ID")
     private IrmaoRelEntity irmaoRel;
 

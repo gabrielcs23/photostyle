@@ -9,6 +9,7 @@ class IrmaoSelect extends Component {
     constructor(props) {
         super(props);
         this.escolaId = this.props.escolaId;
+        this.alunoId = this.props.alunoId;
         this.state = {
             turmas: [],
             alunos: [],
@@ -36,6 +37,7 @@ class IrmaoSelect extends Component {
                     PopUp.aviso('Esta turma não possui alunos');
                     this.setState({alunos: []});
                 } else {
+                    alunos = alunos.filter(aluno => aluno.id !== this.alunoId);
                     this.setState({alunos: alunos});
                 }
             })
@@ -48,7 +50,9 @@ class IrmaoSelect extends Component {
     }
 
     selecionarIrmao(idx) {
-        
+        const irmao = this.state.alunos[idx];
+        this.setState({irmao: irmao});
+        this.props.selecionar(irmao);
     }
 
 

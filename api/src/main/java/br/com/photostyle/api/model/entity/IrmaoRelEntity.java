@@ -12,7 +12,7 @@ public class IrmaoRelEntity {
     @GeneratedValue(generator = "irmao_seq", strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "irmaoRel", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "irmaoRel", cascade = CascadeType.PERSIST, orphanRemoval = true)
     @Column(nullable = false)
     private List<AlunoEntity> irmaos;
 

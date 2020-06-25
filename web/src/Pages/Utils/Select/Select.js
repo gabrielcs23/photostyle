@@ -5,8 +5,18 @@ class Select extends Component {
     
     constructor(props) {
         super(props);
-        this.state = {
-            selecionado: ''
+
+        this.composedKey = this.props.composedKey;
+        
+        // se valor foi carregado do banco
+        if (this.props.disabled && this.props.options?.length === 1) {
+            this.state = {
+                selecionado: this.props.options[0]
+            }
+        } else {
+            this.state = {
+                selecionado: ''
+            }
         }
     }
 
@@ -31,8 +41,8 @@ class Select extends Component {
     }
 
     render() {
-        const option = this.props.options.slice().map((option, idx) => (
-            <option value={idx} key={option.id}>
+        const options = this.props.options.slice().map((option, idx) => (
+            <option value={idx} key={this.composedKey + option.id}>
                 {option.nome}
             </option>
         ));
@@ -48,7 +58,7 @@ class Select extends Component {
                     disabled={this.props.disabled}
                 >
                     <option value="" disabled={true}>Selecione</option>
-                    {option}
+                    {options}
                 </select>
                 <label>{this.props.label}</label>
             </>

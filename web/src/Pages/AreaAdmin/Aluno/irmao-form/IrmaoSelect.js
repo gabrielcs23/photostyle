@@ -10,11 +10,24 @@ class IrmaoSelect extends Component {
         super(props);
         this.escolaId = this.props.escolaId;
         this.alunoId = this.props.alunoId;
-        this.state = {
-            turmas: [],
-            alunos: [],
-            irmao: props.irmao ? props.irmao : '',
-            disabled: props.disabled,
+        this.composedKey = this.props.composedKey;
+
+        // se irmao foi carregado do banco
+        if (!this.props.irmao.turma) {
+            this.state = {
+                turmas: [],
+                alunos: [],
+                irmao: '',
+                disabled: false,
+            }
+        } else {
+            const { irmao } = this.props;
+            this.state = {
+                turmas: [irmao.turma],
+                alunos: [irmao],
+                irmao: irmao,
+                disabled: true,
+            }
         }
     }
 
@@ -60,18 +73,20 @@ class IrmaoSelect extends Component {
         return (
             <div className="row">
                 <div className="input-field col s12 m6">
-                    <Select 
+                    <Select
+                        composedKey={this.composedKey + '0'}
                         label={'Turmas'}
                         options={this.state.turmas}
-                        disabled={this.state.turmas.length === 0}
+                        disabled={this.state.disabled || this.state.turmas.length === 0}
                         selecionar={idx => this.selecionarTurma(idx)}
                     />
                 </div>
                 <div className="input-field col s12 m6">
-                    <Select 
+                    <Select
+                        composedKey={this.composedKey + '1'}
                         label={'Alunos'}
                         options={this.state.alunos}
-                        disabled={this.state.alunos.length === 0}
+                        disabled={this.state.disabled || this.state.alunos.length === 0}
                         selecionar={idx => this.selecionarIrmao(idx)}
                     />
                 </div>

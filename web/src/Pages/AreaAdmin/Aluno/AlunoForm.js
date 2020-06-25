@@ -193,6 +193,7 @@ class AlunoForm extends Component {
                 {this.state.escola ? 
                     <IrmaoForm 
                         escolaId={this.state.escola.id}
+                        irmaoRel={this.state.irmaoRel}
                         relacionarIrmao={irmaoRel => this.relacionarIrmao(irmaoRel)}
                         alunoId={this.state.id}
                     />

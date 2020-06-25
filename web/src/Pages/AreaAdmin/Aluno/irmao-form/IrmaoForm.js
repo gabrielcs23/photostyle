@@ -9,11 +9,21 @@ class IrmaoForm extends Component {
 
         this.escolaId = this.props.escolaId;
         this.alunoId = this.props.alunoId;
-        this.state = {
-            id: '',
-            irmaos: [],
-            fotos: [],
-            addIrmaoDisabled: false
+        if (this.props.irmaoRel) {
+            const { irmaoRel } = this.props;
+            this.state = {
+                id: irmaoRel.id,
+                irmaos: irmaoRel.irmaos.filter(irmao => irmao.id !== this.alunoId),
+                fotos: irmaoRel.fotos,
+                addIrmaoDisabled: false
+            }
+        } else {
+            this.state = {
+                id: null,
+                irmaos: [],
+                fotos: [],
+                addIrmaoDisabled: false
+            }
         }
 
     }
@@ -42,10 +52,10 @@ class IrmaoForm extends Component {
             return (
                 <IrmaoSelect
                     key={idx}
+                    composedKey={`${idx}`}
                     irmao={irmao}
                     escolaId={this.escolaId}
                     alunoId={this.alunoId}
-                    disabled={false} 
                     selecionar={(irmao) => this.relacionarIrmao(irmao, idx)}
                 />
             )

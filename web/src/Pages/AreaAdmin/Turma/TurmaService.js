@@ -25,6 +25,15 @@ const TurmaService = {
         return res.data;
     },
 
+    adicionarFoto: (id, foto) => {
+        const config = {
+            headers: {
+                'content-type': 'multipart/form-data'
+            }
+        }
+        return axios.post(BASE_URL + `/${id}/foto`, foto, config);
+    },
+
     deleteTurma: async (id) => {
         await axios.delete(BASE_URL + `/${id}`);
     }

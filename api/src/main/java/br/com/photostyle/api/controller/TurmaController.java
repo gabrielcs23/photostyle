@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
@@ -71,13 +72,13 @@ public class TurmaController {
     }
 
     @PostMapping("/{idTurma}/foto")
-    public ResponseEntity<FotoDto> adicionarFoto(@PathVariable @NotNull Long idTurma, @RequestBody @Valid FotoDto fotoNova) {
+    public ResponseEntity<FotoDto> adicionarFoto(@PathVariable @NotNull Long idTurma, @RequestParam("file") MultipartFile foto) {
         TurmaEntity turma = turmaService.getEntityPorId(idTurma);
         if (turma == null) {
             return ResponseEntity.notFound().build();
         }
-        FotoDto fotosSalva = turmaService.adicionarFoto(turma, fotoNova);
-        return ResponseEntity.ok(fotosSalva);
+        FotoDto dto = turmaService.adicionarFoto(turma, foto);
+        return ResponseEntity.ok(dto);
     }
 
     @DeleteMapping("/{idTurma}/fotos/{idFoto}")

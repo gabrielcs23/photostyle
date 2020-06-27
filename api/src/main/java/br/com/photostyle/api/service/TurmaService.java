@@ -11,6 +11,7 @@ import br.com.photostyle.api.repository.TurmaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
@@ -107,8 +108,8 @@ public class TurmaService extends BaseService<TurmaEntity, TurmaDto> {
     }
 
     @Transactional
-    public FotoDto adicionarFoto(TurmaEntity turma, FotoDto fotoNova) {
-        FotoEntity fotoEntity = fotoService.upload(fotoNova);
+    public FotoDto adicionarFoto(TurmaEntity turma, MultipartFile foto) {
+        FotoEntity fotoEntity = fotoService.upload(foto);
         turma.getFotos().add(fotoEntity);
         repository.save(turma);
 

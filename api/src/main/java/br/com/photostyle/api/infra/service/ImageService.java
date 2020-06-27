@@ -6,6 +6,7 @@ import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,10 +29,12 @@ public class ImageService {
 
     public String saveImage(MultipartFile image) {
         try {
+            ObjectMetadata metadata = new ObjectMetadata();
+            metadata.setContentLength(image.getSize());
             amazonClient.putObject(
                     new PutObjectRequest(constants.getBucket(),
                             image.getOriginalFilename(), image.getInputStream(),
-                            null)
+                            metadata)
                     .withCannedAcl(CannedAccessControlList.PublicRead));
 
             return buildImageUrl(image.getOriginalFilename());

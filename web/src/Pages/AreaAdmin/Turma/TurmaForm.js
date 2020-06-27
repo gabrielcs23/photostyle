@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
+import M from 'materialize-css';
 import Rotas from '../AreaAdminRotas';
 import TurmaService from './TurmaService';
 import Turma from '../../../Model/Turma';
+import Foto from '../../../Model/Foto';
 import FormValidator from '../form-utils/FormValidator';
 import PopUp from '../../Utils/pop-up/PopUp';
-import M from 'materialize-css';
+import FotoDropzone from '../../Utils/FotoDropzone/FotoDropzone';
 
 class TurmaForm extends Component {
 
@@ -61,7 +63,7 @@ class TurmaForm extends Component {
                 })
                 .catch(error => PopUp.erro(error));
         } else if(this.props.escola == null) {
-            this.props.history.push(Rotas.ESCOLA_LISTA);  
+            this.props.history.push(Rotas.ESCOLA_LISTA);
         }
     }
 
@@ -74,13 +76,33 @@ class TurmaForm extends Component {
         });
     }
 
+    getFotos() {
+        const fotos = this.state.fotos.slice();
+        return fotos.filter(foto => foto.formData != null).map(foto => foto.formData.get('file'));
+    }
+
+    onFotoDrop = (arq) => {
+        const formData = new FormData();
+        formData.append('file', arq, arq.name);
+        const foto = new Foto();
+        foto.formData = formData;
+        const fotos = this.state.fotos.slice();
+        fotos.push(foto);
+        this.setState({fotos: fotos, canSubmit: true});
+    }
+
+    removerFoto = (idx) => {
+        const fotos = this.state.fotos.slice();
+        fotos.splice(idx, 1);
+        this.setState({fotos: fotos});
+    }
+
     submitForm = () => {
         this.setState({canSubmit: false});
         const validacao = this.validador.valida(this.state);
 
         if (validacao.isValid) {
             const turma = new Turma(this.state.nome, this.state.escola);
-            turma.fotos = this.state.fotos;
             if (this.state.id) {
                 turma.id = this.state.id;
                 turma.alunos = this.state.alunos;
@@ -89,6 +111,9 @@ class TurmaForm extends Component {
             TurmaService.postTurma(turma)
                 .then(res => res.data)
                 .then(turma => {
+                    if(this.state.fotos?.length > 0) {
+                        this.uploadFotos();
+                    }
                     if(this.state.id) {
                         this.props.history.push(Rotas.TURMA_LISTA);
                         PopUp.sucesso('Turma atualizada com sucesso');
@@ -109,6 +134,19 @@ class TurmaForm extends Component {
             const camposInvalidos = campos.filter(elem => elem.isInvalid);
             camposInvalidos.forEach(campo => PopUp.erro(campo.message));
         }
+    }
+
+    uploadFotos() {
+        const { id, fotos } = this.state;
+        const promises = [];
+        fotos.forEach(foto => {
+            if (foto.id == null) {
+                promises.push(TurmaService.adicionarFoto(id, foto.formData));
+            }
+        });
+        Promise.allSettled(promises)
+            .then(resultados => resultados.filter(resultado => resultado.status === 'rejected'))
+            .then(resultados => resultados.length === 0 ? PopUp.sucesso('Fotos enviadas com sucesso') : PopUp.erro(`Erro no envio de ${resultados.length}`));
     }
 
     render() {
@@ -152,6 +190,13 @@ class TurmaForm extends Component {
                         />
                     </div>
                 </div>
+
+                <FotoDropzone 
+                    fotos={this.getFotos()}
+                    onFotoDrop={this.onFotoDrop}
+                    removerFoto={this.removerFoto} 
+                />
+
             </form>
         )
     }

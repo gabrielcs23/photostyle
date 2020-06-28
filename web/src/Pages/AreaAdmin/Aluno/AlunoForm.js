@@ -95,7 +95,6 @@ class AlunoForm extends Component {
         if (validacao.isValid) {
             const aluno = this.getAluno();
             AlunoService.postAluno(aluno)
-                .then(res => res.data)
                 .then(() => {
                     if(this.state.id) {
                         PopUp.sucesso('Aluno(a) atualizado(a) com sucesso');
@@ -104,8 +103,8 @@ class AlunoForm extends Component {
                     }
                     this.props.history.push(Rotas.ALUNO_LISTA);
                 })
-                .catch(error => {
-                    PopUp.erro(error);
+                .catch(() => {
+                    PopUp.erro('Erro no cadastro de aluno');
                     this.setState({canSubmit: true});
                 });
         } else {
@@ -124,6 +123,12 @@ class AlunoForm extends Component {
             aluno.id = this.state.id;
             aluno.irmaoRel = this.state.irmaoRel;
         }
+        // contornando característica de implementação do Jackson
+        // https://github.com/FasterXML/jackson-databind/issues/266
+        aluno.escola.turmas = null;
+        aluno.turma.escola = null;
+        aluno.turma.alunos = null;
+
         return aluno;
     }
 

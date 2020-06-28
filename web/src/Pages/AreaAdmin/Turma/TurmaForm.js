@@ -107,9 +107,11 @@ class TurmaForm extends Component {
                 turma.id = this.state.id;
                 turma.alunos = this.state.alunos;
             }
+            // contornando característica de implementação do Jackson
+            // https://github.com/FasterXML/jackson-databind/issues/266
+            turma.escola.turmas = null;
 
             TurmaService.postTurma(turma)
-                .then(res => res.data)
                 .then(turma => {
                     if(this.state.fotos?.length > 0) {
                         this.uploadFotos();
@@ -118,13 +120,12 @@ class TurmaForm extends Component {
                         this.props.history.push(Rotas.TURMA_LISTA);
                         PopUp.sucesso('Turma atualizada com sucesso');
                     } else {
-                        this.props.selecionar(turma);
-                        this.props.history.push(Rotas.ALUNO_NOVO);
                         PopUp.sucesso('Turma cadastrada com sucesso');
+                        this.props.selecionar(turma);
                     }
                 })
-                .catch(error => {
-                    PopUp.erro(error);
+                .catch(() => {
+                    PopUp.erro('Erro no cadastro de turma');
                     this.setState({canSubmit: true});
                 });
         } else {

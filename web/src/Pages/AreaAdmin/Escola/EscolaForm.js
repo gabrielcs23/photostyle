@@ -48,14 +48,12 @@ class EscolaForm extends Component {
             const escola = new Escola(this.state.nome);
             escola.apelido = this.state.apelido;
             EscolaService.postEscola(escola)
-                .then(res => res.data)
                 .then(escola => {
                     this.props.selecionar(escola);
-                    this.props.history.push(Rotas.TURMA_NOVO);
                     PopUp.sucesso('Escola cadastrada com sucesso');
                 })
-                .catch(error => {
-                    PopUp.erro(error);
+                .catch(() => {
+                    PopUp.erro('Erro no cadastro de escola');
                     this.setState({canSubmit: true});
                 });
         } else {

@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef} from 'react';
+import React, {useEffect, useState, useRef, Fragment} from 'react';
 import {useDropzone} from 'react-dropzone';
 import ModalConfirmarExclusao from '../Modal/Modal'
 
@@ -88,28 +88,15 @@ const FotoDropzone = (props) => {
         setFiles(newFiles);
     }
 
-    const getAreaRemocao = (id, idx) => {
+    const getBotaoExcluir = (id, idx) => {
         if (id) {
-            const idModal = `modal-confirmar-exclusao-${id}`;
             return (
-                <>
-                    <button className={'btn-floating halfway-fab waves-effect waves-light red modal-trigger'}
-                            style={{zIndex: 1000}}
-                            data-target={idModal}
-                        >
-                        <i className="material-icons">delete_forever</i>
-                    </button>
-                    <ModalConfirmarExclusao
-                        idModal={idModal}
-                        titulo={'Excluir foto?'}
-                        mensagem={(
-                            <div>
-                                <p>Tem certeza de que deseja excluir esta foto?</p>
-                            </div>
-                        )}
-                        confirmar={() => removerFoto(idx)}
-                    />
-                </>
+                <button className={'btn-floating halfway-fab waves-effect waves-light red modal-trigger'}
+                        style={{zIndex: 1000}}
+                        data-target={id}
+                    >
+                    <i className="material-icons">delete_forever</i>
+                </button>
             )
         } else {
             return (
@@ -124,17 +111,30 @@ const FotoDropzone = (props) => {
     }
   
     const thumbs = files.map((file, idx) => {
+        const idModal = `modal-confirmar-exclusao-${file.id}`;
         return (
-            <div className="card" style={thumb} key={file.name+file.url}>
-                <div className="card-image" style={thumbInner}>
-                    <img
-                        src={file.url}
-                        style={img}
-                        alt=''
-                    />
-                    {getAreaRemocao(file.id, idx)}
+            <Fragment key={file.name+file.url}>
+                <ModalConfirmarExclusao
+                    idModal={idModal}
+                    titulo={'Excluir foto?'}
+                    mensagem={(
+                        <div>
+                            <p>Tem certeza de que deseja excluir esta foto?</p>
+                        </div>
+                    )}
+                    confirmar={() => removerFoto(idx)}
+                />
+                <div className="card" style={thumb}>
+                    <div className="card-image" style={thumbInner}>
+                        <img
+                            src={file.url}
+                            style={img}
+                            alt=''
+                        />
+                        {getBotaoExcluir(file.id ? idModal : null, idx)}
+                    </div>
                 </div>
-            </div>
+            </Fragment>
         )
     });
 

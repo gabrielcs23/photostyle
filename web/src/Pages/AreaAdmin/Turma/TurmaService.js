@@ -25,6 +25,10 @@ const TurmaService = {
         return res.data;
     },
 
+    deleteTurma: async (id) => {
+        await axios.delete(BASE_URL + `/${id}`);
+    },
+
     adicionarFoto: (id, foto) => {
         const config = {
             headers: {
@@ -34,8 +38,8 @@ const TurmaService = {
         return axios.post(BASE_URL + `/${id}/foto`, foto, config);
     },
 
-    deleteTurma: async (id) => {
-        await axios.delete(BASE_URL + `/${id}`);
+    removerFoto: async (idTurma, idFoto) => {
+        await axios.delete(BASE_URL + `/${idTurma}/foto/${idFoto}`)
     }
 
 }

@@ -81,7 +81,7 @@ public class TurmaController {
         return ResponseEntity.ok(dto);
     }
 
-    @DeleteMapping("/{idTurma}/fotos/{idFoto}")
+    @DeleteMapping("/{idTurma}/foto/{idFoto}")
     public ResponseEntity<?> removerFoto(@PathVariable @NotNull Long idTurma, @PathVariable @NotNull Long idFoto) {
         TurmaEntity turma = turmaService.getEntityPorId(idTurma);
         if (turma == null) {

@@ -33,7 +33,9 @@ class Modal extends Component {
                     {this.state.mensagem}
                 </div>
                 <div className="modal-footer">
-                    <button className="btn mr-3 modal-close waves-effect waves-light grey darken-1">
+                    <button className="btn mr-3 modal-close waves-effect waves-light grey darken-1"
+                        onClick={e => e.preventDefault()}
+                    >
                         Cancelar
                     </button>
                     <button className="btn mr-3 modal-close waves-effect waves-light red darken-3"

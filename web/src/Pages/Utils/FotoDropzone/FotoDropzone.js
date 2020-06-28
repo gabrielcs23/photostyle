@@ -1,5 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import {useDropzone} from 'react-dropzone';
+import ModalConfirmarExclusao from '../Modal/Modal'
 
 const thumbsContainer = {
     display: 'flex',
@@ -65,48 +66,99 @@ const dragzone = {
 }
 
 const FotoDropzone = (props) => {
-    const [files, setFiles] = useState(props.fotos);
+    const [files, setFiles] = useState(props.fotos ? props.fotos : []); // hook para estado
+    const didMountRef = useRef(false); // hook para guardar se componente foi montado ou atualizado
     const { getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject } = useDropzone({
         accept: 'image/*',
         onDrop: acceptedFiles => {
             const newFiles = files.slice();
             acceptedFiles.forEach(file => {
-                props.onFotoDrop(file);
-                Object.assign(file, {preview: URL.createObjectURL(file)});
+                Object.assign(file, {url: URL.createObjectURL(file)});
                 newFiles.push(file);
+                props.onFotoDrop(file);
             });
             setFiles(newFiles);
         }
     });
 
-    const removerFoto = (e, idx) => {
-        e.preventDefault();
+    const removerFoto = (idx) => {
         props.removerFoto(idx);
+        const newFiles = files.slice();
+        newFiles.splice(idx, 1);
+        setFiles(newFiles);
     }
-  
-    const thumbs = files.map((file, idx) => (
-        <div className="card" style={thumb} key={file.name+file.preview}>
-            <div className="card-image" style={thumbInner}>
-                <img
-                    src={file.preview}
-                    style={img}
-                    alt=''
-                />
-                <button className="btn-floating halfway-fab waves-effect waves-light red"
-                    style={{zIndex: 1000}}
-                    onClick={e => removerFoto(e, idx)}
-                >
+
+    const getAreaRemocao = (id, idx) => {
+        if (id) {
+            const idModal = `modal-confirmar-exclusao-${id}`;
+            return (
+                <>
+                    <button className={'btn-floating halfway-fab waves-effect waves-light red modal-trigger'}
+                            style={{zIndex: 1000}}
+                            data-target={idModal}
+                        >
+                        <i className="material-icons">delete_forever</i>
+                    </button>
+                    <ModalConfirmarExclusao
+                        idModal={idModal}
+                        titulo={'Excluir foto?'}
+                        mensagem={(
+                            <div>
+                                <p>Tem certeza de que deseja excluir esta foto?</p>
+                            </div>
+                        )}
+                        confirmar={() => removerFoto(idx)}
+                    />
+                </>
+            )
+        } else {
+            return (
+                <button className={'btn-floating halfway-fab waves-effect waves-light red'}
+                        style={{zIndex: 1000}}
+                        onClick={() => removerFoto(idx)}
+                    >
                     <i className="material-icons">delete_forever</i>
                 </button>
+            )
+        }
+    }
+  
+    const thumbs = files.map((file, idx) => {
+        return (
+            <div className="card" style={thumb} key={file.name+file.url}>
+                <div className="card-image" style={thumbInner}>
+                    <img
+                        src={file.url}
+                        style={img}
+                        alt=''
+                    />
+                    {getAreaRemocao(file.id, idx)}
+                </div>
             </div>
-        </div>
         )
-    );
+    });
 
-    useEffect(() => () => {
-        // Make sure to revoke the data uris to avoid memory leaks
-        files.forEach(file => URL.revokeObjectURL(file.preview));
-    }, [files]);
+    // hook capaz de agregar componentDidMount, componentDidUpdate e componentWillUnmount
+    useEffect(() => {
+        if (didMountRef.current) { // componentDidUpdate?
+            // componente pai carregou fotos por http?
+            if (files.length === 0 && props.fotos?.length > 0) {
+                props.fotos
+                    .filter(foto => !foto.url)
+                    .map(foto => Object.assign(foto, {url: URL.createObjectURL(foto.formData.get('file'))}));
+                setFiles(props.fotos);
+            }
+        } else { // componentDidMount?
+            didMountRef.current = true;
+        }
+        return () => { // retorno representa componentWillUnmount
+            files.forEach(file => {
+                if (file.id == null) {
+                    URL.revokeObjectURL(file.url); // evita memory leak com imagens não enviadas
+                }
+            });
+        }
+    }, [props,files]);
 
     return (
         <section className="container">

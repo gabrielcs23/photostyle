@@ -76,11 +76,6 @@ class TurmaForm extends Component {
         });
     }
 
-    getFotos() {
-        const fotos = this.state.fotos.slice();
-        return fotos.filter(foto => foto.formData != null).map(foto => foto.formData.get('file'));
-    }
-
     onFotoDrop = (arq) => {
         const formData = new FormData();
         formData.append('file', arq, arq.name);
@@ -93,6 +88,11 @@ class TurmaForm extends Component {
 
     removerFoto = (idx) => {
         const fotos = this.state.fotos.slice();
+        if (fotos[idx].id) {
+            TurmaService.removerFoto(this.state.id, fotos[idx].id)
+                .then(() => PopUp.sucesso('Foto removida com sucesso'))
+                .catch(error => PopUp.erro(error));
+        }
         fotos.splice(idx, 1);
         this.setState({fotos: fotos});
     }
@@ -192,11 +192,11 @@ class TurmaForm extends Component {
                 </div>
 
                 <FotoDropzone 
-                    fotos={this.getFotos()}
+                    fotos={this.state.fotos.slice()}
                     onFotoDrop={this.onFotoDrop}
                     removerFoto={this.removerFoto} 
                 />
-
+                
             </form>
         )
     }

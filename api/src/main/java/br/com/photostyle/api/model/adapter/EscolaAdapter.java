@@ -35,7 +35,7 @@ public class EscolaAdapter extends BaseAdapter<EscolaEntity, EscolaDto>{
             List<TurmaDto> turmasDto = entity.getTurmas().stream()
                     .map(turmaEntity -> {
                         TurmaDto turmaDto = new TurmaDto();
-                        turmaDto.setId(entity.getId());
+                        turmaDto.setId(turmaEntity.getId());
                         turmaDto.setNome(turmaEntity.getNome());
                         return turmaDto;
                     })

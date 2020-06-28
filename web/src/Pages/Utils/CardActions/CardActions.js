@@ -38,7 +38,6 @@ class CardActions extends Component {
                         </button>
                         <button className="left-fab btn-floating halfway-fab waves-effect waves-light red modal-trigger"
                             data-target={this.idModal}
-                            onClick={this.props.excluir}
                         >
                             <i className="material-icons">delete_forever</i>
                         </button>

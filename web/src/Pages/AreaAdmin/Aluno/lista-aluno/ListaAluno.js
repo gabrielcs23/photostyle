@@ -19,6 +19,7 @@ class ListaAluno extends Component {
     componentDidMount() {
         if(this.props.turma != null) {
             AlunoService.getListPorTurma(this.turma.id)
+                .then(lista => this.ordenaLista(lista))
                 .then(lista => this.setState({listaAlunos : lista}))
                 .catch(error => PopUp.erro(error));
         } else {
@@ -35,6 +36,20 @@ class ListaAluno extends Component {
                 PopUp.sucesso('Aluno removida com sucesso');
             })
             .catch(error => PopUp.erro(error));
+    }
+
+    ordenaLista(lista) {
+        return lista.sort((a, b) => {
+            const nomeA = a.nome.toUpperCase();
+            const nomeB = b.nome.toUpperCase();
+            if (nomeA < nomeB) {
+                return -1;
+            }
+            if (nomeA > nomeB) {
+                return 1;
+            }
+            return 0;
+        });
     }
 
     render() {

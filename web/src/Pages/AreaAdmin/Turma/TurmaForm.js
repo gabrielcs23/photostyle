@@ -107,9 +107,6 @@ class TurmaForm extends Component {
                 turma.id = this.state.id;
                 turma.alunos = this.state.alunos;
             }
-            // contornando característica de implementação do Jackson
-            // https://github.com/FasterXML/jackson-databind/issues/266
-            turma.escola.turmas = null;
 
             TurmaService.postTurma(turma)
                 .then(turma => {

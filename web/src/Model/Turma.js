@@ -1,3 +1,5 @@
+import Escola from "./Escola";
+
 class Turma {
     id;
     nome;
@@ -5,9 +7,14 @@ class Turma {
     alunos = [];
     fotos = [];
 
-    constructor(nome, escola) {
+    constructor(nome, escola, id) {
         this.nome = nome;
-        this.escola = escola;
+        if (escola) {
+            this.escola = new Escola(escola.nome, escola.id);
+        }
+        if (id != null) {
+            this.id = id;
+        }
     }
 
 }

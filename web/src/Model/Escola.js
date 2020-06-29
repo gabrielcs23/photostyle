@@ -2,11 +2,13 @@ class Escola {
     id;
     nome;
     apelido;
-    turmas;
+    turmas = [];
 
-    constructor(nome) {
+    constructor(nome, id) {
         this.nome = nome;
-        this.turmas = [];
+        if (id != null) {
+            this.id = id;
+        }
     }
 
 }

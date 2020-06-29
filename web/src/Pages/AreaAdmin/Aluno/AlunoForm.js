@@ -121,13 +121,8 @@ class AlunoForm extends Component {
         aluno.foto = this.state.foto;
         if (this.state.id) {
             aluno.id = this.state.id;
-            aluno.irmaoRel = this.state.irmaoRel;
+            aluno.setIrmaoRel(this.state.irmaoRel);
         }
-        // contornando característica de implementação do Jackson
-        // https://github.com/FasterXML/jackson-databind/issues/266
-        aluno.escola.turmas = null;
-        aluno.turma.escola = null;
-        aluno.turma.alunos = null;
 
         return aluno;
     }

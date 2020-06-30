@@ -89,9 +89,14 @@ class TurmaForm extends Component {
     removerFoto = (idx) => {
         const fotos = this.state.fotos.slice();
         if (fotos[idx].id) {
+            const bk = fotos[idx];
             TurmaService.removerFoto(this.state.id, fotos[idx].id)
                 .then(() => PopUp.sucesso('Foto removida com sucesso'))
-                .catch(error => PopUp.erro(error));
+                .catch(() => {
+                    PopUp.erro('Erro na remoção da foto');
+                    fotos.push(bk);
+                    this.setState({fotos: fotos});
+                })
         }
         fotos.splice(idx, 1);
         this.setState({fotos: fotos});
@@ -192,7 +197,7 @@ class TurmaForm extends Component {
                 <FotoDropzone 
                     fotos={this.state.fotos.slice()}
                     onFotoDrop={this.onFotoDrop}
-                    removerFoto={this.removerFoto} 
+                    removerFoto={this.removerFoto}
                 />
                 
             </form>

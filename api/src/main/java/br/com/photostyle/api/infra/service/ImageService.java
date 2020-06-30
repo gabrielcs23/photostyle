@@ -23,31 +23,27 @@ public class ImageService {
     @Autowired
     private AmazonConstants constants;
 
-    private String buildImageUrl(String fileName) {
-        return "http://s3." + constants.getRegion() + ".amazonaws.com/" + constants.getBucket() + "/" + fileName;
-    }
-
-    public String saveImage(MultipartFile image) {
+    public void saveImage(MultipartFile image, String imgName) {
         try {
             ObjectMetadata metadata = new ObjectMetadata();
             metadata.setContentLength(image.getSize());
+            metadata.setContentType(image.getContentType());
+
             amazonClient.putObject(
                     new PutObjectRequest(constants.getBucket(),
-                            image.getOriginalFilename(), image.getInputStream(),
+                            imgName, image.getInputStream(),
                             metadata)
                     .withCannedAcl(CannedAccessControlList.PublicRead));
 
-            return buildImageUrl(image.getOriginalFilename());
         } catch (AmazonServiceException | IOException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
 
-    public void deleteImage(String imageUrl) {
-        String fileName = imageUrl.substring(imageUrl.lastIndexOf("/") + 1);
+    public void deleteImage(String imgName) {
         try {
-            amazonClient.deleteObject(new DeleteObjectRequest(constants.getBucket(), fileName));
+            amazonClient.deleteObject(new DeleteObjectRequest(constants.getBucket(), imgName));
         } catch (AmazonClientException e) {
             e.printStackTrace();
             throw new RuntimeException(e);

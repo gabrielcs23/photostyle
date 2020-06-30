@@ -12,7 +12,7 @@ public class FotoEntity {
     private Long id;
 
     @Column(nullable = false)
-    private String path;
+    private String fileName;
 
     public Long getId() {
         return id;
@@ -22,12 +22,11 @@ public class FotoEntity {
         this.id = id;
     }
 
-    public String getPath() {
-        return path;
+    public String getFileName() {
+        return fileName;
     }
 
-    public void setPath(String path) {
-        this.path = path;
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
-
 }

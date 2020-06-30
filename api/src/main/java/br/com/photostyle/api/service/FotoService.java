@@ -1,5 +1,6 @@
 package br.com.photostyle.api.service;
 
+import br.com.photostyle.api.infra.service.ImageNameManager;
 import br.com.photostyle.api.infra.service.ImageService;
 import br.com.photostyle.api.model.adapter.FotoAdapter;
 import br.com.photostyle.api.model.dto.FotoDto;
@@ -8,6 +9,7 @@ import br.com.photostyle.api.repository.FotoRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
@@ -27,6 +29,9 @@ public class FotoService {
     @Autowired
     private ImageService imgService;
 
+    @Autowired
+    private ImageNameManager imgNameManager;
+
     public List<FotoEntity> listar() {
         return repository.findAll();
     }
@@ -45,27 +50,42 @@ public class FotoService {
 
     @Transactional
     public FotoEntity upload(MultipartFile foto) {
-        String path = imgService.saveImage(foto);
+        String imgName = buildFotoName(foto.getOriginalFilename());
+        imgService.saveImage(foto, imgName);
         try {
             FotoEntity entity = new FotoEntity();
-            entity.setPath(path);
+            entity.setFileName(imgName);
             return repository.save(entity);
         } catch(Exception e) {
-            imgService.deleteImage(path);
+            if (!StringUtils.isEmpty(imgName)) {
+                imgService.deleteImage(imgName);
+            }
             throw e;
         }
     }
 
     @Transactional
-    public void remover(@NotNull Long id) {
+    protected void remover(@NotNull Long id) {
         FotoEntity foto = getPorId(id);
         remover(foto);
     }
 
     @Transactional
     public void remover(FotoEntity foto) {
-        imgService.deleteImage(foto.getPath());
+        imgService.deleteImage(foto.getFileName());
         repository.delete(foto);
+    }
+
+    private String buildFotoName(String originalFileName) {
+        String imgName;
+        boolean isNameUnico = false;
+        do {
+            imgName = imgNameManager.buildName(originalFileName);
+            if (repository.getByFileName(imgName) == null) {
+                isNameUnico = true;
+            }
+        } while(!isNameUnico);
+        return imgName;
     }
 
     public FotoEntity copiaFoto(FotoEntity original) {

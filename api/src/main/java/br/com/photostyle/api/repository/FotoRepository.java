@@ -4,4 +4,7 @@ import br.com.photostyle.api.model.entity.FotoEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface FotoRepository extends JpaRepository<FotoEntity, Long> {
+
+    FotoEntity getByFileName(String fileName);
+
 }

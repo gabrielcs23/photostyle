@@ -113,17 +113,24 @@ class TurmaForm extends Component {
                 turma.alunos = this.state.alunos;
             }
 
+            let turmaAposPost;
             TurmaService.postTurma(turma)
                 .then(turma => {
-                    if(this.state.fotos?.length > 0) {
-                        this.uploadFotos();
-                    }
+                    turmaAposPost = turma;
                     if(this.state.id) {
-                        this.props.history.push(Rotas.TURMA_LISTA);
                         PopUp.sucesso('Turma atualizada com sucesso');
                     } else {
                         PopUp.sucesso('Turma cadastrada com sucesso');
-                        this.props.selecionar(turma);
+                    }
+                    if(this.state.fotos?.length > 0) {
+                        return this.uploadFotos(turmaAposPost.id);
+                    }
+                })
+                .then(() => {
+                    if(this.state.id) {
+                        this.props.history.push(Rotas.TURMA_LISTA);
+                    } else {
+                        this.props.selecionar(turmaAposPost);
                     }
                 })
                 .catch(() => {
@@ -139,17 +146,17 @@ class TurmaForm extends Component {
         }
     }
 
-    uploadFotos() {
-        const { id, fotos } = this.state;
+    uploadFotos(id) {
+        const { fotos } = this.state;
         const promises = [];
         fotos.forEach(foto => {
             if (foto.id == null) {
                 promises.push(TurmaService.adicionarFoto(id, foto.formData));
             }
         });
-        Promise.allSettled(promises)
+        return Promise.allSettled(promises)
             .then(resultados => resultados.filter(resultado => resultado.status === 'rejected'))
-            .then(resultados => resultados.length === 0 ? PopUp.sucesso('Fotos enviadas com sucesso') : PopUp.erro(`Erro no envio de ${resultados.length}`));
+            .then(resultados => resultados.length === 0 ? PopUp.sucesso('Foto(s) enviadas com sucesso') : PopUp.erro(`Erro no envio de ${resultados.length}`));
     }
 
     render() {

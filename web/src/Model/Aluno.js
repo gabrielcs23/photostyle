@@ -25,7 +25,7 @@ class Aluno {
 
     setIrmaoRel(rel) {
         if (rel != null) {
-            this.irmaoRel = new IrmaoRel(rel);
+            this.irmaoRel = new IrmaoRel(rel.irmaos, rel.fotos, rel.id, this.id);
         }
     }
 

@@ -5,14 +5,17 @@ class IrmaoRel {
     irmaos;
     fotos;
 
-    constructor(irmaos, fotos) {
+    constructor(irmaos, fotos, id, idRemover) {
         this.irmaos = [];
         irmaos.forEach(irmao => {
-            const irmaoCopia = new Aluno();
-            irmaoCopia.id = irmao.id;
-            irmaos.push(irmaoCopia);
+            if (!idRemover || irmao.id !== idRemover) {
+                const irmaoCopia = new Aluno();
+                irmaoCopia.id = irmao.id;
+                this.irmaos.push(irmaoCopia);
+            }
         });
         this.fotos = fotos;
+        this.id = id;
     }
 
 }

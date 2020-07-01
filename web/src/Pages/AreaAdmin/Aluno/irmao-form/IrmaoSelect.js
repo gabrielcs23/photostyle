@@ -8,8 +8,6 @@ class IrmaoSelect extends Component {
 
     constructor(props) {
         super(props);
-        this.escolaId = this.props.escolaId;
-        this.alunoId = this.props.alunoId;
         this.composedKey = this.props.composedKey;
 
         // se irmao foi carregado do banco
@@ -38,7 +36,7 @@ class IrmaoSelect extends Component {
     }
 
     listTurmas() {
-        TurmaService.getListNomesPorEscola(this.escolaId)
+        TurmaService.getListNomesPorEscola(this.props.escolaId)
             .then(turmas => this.setState({turmas: turmas}))
             .catch(error => PopUp.erro(error));
     }
@@ -50,7 +48,7 @@ class IrmaoSelect extends Component {
                     PopUp.aviso('Esta turma não possui alunos');
                     this.setState({alunos: []});
                 } else {
-                    alunos = alunos.filter(aluno => aluno.id !== this.alunoId);
+                    alunos = alunos.filter(aluno => aluno.id !== this.props.alunoId);
                     this.setState({alunos: alunos});
                 }
             })

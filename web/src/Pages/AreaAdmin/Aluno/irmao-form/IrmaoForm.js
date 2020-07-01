@@ -7,13 +7,11 @@ class IrmaoForm extends Component {
     constructor(props) {
         super(props);
 
-        this.escolaId = this.props.escolaId;
-        this.alunoId = this.props.alunoId;
         if (this.props.irmaoRel) {
             const { irmaoRel } = this.props;
             this.state = {
                 id: irmaoRel.id,
-                irmaos: irmaoRel.irmaos.filter(irmao => irmao.id !== this.alunoId),
+                irmaos: irmaoRel.irmaos.filter(irmao => irmao.id !== this.props.alunoId),
                 fotos: irmaoRel.fotos,
                 addIrmaoDisabled: false
             }
@@ -22,10 +20,21 @@ class IrmaoForm extends Component {
                 id: null,
                 irmaos: [],
                 fotos: [],
-                addIrmaoDisabled: false
+                addIrmaoDisabled: false,
             }
         }
 
+    }
+
+    componentDidUpdate(prevProps) {
+        if (!prevProps.irmaoRel && this.props.irmaoRel && this.state.irmaos?.length === 0) {
+            const { irmaoRel } = this.props;
+            this.setState({
+                id: irmaoRel.id,
+                irmaos: irmaoRel.irmaos.filter(irmao => irmao.id !== this.props.alunoId),
+                fotos: irmaoRel.fotos
+            });
+        }
     }
 
     relacionarIrmao(irmao, idx) {
@@ -33,10 +42,7 @@ class IrmaoForm extends Component {
         irmaos[idx] = irmao;
         this.setState({irmaos: irmaos, addIrmaoDisabled: false});
 
-        const irmaoRel = new IrmaoRel(irmaos, this.state.fotos);
-        if (this.state.id) {
-            irmaoRel.id = this.state.id;
-        }
+        const irmaoRel = new IrmaoRel(irmaos, this.state.fotos, this.state.id);
         this.props.relacionarIrmao(irmaoRel);
     }
 
@@ -54,8 +60,8 @@ class IrmaoForm extends Component {
                     key={idx}
                     composedKey={`${idx}`}
                     irmao={irmao}
-                    escolaId={this.escolaId}
-                    alunoId={this.alunoId}
+                    escolaId={this.props.escolaId}
+                    alunoId={this.props.alunoId}
                     selecionar={(irmao) => this.relacionarIrmao(irmao, idx)}
                 />
             )

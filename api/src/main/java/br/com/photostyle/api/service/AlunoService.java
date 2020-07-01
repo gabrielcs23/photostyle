@@ -14,6 +14,7 @@ import br.com.photostyle.api.repository.IrmaoRelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
@@ -83,7 +84,7 @@ public class AlunoService extends BaseService<AlunoEntity, AlunoDto> {
     }
 
     @Transactional
-    public FotoDto uploadFoto(AlunoEntity aluno, FotoDto foto) {
+    public FotoDto uploadFoto(AlunoEntity aluno, MultipartFile foto) {
         FotoEntity fotoEntity = fotoService.upload(foto);
 
         FotoEntity fotoAntiga = null;

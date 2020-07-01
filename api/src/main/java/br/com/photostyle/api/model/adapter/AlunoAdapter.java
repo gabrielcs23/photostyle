@@ -81,6 +81,11 @@ public class AlunoAdapter extends BaseAdapter<AlunoEntity, AlunoDto> {
         dto.setEscola(escolaDto);
         dto.setTurma(turmaDto);
 
+        if (entity.getFoto() != null) {
+            FotoDto fotoDto = fotoAdapter.entityToDto(entity.getFoto());
+            dto.setFoto(fotoDto);
+        }
+
         return dto;
     }
 

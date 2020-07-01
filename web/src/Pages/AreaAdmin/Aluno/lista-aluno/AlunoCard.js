@@ -29,7 +29,6 @@ const AlunoCard = (props) => {
                     <div className="card-title mb-0 text-truncate">
                         <span>{aluno.nome}</span>
                     </div>
-                    <p>Fotos: {aluno.fotos ? aluno.fotos.length : '0'}</p>
                 </div>
 
             </div>

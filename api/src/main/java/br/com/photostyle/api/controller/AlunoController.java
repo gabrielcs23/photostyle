@@ -8,6 +8,7 @@ import br.com.photostyle.api.service.AlunoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
@@ -71,7 +72,7 @@ public class AlunoController {
     }
 
     @PostMapping("/{id}/foto")
-    public ResponseEntity<FotoDto> uploadFoto(@PathVariable @NotNull Long id, @RequestBody @Valid FotoDto foto) {
+    public ResponseEntity<FotoDto> uploadFoto(@PathVariable @NotNull Long id, @RequestParam("file") MultipartFile foto) {
         AlunoEntity entity = alunoService.getEntityPorId(id);
         if (entity == null) {
             return ResponseEntity.notFound().build();

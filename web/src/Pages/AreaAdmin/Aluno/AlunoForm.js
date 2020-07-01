@@ -7,6 +7,8 @@ import FormValidator from '../form-utils/FormValidator';
 import PopUp from '../../Utils/pop-up/PopUp';
 import M from 'materialize-css';
 import IrmaoForm from './irmao-form/IrmaoForm';
+import FotoDropzone from '../../Utils/FotoDropzone/FotoDropzone';
+import Foto from '../../../Model/Foto';
 
 class AlunoForm extends Component {
 
@@ -95,14 +97,19 @@ class AlunoForm extends Component {
         if (validacao.isValid) {
             const aluno = this.getAluno();
             AlunoService.postAluno(aluno)
-                .then(() => {
+                .then(aluno => {
                     if(this.state.id) {
                         PopUp.sucesso('Aluno(a) atualizado(a) com sucesso');
                     } else {
                         PopUp.sucesso('Aluno(a) cadastrado(a) com sucesso');
                     }
-                    this.props.history.push(Rotas.ALUNO_LISTA);
+                    if (this.state.foto && !this.state.foto.id) {
+                        return AlunoService.uploadFoto(aluno.id, this.state.foto.formData)
+                            .then(() => PopUp.sucesso('Foto enviada com sucesso'))
+                            .catch(() => PopUp.erro('Erro no envio da foto'))
+                    }
                 })
+                .then(() => this.props.history.push(Rotas.ALUNO_LISTA))
                 .catch(() => {
                     PopUp.erro('Erro no cadastro de aluno');
                     this.setState({canSubmit: true});
@@ -118,13 +125,30 @@ class AlunoForm extends Component {
 
     getAluno() {
         const aluno = new Aluno(this.state.nome, this.state.matricula, this.state.escola, this.state.turma);
-        aluno.foto = this.state.foto;
         if (this.state.id) {
             aluno.id = this.state.id;
             aluno.setIrmaoRel(this.state.irmaoRel);
         }
 
         return aluno;
+    }
+
+    onFotoDrop(arq) {
+        if (this.state.foto?.id) {
+            PopUp.aviso('Foto individual substituída');
+        }
+        const foto = new Foto(arq);
+        this.setState({foto: foto, canSubmit: true});
+    }
+
+    removerFoto() {
+        const foto = this.state.foto;
+        if (foto.id) {
+            AlunoService.removerFoto(this.state.id)
+                .then(() => PopUp.sucesso('Foto removida com sucesso'))
+                .catch(error => PopUp.erro(error));
+        }
+        this.setState({foto: null});
     }
 
     relacionarIrmao(irmaoRel) {
@@ -189,6 +213,13 @@ class AlunoForm extends Component {
                         />
                     </div>
                 </div>
+
+                <FotoDropzone
+                    fotos={this.state.foto ? [this.state.foto] : null}
+                    multiple={false}
+                    onFotoDrop={foto => this.onFotoDrop(foto)}
+                    removerFoto={() => this.removerFoto()} 
+                />
 
                 {this.state.escola ? 
                     <IrmaoForm 

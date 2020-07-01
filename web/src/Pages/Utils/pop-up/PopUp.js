@@ -3,7 +3,7 @@ import M from 'materialize-css';
 const status = {
     SUCCESS: 'green',
     ERROR: 'red',
-    WARNING: 'yellow'
+    WARNING: 'yellow darken-2'
 }
 
 const PopUp = {

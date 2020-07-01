@@ -77,10 +77,7 @@ class TurmaForm extends Component {
     }
 
     onFotoDrop = (arq) => {
-        const formData = new FormData();
-        formData.append('file', arq, arq.name);
-        const foto = new Foto();
-        foto.formData = formData;
+        const foto = new Foto(arq);
         const fotos = this.state.fotos.slice();
         fotos.push(foto);
         this.setState({fotos: fotos, canSubmit: true});

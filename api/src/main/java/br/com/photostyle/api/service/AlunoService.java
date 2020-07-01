@@ -53,8 +53,9 @@ public class AlunoService extends BaseService<AlunoEntity, AlunoDto> {
         alunoEntity.setTurma(turma);
         alunoEntity.setEscola(turma.getEscola());
 
-        if (aluno.getFoto() != null) {
-            FotoEntity fotoEntity = fotoService.upload(aluno.getFoto());
+        FotoDto foto = aluno.getFoto();
+        if (foto != null && foto.getId() != null) {
+            FotoEntity fotoEntity = fotoService.getPorId(foto.getId());
             alunoEntity.setFoto(fotoEntity);
         }
 

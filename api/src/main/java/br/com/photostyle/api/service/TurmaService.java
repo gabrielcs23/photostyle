@@ -42,12 +42,18 @@ public class TurmaService extends BaseService<TurmaEntity, TurmaDto> {
 
     @Transactional
     public TurmaDto cadastrarTurma(TurmaDto turma) {
-        EscolaEntity escola = escolaService.getEntityPorId(turma.getEscola().getId());
-        if (escola == null) {
-            return null;
-        }
         TurmaEntity turmaEntity = adapter.dtoToEntity(turma);
-        turmaEntity.setEscola(escola);
+        if (turmaEntity.getId() == null) {
+            EscolaEntity escola = escolaService.getEntityPorId(turma.getEscola().getId());
+            if (escola == null) {
+                return null;
+            }
+            turmaEntity.setEscola(escola);
+        } else {
+            TurmaEntity entityAntiga = getEntityPorId(turmaEntity.getId());
+            turmaEntity.setEscola(entityAntiga.getEscola());
+            turmaEntity.setFotos(entityAntiga.getFotos());
+        }
         turmaEntity = repository.save(turmaEntity);
         return adapter.entityToDto(turmaEntity);
     }

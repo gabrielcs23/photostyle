@@ -70,22 +70,46 @@ const FotoDropzone = (props) => {
     const didMountRef = useRef(false); // hook para guardar se componente foi montado ou atualizado
     const { getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject } = useDropzone({
         accept: 'image/*',
-        onDrop: acceptedFiles => {
-            const newFiles = files.slice();
-            acceptedFiles.forEach(file => {
-                Object.assign(file, {url: URL.createObjectURL(file)});
-                newFiles.push(file);
-                props.onFotoDrop(file);
-            });
-            setFiles(newFiles);
-        }
+        multiple: props.multiple,
+        onDrop: acceptedFiles => onDrop(acceptedFiles)
     });
 
-    const removerFoto = (idx) => {
-        props.removerFoto(idx);
+    const onDrop = (drop) => {
+        if (props.multiple) {
+            return onDropMultiple(drop);
+        } else {
+            return onDropSingle(drop);
+        }
+    }
+
+    const onDropSingle = (drop) => {
+        drop.forEach(foto => {
+            Object.assign(foto, {url: URL.createObjectURL(foto)});
+            setFiles([foto]);
+            props.onFotoDrop(foto);
+        });
+    }
+    
+    const onDropMultiple = (fotos) => {
         const newFiles = files.slice();
-        newFiles.splice(idx, 1);
+        fotos.forEach(file => {
+            Object.assign(file, {url: URL.createObjectURL(file)});
+            newFiles.push(file);
+            props.onFotoDrop(file);
+        });
         setFiles(newFiles);
+    }
+
+    const removerFoto = (idx) => {
+        if (props.multiple) {
+            props.removerFoto(idx);
+            const newFiles = files.slice();
+            newFiles.splice(idx, 1);
+            setFiles(newFiles);
+        } else {
+            props.removerFoto();
+            setFiles([]);
+        }
     }
 
     const getBotaoExcluir = (id, idx) => {

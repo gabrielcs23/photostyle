@@ -198,6 +198,7 @@ class TurmaForm extends Component {
                     fotos={this.state.fotos.slice()}
                     onFotoDrop={this.onFotoDrop}
                     removerFoto={this.removerFoto}
+                    multiple={true}
                 />
                 
             </form>

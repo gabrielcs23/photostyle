@@ -1,5 +1,6 @@
 package br.com.photostyle.api.infra.amazon;
 
+import com.amazonaws.ClientConfiguration;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
@@ -22,6 +23,7 @@ public class AmazonConfiguration {
     @Bean
     public AmazonS3 amazonClient() {
         return AmazonS3ClientBuilder.standard().withRegion(constants.getRegion())
+                .withClientConfiguration(new ClientConfiguration().withMaxErrorRetry(3))
                 .withCredentials(new AWSStaticCredentialsProvider(basicAWSCredentials()))
                 .build();
     }

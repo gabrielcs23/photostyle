@@ -23,7 +23,7 @@ public class AmazonConfiguration {
     @Bean
     public AmazonS3 amazonClient() {
         return AmazonS3ClientBuilder.standard().withRegion(constants.getRegion())
-                .withClientConfiguration(new ClientConfiguration().withMaxErrorRetry(3))
+                .withClientConfiguration(new ClientConfiguration().withMaxErrorRetry(5))
                 .withCredentials(new AWSStaticCredentialsProvider(basicAWSCredentials()))
                 .build();
     }

@@ -23,7 +23,13 @@ public class ImageService {
     @Autowired
     private AmazonConstants constants;
 
-    public void saveImage(MultipartFile image, String imgName) {
+    private final int MAX_TRIES = 5;
+
+    public void saveImage(MultipartFile image, String imgName){
+        saveImage(image, imgName, MAX_TRIES);
+    }
+
+    private void saveImage(MultipartFile image, String imgName, int tentativas) {
         try {
             ObjectMetadata metadata = new ObjectMetadata();
             metadata.setContentLength(image.getSize());
@@ -36,6 +42,9 @@ public class ImageService {
                     .withCannedAcl(CannedAccessControlList.PublicRead));
 
         } catch (AmazonServiceException | IOException e) {
+            if (tentativas > 0) {
+                saveImage(image, imgName, --tentativas);
+            }
             e.printStackTrace();
             throw new RuntimeException(e);
         }

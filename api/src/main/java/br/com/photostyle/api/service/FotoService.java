@@ -42,13 +42,6 @@ public class FotoService {
     }
 
     @Transactional
-    @Deprecated
-    public FotoEntity upload(FotoDto dto) {
-        MultipartFile foto = dto.getFoto();
-        return upload(foto);
-    }
-
-    @Transactional
     public FotoEntity upload(MultipartFile foto) {
         String imgName = buildFotoName(foto.getOriginalFilename());
         imgService.saveImage(foto, imgName);

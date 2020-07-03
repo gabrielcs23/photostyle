@@ -9,6 +9,8 @@ import br.com.photostyle.api.model.entity.IrmaoRelEntity;
 import br.com.photostyle.api.repository.IrmaoRelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -92,25 +94,25 @@ public class IrmaoService {
         }
     }
 
-//    @Transactional
-//    public List<FotoDto> atualizarFotosIrmaos(IrmaoRelEntity entity, List<FotoDto> fotosNovas) {
-//
-//        if (!CollectionUtils.isEmpty(entity.getFotos())) {
-//            removerFotosIrmaos(entity);
-//        }
-//
-//        List<FotoEntity> fotos = uploadFotosIrmaos(fotosNovas);
-//        entity.setFotos(fotos);
-//        repository.save(entity);
-//
-//        return fotoService.entityListToDtoList(fotos);
-//    }
+    @Transactional
+    public FotoDto adicionarFotoIrmao(IrmaoRelEntity irmaoRel, MultipartFile foto) {
+        FotoEntity fotoEntity = fotoService.upload(foto);
+        irmaoRel.getFotos().add(fotoEntity);
+        repository.save(irmaoRel);
 
-    private List<FotoEntity> uploadFotosIrmaos(List<FotoDto> fotos) {
-        return fotos.stream().map(foto -> fotoService.upload(foto)).collect(Collectors.toList());
+        return fotoService.entityToDto(fotoEntity);
     }
 
-//    @Transactional
-//    public void removerFotosIrmaos(IrmaoRelEntity irmaoRel);
-    
+    @Transactional
+    public void removerFotoIrmao(IrmaoRelEntity irmaoRel, Long idFoto) {
+        List<FotoEntity> fotos = irmaoRel.getFotos();
+        if (!CollectionUtils.isEmpty(fotos)) {
+            List<FotoEntity> fotosFiltradas = fotos.stream()
+                    .filter(foto -> !foto.getId().equals(idFoto))
+                    .collect(Collectors.toList());
+            irmaoRel.setFotos(fotosFiltradas);
+            repository.save(irmaoRel);
+            fotoService.remover(idFoto);
+        }
+    }
 }

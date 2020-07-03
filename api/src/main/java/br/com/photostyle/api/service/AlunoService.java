@@ -1,16 +1,13 @@
 package br.com.photostyle.api.service;
 
 import br.com.photostyle.api.model.adapter.AlunoAdapter;
-import br.com.photostyle.api.model.adapter.IrmaoAdapter;
 import br.com.photostyle.api.model.dto.AlunoDto;
 import br.com.photostyle.api.model.dto.FotoDto;
 import br.com.photostyle.api.model.dto.IrmaoRelDto;
 import br.com.photostyle.api.model.entity.AlunoEntity;
 import br.com.photostyle.api.model.entity.FotoEntity;
-import br.com.photostyle.api.model.entity.IrmaoRelEntity;
 import br.com.photostyle.api.model.entity.TurmaEntity;
 import br.com.photostyle.api.repository.AlunoRepository;
-import br.com.photostyle.api.repository.IrmaoRelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -118,7 +115,6 @@ public class AlunoService extends BaseService<AlunoEntity, AlunoDto> {
         if (fotoAntiga != null) {
             fotoService.remover(fotoAntiga);
         }
-
         return fotoService.entityToDto(fotoEntity);
     }
 
@@ -178,12 +174,12 @@ public class AlunoService extends BaseService<AlunoEntity, AlunoDto> {
         return irmaoService.relacionaIrmaos(aluno, idsIrmaos);
     }
 
-//    @Transactional
-//    public List<FotoDto> atualizarFotosIrmaos(IrmaoRelEntity entity, List<FotoDto> fotosNovas);
-//
-//    @Transactional
-//    public void removerFotosIrmaosEPersistir(IrmaoRelEntity irmaoRel);
-//
-//    private void removerFotosIrmaos(IrmaoRelEntity irmaoRel);
+    public FotoDto adicionarFotoIrmao(AlunoEntity aluno, MultipartFile foto) {
+        return irmaoService.adicionarFotoIrmao(aluno.getIrmaoRel(), foto);
+    }
+
+    public void removerFotoIrmao(AlunoEntity aluno, Long idFoto) {
+        irmaoService.removerFotoIrmao(aluno.getIrmaoRel(), idFoto);
+    }
 
 }

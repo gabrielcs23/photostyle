@@ -110,24 +110,24 @@ public class AlunoController {
         return ResponseEntity.ok(relacionamento);
     }
 
-//    @PostMapping("/{idAluno}/fotos-irmaos")
-//    public ResponseEntity<List<FotoDto>> atualizarFotosIrmaos(@PathVariable @NotNull Long idAluno, @RequestBody @Valid List<FotoDto> fotos) {
-//        IrmaoRelEntity irmaoRel = alunoService.getIrmaoRelEntity(idAluno);
-//        if (irmaoRel == null) {
-//            return ResponseEntity.notFound().build();
-//        }
-//        List<FotoDto> fotosSalvas = alunoService.atualizarFotosIrmaos(irmaoRel, fotos);
-//        return ResponseEntity.ok(fotosSalvas);
-//    }
-//
-//    @DeleteMapping("/{idAluno}/fotos-irmaos/{idFoto}")
-//    public ResponseEntity<?> removerFotosIrmaos(@PathVariable @NotNull Long idAluno, @PathVariable @NotNull Long idFoto) {
-//        IrmaoRelEntity irmaoRel = alunoService.getIrmaoRelEntity(idAluno);
-//        if (irmaoRel == null) {
-//            return ResponseEntity.notFound().build();
-//        }
-//        alunoService.removerFotosIrmaosEPersistir(irmaoRel);
-//        return ResponseEntity.ok().build();
-//    }
+    @PostMapping("/{idAluno}/foto-irmao")
+    public ResponseEntity<FotoDto> adicionarFotoIrmao(@PathVariable @NotNull Long idAluno, @RequestParam("file") MultipartFile foto) {
+        AlunoEntity aluno = alunoService.getEntityPorId(idAluno);
+        if (aluno == null || aluno.getIrmaoRel() == null) {
+            return ResponseEntity.notFound().build();
+        }
+        FotoDto fotoDto = alunoService.adicionarFotoIrmao(aluno, foto);
+        return ResponseEntity.ok(fotoDto);
+    }
+
+    @DeleteMapping("/{idAluno}/foto-irmao/{idFoto}")
+    public ResponseEntity<FotoDto> removerFotoIrmao(@PathVariable @NotNull Long idAluno, @PathVariable @NotNull Long idFoto) {
+        AlunoEntity aluno = alunoService.getEntityPorId(idAluno);
+        if (aluno == null || aluno.getIrmaoRel() == null) {
+            return ResponseEntity.notFound().build();
+        }
+        alunoService.removerFotoIrmao(aluno, idFoto);
+        return ResponseEntity.ok().build();
+    }
 
 }

@@ -73,6 +73,25 @@ public class AlunoService extends BaseService<AlunoEntity, AlunoDto> {
         return adapter.entityToDto(entitySaved);
     }
 
+    @Transactional
+    public void remover(AlunoEntity aluno) {
+        if (aluno.getIrmaoRel() != null) {
+            irmaoService.removeRelacionamento(aluno.getIrmaoRel(), aluno);
+        }
+
+        if (aluno.getFoto() != null) {
+            FotoEntity fotoCopia = fotoService.copiaFoto(aluno.getFoto());
+            aluno.setFoto(null);
+            fotoService.remover(fotoCopia);
+        }
+
+        repository.delete(aluno);
+    }
+
+    public void salvar(AlunoEntity aluno) {
+        repository.save(aluno);
+    }
+
     public List<AlunoDto> getAlunosByTurmaId(Long idTurma) {
         List<AlunoEntity> alunos = repository.getAlunoEntitiesByTurma_Id(idTurma);
         return adapter.entityListToDtoList(alunos);

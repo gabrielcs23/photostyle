@@ -75,4 +75,14 @@ public class AlunoEntity extends BaseEntity {
     public void setFoto(FotoEntity foto) {
         this.foto = foto;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (getClass() != o.getClass()) {
+            return false;
+        }
+        AlunoEntity aluno = (AlunoEntity) o;
+        return this.getId().equals(aluno.getId());
+    }
+
 }

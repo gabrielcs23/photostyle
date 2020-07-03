@@ -125,9 +125,12 @@ class AlunoForm extends Component {
 
     getAluno() {
         const aluno = new Aluno(this.state.nome, this.state.matricula, this.state.escola, this.state.turma);
+        aluno.setIrmaoRel(this.state.irmaoRel);
         if (this.state.id) {
             aluno.id = this.state.id;
-            aluno.setIrmaoRel(this.state.irmaoRel);
+            if (this.state.foto?.id) {
+                aluno.foto = this.state.foto
+            }
         }
 
         return aluno;

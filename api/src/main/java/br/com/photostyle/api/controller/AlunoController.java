@@ -67,7 +67,7 @@ public class AlunoController {
         if (entity == null) {
             return ResponseEntity.notFound().build();
         }
-        alunoService.remover(id);
+        alunoService.remover(entity);
         return ResponseEntity.ok().build();
     }
 

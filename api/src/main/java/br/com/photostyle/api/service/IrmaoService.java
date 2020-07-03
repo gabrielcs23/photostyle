@@ -9,7 +9,6 @@ import br.com.photostyle.api.model.entity.IrmaoRelEntity;
 import br.com.photostyle.api.repository.IrmaoRelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -73,6 +72,24 @@ public class IrmaoService {
         IrmaoRelEntity entitySaved = repository.save(relExistente);
 
         return adapter.entityToDto(entitySaved);
+    }
+
+    public void removeRelacionamento(IrmaoRelEntity rel, AlunoEntity aluno) {
+        List<AlunoEntity> irmaos = rel.getIrmaos();
+        if (irmaos.size() > 2) {
+            aluno.setIrmaoRel(null);
+        } else {
+            irmaos.forEach(irmao -> irmao.setIrmaoRel(null));
+            rel.setIrmaos(null);
+
+            List<FotoEntity> fotos = rel.getFotos();
+            while(fotos.size() > 0) {
+                FotoEntity foto = fotos.remove(fotos.size() - 1);
+                fotoService.remover(foto);
+            }
+
+            repository.delete(rel);
+        }
     }
 
 //    @Transactional

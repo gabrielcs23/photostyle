@@ -27,7 +27,8 @@ const thumbInner = {
     minWidth: 0,
     overflow: 'hidden',
     zIndex: 1,
-    position: 'initial'
+    position: 'initial',
+    cursor: 'pointer'
 };
 
 const img = {
@@ -149,14 +150,14 @@ const FotoDropzone = (props) => {
                     confirmar={() => removerFoto(idx)}
                 />
                 <div className="card" style={thumb}>
-                    <div className="card-image" style={thumbInner}>
+                    <div className="card-image" style={thumbInner} onClick={() => window.open(file.url)}>
                         <img
                             src={file.url}
                             style={img}
                             alt=''
                         />
-                        {getBotaoExcluir(file.id ? idModal : null, idx)}
                     </div>
+                    {getBotaoExcluir(file.id ? idModal : null, idx)}
                 </div>
             </Fragment>
         )

@@ -135,7 +135,7 @@ class AlunoForm extends Component {
 
     onFotoDrop(arq) {
         if (this.state.foto?.id) {
-            PopUp.aviso('Foto individual substituída');
+            PopUp.aviso('Foto individual será substituída');
         }
         const foto = new Foto(arq);
         this.setState({foto: foto, canSubmit: true});

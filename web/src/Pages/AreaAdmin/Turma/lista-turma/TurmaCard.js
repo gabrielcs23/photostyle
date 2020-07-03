@@ -24,7 +24,7 @@ const TurmaCard = (props) => {
                 <div className="card-image"
                     onClick={props.selecionar}
                 >
-                    <img src="https://www.bournemouthecho.co.uk/resources/images/9348617?type=responsive-gallery-fullscreen" alt='' />
+                    <img src={turma.fotos ? turma.fotos[0]?.url : undefined} alt='' />
                 </div>
 
 

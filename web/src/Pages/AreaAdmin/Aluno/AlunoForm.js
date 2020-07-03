@@ -103,10 +103,16 @@ class AlunoForm extends Component {
                     } else {
                         PopUp.sucesso('Aluno(a) cadastrado(a) com sucesso');
                     }
+                })
+                .then(async () => {
                     if (this.state.foto && !this.state.foto.id) {
-                        return AlunoService.uploadFoto(aluno.id, this.state.foto.formData)
-                            .then(() => PopUp.sucesso('Foto enviada com sucesso'))
-                            .catch(() => PopUp.erro('Erro no envio da foto'))
+                        try {
+                            await AlunoService.uploadFoto(aluno.id, this.state.foto.formData);
+                            return PopUp.sucesso('Foto enviada com sucesso');
+                        }
+                        catch (e) {
+                            return PopUp.erro('Erro no envio da foto');
+                        }
                     }
                 })
                 .then(() => this.props.history.push(Rotas.ALUNO_LISTA))

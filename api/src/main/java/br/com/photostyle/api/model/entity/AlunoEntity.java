@@ -25,7 +25,7 @@ public class AlunoEntity extends BaseEntity {
     @JoinColumn(name = "RL_IRMAO_ID")
     private IrmaoRelEntity irmaoRel;
 
-    @OneToOne(cascade = CascadeType.REMOVE)
+    @OneToOne
     private FotoEntity foto;
 
     public String getNome() {

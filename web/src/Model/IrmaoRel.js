@@ -14,7 +14,7 @@ class IrmaoRel {
                 this.irmaos.push(irmaoCopia);
             }
         });
-        this.fotos = fotos;
+        this.fotos = fotos.slice();
         this.id = id;
     }
 

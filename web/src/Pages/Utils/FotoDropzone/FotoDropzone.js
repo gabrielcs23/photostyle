@@ -47,7 +47,7 @@ const getColor = (props) => {
     if (props.isDragActive) {
         return '#2196f3';
     }
-    return '#eeeeee';
+    return '#a6a6a6';
 }
 
 const dragzone = {
@@ -60,8 +60,8 @@ const dragzone = {
     borderWidth: 2,
     borderRadius: 2,
     borderStyle: 'dashed',
-    backgroundColor: '#fafafa',
-    color: '#bdbdbd',
+    backgroundColor: '#dfdfdf',
+    color: '#808080',
     outline: 'none',
     transition: 'border .24s ease-in-out'
 }

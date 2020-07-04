@@ -36,6 +36,7 @@ public class AlunoAdapter extends BaseAdapter<AlunoEntity, AlunoDto> {
             List<AlunoEntity> irmaosEntities = irmaoRelEntity.getIrmaos();
 
             IrmaoRelDto irmaoRelDto = new IrmaoRelDto();
+            irmaoRelDto.setId(irmaoRelEntity.getId());
             List<AlunoDto> irmaosDtos = entityListToDtoList(irmaosEntities);
             irmaoRelDto.setIrmaos(irmaosDtos);
 

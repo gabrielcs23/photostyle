@@ -96,8 +96,11 @@ class AlunoForm extends Component {
 
         if (validacao.isValid) {
             const aluno = this.getAluno();
+
+            let alunoAposPost;
             AlunoService.postAluno(aluno)
                 .then(aluno => {
+                    alunoAposPost = aluno;
                     if(this.state.id) {
                         PopUp.sucesso('Aluno(a) atualizado(a) com sucesso');
                     } else {
@@ -113,6 +116,12 @@ class AlunoForm extends Component {
                         catch (e) {
                             return PopUp.erro('Erro no envio da foto');
                         }
+                    }
+                })
+                .then(() => {
+                    if (this.state.irmaoRel?.fotos.length > 0) {
+                        const fotos = this.state.irmaoRel.fotos;
+                        return this.uploadFotosIrmaos(alunoAposPost.id, fotos);
                     }
                 })
                 .then(() => this.props.history.push(Rotas.ALUNO_LISTA))
@@ -131,12 +140,10 @@ class AlunoForm extends Component {
 
     getAluno() {
         const aluno = new Aluno(this.state.nome, this.state.matricula, this.state.escola, this.state.turma);
+        aluno.id = this.state.id;
         aluno.setIrmaoRel(this.state.irmaoRel);
-        if (this.state.id) {
-            aluno.id = this.state.id;
-            if (this.state.foto?.id) {
-                aluno.foto = this.state.foto
-            }
+        if (this.state.id && this.state.foto?.id) {
+            aluno.foto = this.state.foto
         }
 
         return aluno;
@@ -166,6 +173,18 @@ class AlunoForm extends Component {
         } else {
             this.setState({irmaoRel: irmaoRel});
         }
+    }
+
+    uploadFotosIrmaos(id, fotos) {
+        const promises = [];
+        fotos.forEach(foto => {
+            if (foto.id == null) {
+                promises.push(AlunoService.adicionarFotoIrmao(id, foto.formData));
+            }
+        });
+        return Promise.allSettled(promises)
+            .then(resultados => resultados.filter(resultado => resultado.status === 'rejected'))
+            .then(resultados => resultados.length === 0 ? PopUp.sucesso('Foto(s) enviadas com sucesso') : PopUp.erro(`Erro no envio de ${resultados.length}`));
     }
 
     render() {

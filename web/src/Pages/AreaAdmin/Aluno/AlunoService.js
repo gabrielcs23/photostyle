@@ -40,6 +40,19 @@ const AlunoService = {
 
     removerFoto: async (id) => {
         await axios.delete(BASE_URL + `/${id}/foto`);
+    },
+
+    adicionarFotoIrmao: (id, foto) => {
+        const config = {
+            headers: {
+                'content-type': 'multipart/form-data'
+            }
+        }
+        return axios.post(BASE_URL + `/${id}/foto-irmao`, foto, config);
+    },
+
+    removerFotoIrmao: async (idTurma, idFoto) => {
+        await axios.delete(BASE_URL + `/${idTurma}/foto-irmao/${idFoto}`)
     }
 
 }

@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 import IrmaoRel from '../../../../Model/IrmaoRel'
+import Foto from '../../../../Model/Foto';
+import PopUp from '../../../Utils/pop-up/PopUp';
+import FotoDropzone from '../../../Utils/FotoDropzone/FotoDropzone';
+import AlunoService from '../AlunoService';
 import IrmaoSelect from './IrmaoSelect';
 
 class IrmaoForm extends Component {
@@ -13,7 +17,8 @@ class IrmaoForm extends Component {
                 id: irmaoRel.id,
                 irmaos: irmaoRel.irmaos.filter(irmao => irmao.id !== this.props.alunoId),
                 fotos: irmaoRel.fotos,
-                addIrmaoDisabled: false
+                addIrmaoDisabled: false,
+                fotosDisabled: false
             }
         } else {
             this.state = {
@@ -21,6 +26,7 @@ class IrmaoForm extends Component {
                 irmaos: [],
                 fotos: [],
                 addIrmaoDisabled: false,
+                fotosDisabled: true
             }
         }
 
@@ -32,24 +38,58 @@ class IrmaoForm extends Component {
             this.setState({
                 id: irmaoRel.id,
                 irmaos: irmaoRel.irmaos.filter(irmao => irmao.id !== this.props.alunoId),
-                fotos: irmaoRel.fotos
+                fotos: irmaoRel.fotos,
+                fotosDisabled: false
             });
         }
+    }
+
+    attRelacionamento() {
+        const irmaoRel = new IrmaoRel(this.state.irmaos, this.state.fotos, this.state.id);
+        this.props.relacionarIrmao(irmaoRel);
     }
 
     relacionarIrmao(irmao, idx) {
         const irmaos = this.state.irmaos.slice();
         irmaos[idx] = irmao;
-        this.setState({irmaos: irmaos, addIrmaoDisabled: false});
+        this.setState({irmaos: irmaos, addIrmaoDisabled: false, fotosDisabled: false});
 
-        const irmaoRel = new IrmaoRel(irmaos, this.state.fotos, this.state.id);
-        this.props.relacionarIrmao(irmaoRel);
+        this.attRelacionamento();
     }
 
     adicionarIrmao() {
         const irmaos = this.state.irmaos.slice();
         irmaos.push({});
         this.setState({irmaos: irmaos, addIrmaoDisabled: true});
+    }
+
+    onFotoDrop = (arq) => {
+        const foto = new Foto(arq);
+        const fotos = this.state.fotos.slice();
+        fotos.push(foto);
+        this.setState({fotos: fotos});
+
+        this.attRelacionamento();
+    }
+
+    removerFoto = (idx) => {
+        const fotos = this.state.fotos.slice();
+        if (fotos[idx].id) {
+            const bk = fotos[idx];
+            debugger;
+            AlunoService.removerFotoIrmao(this.props.alunoId, fotos[idx].id)
+            .then(() => {
+                PopUp.sucesso('Foto removida com sucesso');
+                this.attRelacionamento();
+            })
+            .catch(() => {
+                PopUp.erro('Erro na remoção da foto');
+                fotos.push(bk);
+                this.setState({fotos: fotos});
+            })
+        }
+        fotos.splice(idx, 1);
+        this.setState({fotos: fotos});
     }
 
     render() {
@@ -81,6 +121,18 @@ class IrmaoForm extends Component {
                     </span>
                 </button>
                 {rows}
+
+                {!this.state.fotosDisabled ? 
+                    <FotoDropzone
+                        fotos={this.state.fotos.slice()}
+                        onFotoDrop={this.onFotoDrop}
+                        removerFoto={this.removerFoto}
+                        multiple={true}
+                    />
+                    :
+                    null
+                }
+
             </>
         )
     }

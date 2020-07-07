@@ -1,5 +1,6 @@
 package br.com.photostyle.api.service;
 
+import br.com.photostyle.api.component.GeradorCodigoAcesso;
 import br.com.photostyle.api.model.adapter.AlunoAdapter;
 import br.com.photostyle.api.model.dto.AlunoDto;
 import br.com.photostyle.api.model.dto.FotoDto;
@@ -26,6 +27,9 @@ public class AlunoService extends BaseService<AlunoEntity, AlunoDto> {
 
     @Autowired
     private AlunoAdapter adapter;
+
+    @Autowired
+    private GeradorCodigoAcesso geradorCodAcesso;
 
     @Autowired
     private IrmaoService irmaoService;
@@ -56,6 +60,9 @@ public class AlunoService extends BaseService<AlunoEntity, AlunoDto> {
             if (entityAnterior.getFoto() != null) {
                 alunoEntity.setFoto(entityAnterior.getFoto());
             }
+            alunoEntity.setCodigoAcesso(entityAnterior.getCodigoAcesso());
+        } else {
+            geraCodigo(alunoEntity);
         }
 
         AlunoEntity entitySaved = repository.save(alunoEntity);
@@ -71,6 +78,18 @@ public class AlunoService extends BaseService<AlunoEntity, AlunoDto> {
         return adapter.entityToDto(entitySaved);
     }
 
+    // TODO renomear método e remover método antigo de geração
+    private void geraCodigo(AlunoEntity aluno) {
+        String codigoAcesso;
+        boolean isCodUnico;
+        do {
+            // TODO remover essa chamada intermediária
+            codigoAcesso = gerarCodigoAcesso(aluno);
+            isCodUnico = repository.getByCodigoAcesso(codigoAcesso) == null;
+        } while(!isCodUnico);
+        aluno.setCodigoAcesso(codigoAcesso);
+    }
+
     @Transactional
     public void remover(AlunoEntity aluno) {
         if (aluno.getIrmaoRel() != null) {
@@ -84,10 +103,6 @@ public class AlunoService extends BaseService<AlunoEntity, AlunoDto> {
         }
 
         repository.delete(aluno);
-    }
-
-    public void salvar(AlunoEntity aluno) {
-        repository.save(aluno);
     }
 
     public List<AlunoDto> getAlunosByTurmaId(Long idTurma) {
@@ -182,4 +197,18 @@ public class AlunoService extends BaseService<AlunoEntity, AlunoDto> {
         irmaoService.removerFotoIrmao(aluno.getIrmaoRel(), idFoto);
     }
 
+    // TODO remover esse método quando não for mais necessário
+    private String gerarCodigoAcesso(AlunoEntity aluno) {
+        return geradorCodAcesso.gerarCodigo(aluno.getEscola().getNome(), aluno.getMatricula());
+    }
+
+    // TODO remover esse método quando não for mais necessário
+    public void gerarCodigoParaTodos() {
+        List<AlunoEntity> alunos = repository.findAll();
+        for (AlunoEntity aluno: alunos) {
+            String cod = gerarCodigoAcesso(aluno);
+            aluno.setCodigoAcesso(cod);
+            repository.save(aluno);
+        }
+    }
 }

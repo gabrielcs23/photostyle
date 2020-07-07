@@ -66,6 +66,7 @@ public class AlunoAdapter extends BaseAdapter<AlunoEntity, AlunoDto> {
         dto.setId(entity.getId());
         dto.setNome(entity.getNome());
         dto.setMatricula(entity.getMatricula());
+        dto.setCodigoAcesso(entity.getCodigoAcesso());
 
         EscolaDto escolaDto = new EscolaDto();
         EscolaEntity escolaEntity = entity.getEscola();

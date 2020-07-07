@@ -6,7 +6,7 @@ class Aluno {
     id;
     nome;
     matricula;
-    codAcesso;
+    codigoAcesso;
     escola;
     turma;
     irmaoRel;

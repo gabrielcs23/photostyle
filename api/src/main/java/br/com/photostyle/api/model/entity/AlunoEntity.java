@@ -13,6 +13,9 @@ public class AlunoEntity extends BaseEntity {
     @Column(name = "MATR", nullable = false)
     private String matricula;
 
+    @Column(name = "COD_AC", nullable = false, unique = true)
+    private String codigoAcesso;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ESC_ID", nullable = false)
     private EscolaEntity escola;
@@ -42,6 +45,14 @@ public class AlunoEntity extends BaseEntity {
 
     public void setMatricula(String matricula) {
         this.matricula = matricula;
+    }
+
+    public String getCodigoAcesso() {
+        return codigoAcesso;
+    }
+
+    public void setCodigoAcesso(String codigoAcesso) {
+        this.codigoAcesso = codigoAcesso;
     }
 
     public EscolaEntity getEscola() {

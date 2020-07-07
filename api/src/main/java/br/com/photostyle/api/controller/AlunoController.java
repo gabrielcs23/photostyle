@@ -130,4 +130,10 @@ public class AlunoController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/gerar-cod")
+    public ResponseEntity<?> gerarCodigoAcesso() {
+        alunoService.gerarCodigoParaTodos();
+        return ResponseEntity.ok().build();
+    }
+
 }

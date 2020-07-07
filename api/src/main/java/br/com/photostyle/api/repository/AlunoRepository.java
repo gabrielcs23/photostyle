@@ -11,4 +11,6 @@ public interface AlunoRepository extends BaseRepository<AlunoEntity> {
 
     List<AlunoEntity> getAlunoEntitiesByTurma_Id(Long idTurma);
 
+    AlunoEntity getByCodigoAcesso(String codigo);
+
 }

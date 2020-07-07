@@ -13,6 +13,8 @@ public class AlunoDto {
 
     private String matricula;
 
+    private String codigoAcesso;
+
     private EscolaDto escola;
 
     private TurmaDto turma;
@@ -43,6 +45,14 @@ public class AlunoDto {
 
     public void setMatricula(String matricula) {
         this.matricula = matricula;
+    }
+
+    public String getCodigoAcesso() {
+        return codigoAcesso;
+    }
+
+    public void setCodigoAcesso(String codigoAcesso) {
+        this.codigoAcesso = codigoAcesso;
     }
 
     public EscolaDto getEscola() {

@@ -42,6 +42,7 @@ class AlunoForm extends Component {
                 turma: turma,
                 foto: null,
                 irmaoRel: null,
+                codigoAcesso: '',
                 validacao: this.validador.valido(),
                 canSubmit: false
             }
@@ -54,6 +55,7 @@ class AlunoForm extends Component {
                 turma: turma,
                 foto: null,
                 irmaoRel: null,
+                codigoAcesso: '',
                 validacao: this.validador.valido(),
                 canSubmit: false
             }
@@ -71,8 +73,10 @@ class AlunoForm extends Component {
                         escola: aluno.escola,
                         turma: aluno.turma,
                         foto: aluno.foto,
-                        irmaoRel: aluno.irmaoRel
+                        irmaoRel: aluno.irmaoRel,
+                        codigoAcesso: aluno.codigoAcesso
                     });
+                    console.log(this.state.codigoAcesso);
                     M.updateTextFields();
                 })
                 .catch(error => PopUp.erro(error));
@@ -190,7 +194,7 @@ class AlunoForm extends Component {
     }
 
     render() {
-        const { nome, matricula } = this.state;
+        const { nome, matricula, codigoAcesso } = this.state;
         return (
             <form>
                 <div className="row">
@@ -231,7 +235,7 @@ class AlunoForm extends Component {
                     </div>
                 </div>
                 <div className="row">
-                    <div className="input-field col s6">
+                    <div className="input-field col s12 m6">
                         <label htmlFor="matricula">Matrícula</label>
                         <input 
                             className="validate"
@@ -242,6 +246,20 @@ class AlunoForm extends Component {
                             onChange={this.inputChangeHandler}
                         />
                     </div>
+                    {this.state.id ? 
+                        <div className="input-field col s12 m6">
+                            <label htmlFor="codAcesso">Código de Acesso</label>
+                            <input 
+                                className="validate"
+                                id="codAcesso"
+                                type="text"
+                                name="codAcesso"
+                                disabled={true}
+                                value={codigoAcesso}
+                            />
+                        </div>
+                        : null
+                    }
                 </div>
 
                 <FotoDropzone

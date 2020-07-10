@@ -62,7 +62,7 @@ public class AlunoService extends BaseService<AlunoEntity, AlunoDto> {
             }
             alunoEntity.setCodigoAcesso(entityAnterior.getCodigoAcesso());
         } else {
-            geraCodigo(alunoEntity);
+            gerarCodigo(alunoEntity);
         }
 
         AlunoEntity entitySaved = repository.save(alunoEntity);
@@ -78,13 +78,11 @@ public class AlunoService extends BaseService<AlunoEntity, AlunoDto> {
         return adapter.entityToDto(entitySaved);
     }
 
-    // TODO renomear método e remover método antigo de geração
-    private void geraCodigo(AlunoEntity aluno) {
+    private void gerarCodigo(AlunoEntity aluno) {
         String codigoAcesso;
         boolean isCodUnico;
         do {
-            // TODO remover essa chamada intermediária
-            codigoAcesso = gerarCodigoAcesso(aluno);
+            codigoAcesso = geradorCodAcesso.gerarCodigo(aluno.getEscola().getNome(), aluno.getMatricula());
             isCodUnico = repository.getByCodigoAcesso(codigoAcesso) == null;
         } while(!isCodUnico);
         aluno.setCodigoAcesso(codigoAcesso);
@@ -197,18 +195,4 @@ public class AlunoService extends BaseService<AlunoEntity, AlunoDto> {
         irmaoService.removerFotoIrmao(aluno.getIrmaoRel(), idFoto);
     }
 
-    // TODO remover esse método quando não for mais necessário
-    private String gerarCodigoAcesso(AlunoEntity aluno) {
-        return geradorCodAcesso.gerarCodigo(aluno.getEscola().getNome(), aluno.getMatricula());
-    }
-
-    // TODO remover esse método quando não for mais necessário
-    public void gerarCodigoParaTodos() {
-        List<AlunoEntity> alunos = repository.findAll();
-        for (AlunoEntity aluno: alunos) {
-            String cod = gerarCodigoAcesso(aluno);
-            aluno.setCodigoAcesso(cod);
-            repository.save(aluno);
-        }
-    }
 }

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserDetailsService implements org.springframework.security.core.userdetails.UserDetailsService {
@@ -21,15 +22,13 @@ public class UserDetailsService implements org.springframework.security.core.use
 
     @Override
     public UserDetails loadUserByUsername(String nomeUsuario) throws UsernameNotFoundException {
-        UsuarioEntity usuario = usuarioRepository.getByNomeUsuario(nomeUsuario);
-        if (usuario == null) {
-            return new User(" ", " ",
-                    true, true, true, true,
-                    getAuthorities(" "));
-        }
-        return new User(usuario.getNomeUsuario(), usuario.getSenha(),
+        Optional<UsuarioEntity> usuario = usuarioRepository.findByNomeUsuario(nomeUsuario);
+
+        UsuarioEntity usuarioEntity = usuario.orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado" + nomeUsuario));
+
+        return new User(usuarioEntity.getNomeUsuario(), usuarioEntity.getSenha(),
                 true, true, true, true,
-                getAuthorities(usuario.getRole()));
+                getAuthorities(usuarioEntity.getRole()));
     }
 
     private List<? extends GrantedAuthority> getAuthorities(String role) {

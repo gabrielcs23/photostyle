@@ -141,3 +141,8 @@
   padding-right: 8px;
   padding-left: 8px;
 }
+
+#toast-container {
+  right: unset !important;
+  left: 7% !important;
+}

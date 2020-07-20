@@ -63,11 +63,11 @@ public class TurmaController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> remover(@PathVariable @NotNull Long id) {
-        TurmaDto entity = turmaService.getPorId(id);
+        TurmaEntity entity = turmaService.getEntityPorId(id);
         if (entity == null) {
             return ResponseEntity.notFound().build();
         }
-        turmaService.remover(id);
+        turmaService.remover(entity);
         return ResponseEntity.ok().build();
     }
 

@@ -11,6 +11,7 @@ class IrmaoRel {
             if (!idRemover || irmao.id !== idRemover) {
                 const irmaoCopia = new Aluno();
                 irmaoCopia.id = irmao.id;
+                irmaoCopia.nome = irmao.nome;
                 this.irmaos.push(irmaoCopia);
             }
         });

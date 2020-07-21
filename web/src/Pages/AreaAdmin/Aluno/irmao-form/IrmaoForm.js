@@ -44,8 +44,8 @@ class IrmaoForm extends Component {
         }
     }
 
-    attRelacionamento() {
-        const irmaoRel = new IrmaoRel(this.state.irmaos, this.state.fotos, this.state.id);
+    attRelacionamento(irmaos, fotos) {
+        const irmaoRel = new IrmaoRel(irmaos, fotos, this.state.id);
         this.props.relacionarIrmao(irmaoRel);
     }
 
@@ -54,7 +54,7 @@ class IrmaoForm extends Component {
         irmaos[idx] = irmao;
         this.setState({irmaos: irmaos, addIrmaoDisabled: false, fotosDisabled: false});
 
-        this.attRelacionamento();
+        this.attRelacionamento(irmaos, this.state.fotos);
     }
 
     adicionarIrmao() {
@@ -69,14 +69,13 @@ class IrmaoForm extends Component {
         fotos.push(foto);
         this.setState({fotos: fotos});
 
-        this.attRelacionamento();
+        this.attRelacionamento(this.state.irmaos, fotos);
     }
 
     removerFoto = (idx) => {
         const fotos = this.state.fotos.slice();
         if (fotos[idx].id) {
             const bk = fotos[idx];
-            debugger;
             AlunoService.removerFotoIrmao(this.props.alunoId, fotos[idx].id)
             .then(() => {
                 PopUp.sucesso('Foto removida com sucesso');

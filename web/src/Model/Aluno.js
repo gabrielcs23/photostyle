@@ -14,7 +14,9 @@ class Aluno {
 
     constructor(nome, matricula, escola, turma) {
         this.nome = nome;
-        this.matricula = matricula;
+        if (matricula) {
+            this.matricula = matricula;
+        }
         if (escola) {
             this.escola = new Escola(escola.nome, escola.id);
         }

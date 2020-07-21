@@ -76,7 +76,6 @@ class AlunoForm extends Component {
                         irmaoRel: aluno.irmaoRel,
                         codigoAcesso: aluno.codigoAcesso
                     });
-                    console.log(this.state.codigoAcesso);
                     M.updateTextFields();
                 })
                 .catch(error => PopUp.erro(error));

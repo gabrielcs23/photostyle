@@ -14,6 +14,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -85,6 +86,17 @@ public class TurmaService extends BaseService<TurmaEntity, TurmaDto> {
     public List<TurmaDto> getTurmasNomesPorEscolaId(Long idEscola) {
         List<TurmaEntity> turmas = repository.getTurmaEntitiesByEscola_Id(idEscola);
         return adapter.entityListDtoNomesList(turmas);
+    }
+
+    @Transactional
+    public void remover(TurmaEntity turma) {
+        if(!CollectionUtils.isEmpty(turma.getAlunos())) {
+            turma.getAlunos().forEach(aluno -> alunoService.remover(aluno));
+        }
+        if(!CollectionUtils.isEmpty(turma.getFotos())) {
+            turma.getFotos().forEach(foto -> this.removerFoto(turma, foto.getId()));
+        }
+        repository.delete(turma);
     }
 
     public List<TurmaDto> entityListToDtoList(List<TurmaEntity> turmas) {

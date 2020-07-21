@@ -9,15 +9,15 @@ const status = {
 const PopUp = {
 
     sucesso: (msg) => {
-        M.toast({html: msg, classes: status.SUCCESS, displayLength: 15000})
+        M.toast({html: msg, classes: status.SUCCESS, displayLength: 5000})
     },
 
     erro: (msg) => {
-        M.toast({html: msg, classes: status.ERROR, displayLength: 15000})
+        M.toast({html: msg, classes: status.ERROR, displayLength: 7000})
     },
 
     aviso: (msg) => {
-        M.toast({html: msg, classes: status.WARNING, displayLength: 15000})
+        M.toast({html: msg, classes: status.WARNING, displayLength: 7000})
     },
 
 }

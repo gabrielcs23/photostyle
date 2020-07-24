@@ -27,9 +27,11 @@ public class FotoAdapter extends BaseAdapter<FotoEntity, FotoDto> {
     public FotoDto entityToDto(FotoEntity entity) {
         FotoDto fotoDto = new FotoDto();
         fotoDto.setId(entity.getId());
+        fotoDto.setDescricao(entity.getDescricao());
 
         String url = imgNameManager.buildUrl(entity.getFileName());
         fotoDto.setUrl(url);
+
         return fotoDto;
     }
 

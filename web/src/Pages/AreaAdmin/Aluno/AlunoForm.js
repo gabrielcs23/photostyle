@@ -189,7 +189,7 @@ class AlunoForm extends Component {
         });
         return Promise.allSettled(promises)
             .then(resultados => resultados.filter(resultado => resultado.status === 'rejected'))
-            .then(resultados => resultados.length === 0 ? PopUp.sucesso('Foto(s) enviadas com sucesso') : PopUp.erro(`Erro no envio de ${resultados.length}`));
+            .then(resultados => resultados.length === 0 ? PopUp.sucesso('Foto(s) enviadas com sucesso') : PopUp.erro(`Erro no envio de ${resultados.length} foto(s)`));
     }
 
     render() {

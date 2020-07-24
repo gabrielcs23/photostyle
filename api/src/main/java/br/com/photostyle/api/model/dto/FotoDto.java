@@ -11,7 +11,7 @@ public class FotoDto {
 
     private String url;
 
-    private MultipartFile foto;
+    private String descricao;
 
     public Long getId() {
         return id;
@@ -29,11 +29,11 @@ public class FotoDto {
         this.url = url;
     }
 
-    public MultipartFile getFoto() {
-        return foto;
+    public String getDescricao() {
+        return descricao;
     }
 
-    public void setFoto(MultipartFile foto) {
-        this.foto = foto;
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
     }
 }

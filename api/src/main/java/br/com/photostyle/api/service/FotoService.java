@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.transaction.Transactional;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -43,11 +44,15 @@ public class FotoService {
 
     @Transactional
     public FotoEntity upload(MultipartFile foto) {
-        String imgName = buildFotoName(foto.getOriginalFilename());
+        String orgFileName = Objects.requireNonNull(foto.getOriginalFilename());
+        String imgName = buildFotoName(orgFileName);
         imgService.saveImage(foto, imgName);
         try {
             FotoEntity entity = new FotoEntity();
             entity.setFileName(imgName);
+
+            String desc = StringUtils.stripFilenameExtension(orgFileName);
+            entity.setDescricao(desc);
             return repository.save(entity);
         } catch(Exception e) {
             if (!StringUtils.isEmpty(imgName)) {

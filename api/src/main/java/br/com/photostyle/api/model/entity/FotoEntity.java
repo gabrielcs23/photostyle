@@ -14,6 +14,9 @@ public class FotoEntity {
     @Column(nullable = false)
     private String fileName;
 
+    @Column
+    private String descricao = "";
+
     public Long getId() {
         return id;
     }
@@ -28,5 +31,13 @@ public class FotoEntity {
 
     public void setFileName(String fileName) {
         this.fileName = fileName;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
     }
 }

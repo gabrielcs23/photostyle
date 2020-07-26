@@ -78,6 +78,7 @@ class AlunoForm extends Component {
                     });
                     M.updateTextFields();
                 })
+                .catch(error => this.props.handleUnauthorized(error))
                 .catch(error => PopUp.erro(error));
         } else if(this.props.turma == null) {
             this.props.history.push(Rotas.ESCOLA_LISTA);  
@@ -128,6 +129,7 @@ class AlunoForm extends Component {
                     }
                 })
                 .then(() => this.props.history.push(Rotas.ALUNO_LISTA))
+                .catch(error => this.props.handleUnauthorized(error))
                 .catch(() => {
                     PopUp.erro('Erro no cadastro de aluno');
                     this.setState({canSubmit: true});
@@ -167,6 +169,7 @@ class AlunoForm extends Component {
         if (foto.id) {
             AlunoService.removerFoto(this.state.id)
                 .then(() => PopUp.sucesso('Foto removida com sucesso'))
+                .catch(error => this.props.handleUnauthorized(error))
                 .catch(error => PopUp.erro(error));
         }
         this.setState({foto: null});

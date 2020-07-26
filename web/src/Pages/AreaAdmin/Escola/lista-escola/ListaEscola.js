@@ -17,6 +17,7 @@ class ListaEscola extends Component {
     componentDidMount() {
         EscolaService.getList()
             .then(lista => this.setState({listaEscolas : lista}))
+            .catch(error => this.props.handleUnauthorized(error))
             .catch(error => PopUp.erro(error));
     }
 

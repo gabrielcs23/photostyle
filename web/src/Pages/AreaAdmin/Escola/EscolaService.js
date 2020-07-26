@@ -9,32 +9,18 @@ class EscolaService extends BaseApiService {
             const res = await this.axiosInstance.get(BASE_URL);
             return res.data;
         } catch (error) {
-            return error;
+            throw this.parseError(error);
         }
     }
-    
-    // getList: async () => {
-    //     const res = await axios.get(BASE_URL);
-    //     return res.data;
-    // },
-
-    // getPorId: async () => {
-    //     const res = await axios.get(BASE_URL)
-    // },
 
     async postEscola(escola) {
         try {
             const res = await this.axiosInstance.post(BASE_URL, escola);
             return res.data;
         } catch (error) {
-            return error;
+            throw this.parseError(error);
         }
     }
-
-    // postEscola: async (escola) => {
-    //     const res = await axios.post(BASE_URL, escola);
-    //     return res.data;
-    // },
 
 }
 export default new EscolaService();

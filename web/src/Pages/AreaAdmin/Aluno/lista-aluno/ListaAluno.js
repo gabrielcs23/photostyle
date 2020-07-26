@@ -21,6 +21,7 @@ class ListaAluno extends Component {
             AlunoService.getListPorTurma(this.turma.id)
                 .then(lista => this.ordenaLista(lista))
                 .then(lista => this.setState({listaAlunos : lista}))
+                .catch(error => this.props.handleUnauthorized(error))
                 .catch(error => PopUp.erro(error));
         } else {
             this.props.history.push(Rotas.ESCOLA_LISTA);
@@ -35,6 +36,7 @@ class ListaAluno extends Component {
                 this.setState({listaAlunos: novaLista});
                 PopUp.sucesso('Aluno removida com sucesso');
             })
+            .catch(error => this.props.handleUnauthorized(error))
             .catch(error => PopUp.erro(error));
     }
 

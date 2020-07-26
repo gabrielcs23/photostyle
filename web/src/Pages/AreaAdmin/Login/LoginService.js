@@ -2,11 +2,15 @@ import BaseApiService from '../Services/BaseApiService/BaseApiService';
 
 class LoginService extends BaseApiService {
 
-    login(username, password) {
-        return this.axiosInstance.post(`/authenticate`, {
-            username,
-            password
-        });
+    async login(username, password) {
+        try {
+            await this.axiosInstance.post(`/authenticate`, {
+                username,
+                password
+            });
+        } catch (error) {
+            throw this.parseError(error);
+        }
     }
 
 }

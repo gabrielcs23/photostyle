@@ -52,6 +52,7 @@ class EscolaForm extends Component {
                     this.props.selecionar(escola);
                     PopUp.sucesso('Escola cadastrada com sucesso');
                 })
+                .catch(error => this.props.handleUnauthorized(error))
                 .catch(() => {
                     PopUp.erro('Erro no cadastro de escola');
                     this.setState({canSubmit: true});

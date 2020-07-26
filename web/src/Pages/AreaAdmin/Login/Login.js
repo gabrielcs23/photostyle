@@ -46,16 +46,13 @@ class Login extends Component {
             const { usuario, senha } = this.state;
             LoginService.login(usuario, senha)
                 .then(() => {
-                    PopUp.sucesso('Bem vindo');
                     this.props.aposLogin();
                 })
                 .catch(error => {
-                    debugger;
-                    const res = error.response;
-                    if (res.status === 401) {
-                        PopUp.erro(res.data)
+                    if (error.status && error.status === 401) {
+                        PopUp.erro(error.data)
                     } else {
-                        PopUp.erro(`Erro ${res.status}: ${res.data}`);
+                        PopUp.erro(error);
                     }
                     this.setState({canSubmit: true});
                 });
@@ -79,11 +76,12 @@ class Login extends Component {
     render() {
         const { usuario, senha } = this.state;
         return (
-            <form>
-                <div className="container">
-                    <h1>Login</h1>
-                    <div className="row">
+            <div className="container center">
+                <div className="row">
+                    <h4>Login</h4>
+                    <form>
                         <div className="input-field col s12">
+                            <i className="material-icons prefix">account_circle</i>
                             <label htmlFor="usuario">Usuario</label>
                             <input
                                 className="validate"
@@ -95,6 +93,7 @@ class Login extends Component {
                             />
                         </div>
                         <div className="input-field col s12">
+                            <i className="material-icons prefix">enhanced_encryption</i>
                             <label htmlFor="senha">Senha</label>
                             <input
                                 className="validate"
@@ -106,16 +105,18 @@ class Login extends Component {
                                 onKeyPress={this.keyPressHandle}
                             />
                         </div>
-                        <button className="btn btn-success"
-                            disabled={!this.state.canSubmit}
-                            onClick={this.login}
-                            type="button"
-                        >
-                            Login
-                        </button>
-                    </div>
+                        <div className="row">
+                            <button className="btn btn-success blue darken-4"
+                                disabled={!this.state.canSubmit}
+                                onClick={this.login}
+                                type="button"
+                            >
+                                Entrar
+                            </button>
+                        </div>
+                    </form>
                 </div>
-            </form>
+            </div>
         )
     }
 

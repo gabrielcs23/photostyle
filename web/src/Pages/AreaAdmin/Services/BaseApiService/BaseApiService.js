@@ -15,5 +15,9 @@ class BaseApiService {
         );
     }
 
+    parseError(error) {
+        return error.response ? error.response : error;
+    }
+
 }
 export default BaseApiService;

@@ -61,7 +61,8 @@ class TurmaForm extends Component {
                     });
                     M.updateTextFields();
                 })
-                .catch(error => PopUp.erro(error));
+                .catch(error => this.props.handleUnauthorized(error))
+                .catch(() => PopUp.erro('Erro no cadastro de turma'));
         } else if(this.props.escola == null) {
             this.props.history.push(Rotas.ESCOLA_LISTA);
         }
@@ -89,6 +90,7 @@ class TurmaForm extends Component {
             const bk = fotos[idx];
             TurmaService.removerFoto(this.state.id, fotos[idx].id)
                 .then(() => PopUp.sucesso('Foto removida com sucesso'))
+                .catch(error => this.props.handleUnauthorized(error))
                 .catch(() => {
                     PopUp.erro('Erro na remoção da foto');
                     fotos.push(bk);
@@ -130,6 +132,7 @@ class TurmaForm extends Component {
                         this.props.selecionar(turmaAposPost);
                     }
                 })
+                .catch(error => this.props.handleUnauthorized(error))
                 .catch(() => {
                     PopUp.erro('Erro no cadastro de turma');
                     this.setState({canSubmit: true});

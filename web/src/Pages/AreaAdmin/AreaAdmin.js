@@ -62,6 +62,14 @@ class AreaAdmin extends BasePage {
         this.setState({aluno: this.stateInicial.aluno});
     }
 
+    handleUnauthorized = (error) => {
+        if (error.status && error.status === 401) {
+            this.props.history.push(Rotas.LOGIN);
+        } else {
+            throw error;
+        }
+    }
+
     renderPage() {
         const rotaAtual = this.props.location?.pathname;
         return (
@@ -105,7 +113,7 @@ class AreaAdmin extends BasePage {
                                 </div>
                             </div>
                         </nav>
-                        
+
                         : null
                     }
                     <div className="row mt-3">
@@ -116,32 +124,57 @@ class AreaAdmin extends BasePage {
                                 )} />
 
                                 <Route path={Rotas.ESCOLA_LISTA} exact={true} render={routeProps => (
-                                    <ListaEscola {...routeProps} selecionar={this.selecionarEscola} />
+                                    <ListaEscola {...routeProps}
+                                        handleUnauthorized={this.handleUnauthorized}
+                                        selecionar={this.selecionarEscola}
+                                    />
                                 )} />
                                 <Route path={Rotas.ESCOLA_NOVO} exact={true} render={routeProps => (
-                                    <EscolaForm {...routeProps} selecionar={this.selecionarEscola} />
+                                    <EscolaForm {...routeProps}
+                                        handleUnauthorized={this.handleUnauthorized}
+                                        selecionar={this.selecionarEscola}
+                                    />
                                 )} />
 
 
                                 <Route path={Rotas.TURMA_LISTA} exact={true} render={routeProps => (
-                                    <ListaTurma {...routeProps} escola={this.state.escola} selecionar={this.selecionarTurma} editar={this.editarTurma} />
+                                    <ListaTurma {...routeProps}
+                                        handleUnauthorized={this.handleUnauthorized}
+                                        escola={this.state.escola}
+                                        selecionar={this.selecionarTurma}
+                                        editar={this.editarTurma}
+                                    />
                                 )} />
                                 <Route path={Rotas.TURMA_EDICAO} exact={true} render={routeProps => (
-                                    <TurmaForm {...routeProps} />
+                                    <TurmaForm {...routeProps}
+                                        handleUnauthorized={this.handleUnauthorized}
+                                    />
                                 )} />
                                 <Route path={Rotas.TURMA_NOVO} exact={true} render={routeProps => (
-                                    <TurmaForm {...routeProps} escola={this.state.escola} selecionar={this.selecionarTurma} />
+                                    <TurmaForm {...routeProps}
+                                        handleUnauthorized={this.handleUnauthorized}
+                                        escola={this.state.escola}
+                                        selecionar={this.selecionarTurma}
+                                    />
                                 )} />
 
 
                                 <Route path={Rotas.ALUNO_LISTA} exact={true} render={routeProps => (
-                                    <ListaAluno {...routeProps} turma={this.state.turma} editar={this.editarAluno} />
+                                    <ListaAluno {...routeProps}
+                                        handleUnauthorized={this.handleUnauthorized}
+                                        turma={this.state.turma}
+                                        editar={this.editarAluno}
+                                    />
                                 )} />
                                 <Route path={Rotas.ALUNO_EDICAO} exact={true} render={routeProps => (
-                                    <AlunoForm {...routeProps} turma={this.state.turma} />
+                                    <AlunoForm {...routeProps}
+                                        handleUnauthorized={this.handleUnauthorized}
+                                        turma={this.state.turma} />
                                 )} />
                                 <Route path={Rotas.ALUNO_NOVO} exact={true} render={routeProps => (
-                                    <AlunoForm {...routeProps} turma={this.state.turma} />
+                                    <AlunoForm {...routeProps}
+                                        handleUnauthorized={this.handleUnauthorized}
+                                        turma={this.state.turma} />
                                 )} />
                             </Switch>
                         </div>

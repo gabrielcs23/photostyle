@@ -9,7 +9,7 @@ class TurmaService extends BaseApiService {
             const res = await this.axiosInstance.get(`${BASE_URL}/por-escola/${idEscola}`);
             return res.data;
         } catch (error) {
-            return error;
+            throw this.parseError(error);
         }
     }
 
@@ -18,7 +18,7 @@ class TurmaService extends BaseApiService {
             const res = await this.axiosInstance.get(`${BASE_URL}/nomes/por-escola/${idEscola}`);
             return res.data;
         } catch (error) {
-            return error;
+            throw this.parseError(error);
         }
     }
 
@@ -27,7 +27,7 @@ class TurmaService extends BaseApiService {
             const res = await this.axiosInstance.get(`${BASE_URL}/${id}`)
             return res.data;
         } catch (error) {
-            return error;
+            throw this.parseError(error);
         }
     }
 
@@ -36,7 +36,7 @@ class TurmaService extends BaseApiService {
             const res = await this.axiosInstance.post(BASE_URL, turma);
             return res.data;
         } catch (error) {
-            return error;
+            throw this.parseError(error);
         }
     }
 
@@ -44,7 +44,7 @@ class TurmaService extends BaseApiService {
         try {
             await this.axiosInstance.delete(`${BASE_URL}/${id}`);
         } catch (error) {
-            return error;
+            throw this.parseError(error);
         }
     }
 
@@ -55,9 +55,9 @@ class TurmaService extends BaseApiService {
                     'content-type': 'multipart/form-data'
                 }
             }
-            return this.axiosInstance.post(`${BASE_URL}/${id}/foto`, foto, config);
+            return await this.axiosInstance.post(`${BASE_URL}/${id}/foto`, foto, config);
         } catch (error) {
-            return error;
+            throw this.parseError(error);
         }
     }
 
@@ -65,7 +65,7 @@ class TurmaService extends BaseApiService {
         try {
             await this.axiosInstance.delete(`${BASE_URL}/${idTurma}/foto/${idFoto}`)    
         } catch (error) {
-            return error;
+            throw this.parseError(error);
         }
     }
 

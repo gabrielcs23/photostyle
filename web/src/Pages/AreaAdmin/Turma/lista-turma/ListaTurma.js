@@ -20,6 +20,7 @@ class ListaTurma extends Component {
         if(this.props.escola != null) {
             TurmaService.getListPorEscola(this.escola.id)
                 .then(lista => this.setState({listaTurmas : lista}))
+                .catch(error => this.props.handleUnauthorized(error))
                 .catch(error => PopUp.erro(error));
         } else {
             this.props.history.push(Rotas.ESCOLA_LISTA);
@@ -34,6 +35,7 @@ class ListaTurma extends Component {
                 this.setState({listaTurmas: novaLista});
                 PopUp.sucesso('Turma removida com sucesso');
             })
+            .catch(error => this.props.handleUnauthorized(error))
             .catch(error => PopUp.erro(error));
     }
 

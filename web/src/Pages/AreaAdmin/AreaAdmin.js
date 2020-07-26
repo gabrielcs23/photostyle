@@ -9,6 +9,7 @@ import ListaTurma from './Turma/lista-turma/ListaTurma';
 import TurmaForm from './Turma/TurmaForm';
 import ListaAluno from './Aluno/lista-aluno/ListaAluno';
 import AlunoForm from './Aluno/AlunoForm';
+import Login from './Login/Login';
 
 class AreaAdmin extends BasePage {
 
@@ -22,6 +23,10 @@ class AreaAdmin extends BasePage {
         };
 
         this.state = this.stateInicial;
+    }
+
+    aposLogin = () => {
+        this.props.history.push(Rotas.ESCOLA_LISTA);
     }
 
     selecionarEscola = escola => {
@@ -101,6 +106,10 @@ class AreaAdmin extends BasePage {
                     <div className="row mt-3">
                         <div className="col s12">
                             <Switch>
+                                <Route path={Rotas.LOGIN} exact={true} render={routeProps => (
+                                    <Login {...routeProps} aposLogin={this.aposLogin} />
+                                )} />
+
                                 <Route path={Rotas.ESCOLA_LISTA} exact={true} render={routeProps => (
                                     <ListaEscola {...routeProps} selecionar={this.selecionarEscola} />
                                 )} />

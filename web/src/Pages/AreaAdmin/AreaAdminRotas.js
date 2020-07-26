@@ -1,4 +1,6 @@
 const AreaAdminRotas = {
+    LOGIN: '/admin',
+
     ESCOLA_LISTA: '/admin/escola',
     ESCOLA_NOVO: '/admin/escola/novo',
 

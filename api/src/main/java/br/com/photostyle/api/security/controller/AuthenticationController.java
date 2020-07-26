@@ -12,12 +12,10 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/api/authenticate")
 public class AuthenticationController {
 
     @Autowired
@@ -32,12 +30,7 @@ public class AuthenticationController {
     @Autowired
     private CookieService cookieService;
 
-    @GetMapping("/hello")
-    public String hello() {
-        return "Hello World";
-    }
-
-    @PostMapping("/authenticate")
+    @PostMapping
     public ResponseEntity<?> createAuthenticationToken(
             @RequestBody AuthenticationRequest authRequest) {
         final UserDetails userDetails;

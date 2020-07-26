@@ -133,8 +133,8 @@ class AlunoForm extends Component {
                     this.setState({canSubmit: true});
                 });
         } else {
-            const { nome } = validacao;
-            const campos = [nome];
+            const { nome, matricula } = validacao;
+            const campos = [nome, matricula];
 
             const camposInvalidos = campos.filter(elem => elem.isInvalid);
             camposInvalidos.forEach(campo => PopUp.erro(campo.message));

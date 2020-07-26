@@ -1,59 +1,94 @@
-import axios from 'axios';
-import ServiceConstants from '../../Utils/ServiceUtils/ServiceConstants'
+import BaseApiService from '../Services/BaseApiService/BaseApiService';
 
-const BASE_URL = ServiceConstants.BACKEND_URL + '/aluno';
+const BASE_URL = '/aluno';
 
-const AlunoService = {
+class AlunoService extends BaseApiService {
 
-    getListPorTurma: async (idTurma) => {
-        const res = await axios.get(BASE_URL + `/por-turma/${idTurma}`);
-        return res.data;
-    },
-
-    getListNomesPorTurma: async (idTurma) => {
-        const res = await axios.get(BASE_URL + `/nomes/por-turma/${idTurma}`);
-        return res.data;
-    },
-
-    getPorId: async (id) => {
-        const res = await axios.get(BASE_URL + `/${id}`)
-        return res.data;
-    },
-
-    postAluno: async (aluno) => {
-        const res = await axios.post(BASE_URL, aluno);
-        return res.data;
-    },
-
-    deleteAluno: async (id) => {
-        await axios.delete(BASE_URL + `/${id}`);
-    },
-
-    uploadFoto: (id, foto) => {
-        const config = {
-            headers: {
-                'content-type': 'multipart/form-data'
-            }
+    async getListPorTurma(idTurma) {
+        try {
+            const res = await this.axiosInstance.get(`${BASE_URL}/por-turma/${idTurma}`);
+            return res.data;
+        } catch (error) {
+            return error;
         }
-        return axios.post(BASE_URL + `/${id}/foto`, foto, config);
-    },
+    }
 
-    removerFoto: async (id) => {
-        await axios.delete(BASE_URL + `/${id}/foto`);
-    },
-
-    adicionarFotoIrmao: (id, foto) => {
-        const config = {
-            headers: {
-                'content-type': 'multipart/form-data'
-            }
+    async getListNomesPorTurma(idTurma) {
+        try {
+            const res = await this.axiosInstance.get(`${BASE_URL}/nomes/por-turma/${idTurma}`);
+            return res.data;
+        } catch (error) {
+            return error;
         }
-        return axios.post(BASE_URL + `/${id}/foto-irmao`, foto, config);
-    },
+    }
 
-    removerFotoIrmao: async (idTurma, idFoto) => {
-        await axios.delete(BASE_URL + `/${idTurma}/foto-irmao/${idFoto}`)
+    async getPorId(id) {
+        try {
+            const res = await this.axiosInstance.get(`${BASE_URL}/${id}`)
+            return res.data;
+        } catch (error) {
+            return error;
+        }
+    }
+
+    async postAluno(aluno) {
+        try {
+            const res = await this.axiosInstance.post(BASE_URL, aluno);
+            return res.data;
+        } catch (error) {
+            return error;
+        }
+    }
+
+    async deleteAluno(id) {
+        try {
+            await this.axiosInstance.delete(`${BASE_URL}/${id}`);
+        } catch (error) {
+            return error;
+        }
+    }
+
+    async uploadFoto(id, foto) {
+        try {
+            const config = {
+                headers: {
+                    'content-type': 'multipart/form-data'
+                }
+            }
+            return this.axiosInstance.post(`${BASE_URL}/${id}/foto`, foto, config);
+        } catch (error) {
+            return error;
+        }
+    }
+
+    async removerFoto(id) {
+        try {
+            await this.axiosInstance.delete(`${BASE_URL}/${id}/foto`);
+        } catch (error) {
+            return error;
+        }
+    }
+
+    async adicionarFotoIrmao(id, foto) {
+        try {
+            const config = {
+                headers: {
+                    'content-type': 'multipart/form-data'
+                }
+            }
+            return this.axiosInstance.post(`${BASE_URL}/${id}/foto-irmao`, foto, config);
+        } catch (error) {
+            return error;
+        }
+    }
+
+    async removerFotoIrmao(idTurma, idFoto) {
+        try {
+            await this.axiosInstance.delete(`${BASE_URL}/${idTurma}/foto-irmao/${idFoto}`)
+        } catch (error) {
+            return error;
+        }
     }
 
 }
-export default AlunoService;
+export default new AlunoService();

@@ -1,23 +1,40 @@
-import axios from 'axios';
-import ServiceConstants from '../../Utils/ServiceUtils/ServiceConstants'
+import BaseApiService from '../Services/BaseApiService/BaseApiService';
 
-const BASE_URL = ServiceConstants.BACKEND_URL + '/escola';
+const BASE_URL = '/escola';
 
-const EscolaService = {
+class EscolaService extends BaseApiService {
 
-    getList: async () => {
-        const res = await axios.get(BASE_URL);
-        return res.data;
-    },
+    async getList() {
+        try {
+            const res = await this.axiosInstance.get(BASE_URL);
+            return res.data;
+        } catch (error) {
+            return error;
+        }
+    }
+    
+    // getList: async () => {
+    //     const res = await axios.get(BASE_URL);
+    //     return res.data;
+    // },
 
     // getPorId: async () => {
     //     const res = await axios.get(BASE_URL)
     // },
 
-    postEscola: async (escola) => {
-        const res = await axios.post(BASE_URL, escola);
-        return res.data;
-    },
+    async postEscola(escola) {
+        try {
+            const res = await this.axiosInstance.post(BASE_URL, escola);
+            return res.data;
+        } catch (error) {
+            return error;
+        }
+    }
+
+    // postEscola: async (escola) => {
+    //     const res = await axios.post(BASE_URL, escola);
+    //     return res.data;
+    // },
 
 }
-export default EscolaService;
+export default new EscolaService();

@@ -1,10 +1,11 @@
 package br.com.photostyle.api.security.controller;
 
 import br.com.photostyle.api.security.model.http.AuthenticationRequest;
-import br.com.photostyle.api.security.model.http.AuthenticationResponse;
+import br.com.photostyle.api.security.service.CookieService;
 import br.com.photostyle.api.security.service.UserDetailsImplService;
 import br.com.photostyle.api.security.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -28,13 +29,17 @@ public class AuthenticationController {
     @Autowired
     private JwtUtil jwtTokenUtil;
 
+    @Autowired
+    private CookieService cookieService;
+
     @GetMapping("/hello")
     public String hello() {
         return "Hello World";
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authRequest) {
+    public ResponseEntity<?> createAuthenticationToken(
+            @RequestBody AuthenticationRequest authRequest) {
         final UserDetails userDetails;
         try {
             authManager.authenticate(
@@ -47,7 +52,10 @@ public class AuthenticationController {
 
         final String jwt = jwtTokenUtil.generateToken(userDetails);
 
-        return ResponseEntity.ok(new AuthenticationResponse(jwt));
+        HttpHeaders responseHeaders = cookieService.createResponseHeaders(jwt, jwtTokenUtil.getCookieName(),
+                jwtTokenUtil.getMaxAgeSeconds());
+
+        return ResponseEntity.ok().headers(responseHeaders).build();
     }
 
 }

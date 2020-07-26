@@ -1,6 +1,7 @@
 package br.com.photostyle.api.security;
 
 import br.com.photostyle.api.security.filter.JwtRequestFilter;
+import br.com.photostyle.api.security.model.Roles;
 import br.com.photostyle.api.security.service.UserDetailsImplService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -27,12 +28,19 @@ public class SecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .cors()
+                .and()
                 .csrf().disable()
+                .formLogin().disable()
+                .httpBasic().disable()
+                .exceptionHandling().authenticationEntryPoint(new RestAuthenticationEntryPoint())
+                .and()
                 .authorizeRequests()
                 .antMatchers("/authenticate").permitAll()
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                .antMatchers("/hello").hasRole("ADMIN")
+                .antMatchers("/hello").hasRole(Roles.ADMIN)
                 .antMatchers("/api/**").permitAll()
+                .anyRequest().authenticated()
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);

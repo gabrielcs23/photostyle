@@ -1,7 +1,8 @@
 package br.com.photostyle.api;
 
 import br.com.photostyle.api.infra.amazon.AmazonConstants;
-import br.com.photostyle.api.security.JwtConfigurationProperties;
+import br.com.photostyle.api.security.util.JwtConfigurationProperties;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -13,6 +14,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableConfigurationProperties({AmazonConstants.class, JwtConfigurationProperties.class})
 public class ApiApplication {
 
+	@Value("${jwt.maxage}")
+	private int MAX_AGE_MILLI;
+
 	public static void main(String[] args) {
 		SpringApplication.run(ApiApplication.class, args);
 	}
@@ -22,7 +26,12 @@ public class ApiApplication {
 		return new WebMvcConfigurer() {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/**").allowedMethods("GET", "POST", "DELETE");
+				registry.addMapping("/**")
+						.allowedOrigins("*")
+						.allowedMethods("GET", "POST", "DELETE")
+						.allowedHeaders("*")
+						.allowCredentials(true)
+						.maxAge(MAX_AGE_MILLI/1000);
 			}
 		};
 	}

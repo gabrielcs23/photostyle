@@ -10,9 +10,8 @@ public class CookieService {
     public HttpHeaders createResponseHeaders(String token, String cookieName, int maxAgeSeconds) {
         ResponseCookie cookie = ResponseCookie.from(cookieName, token)
                 .maxAge(maxAgeSeconds)
-                 .httpOnly(true)
-                // TODO descomentar quando HTTPS ativo
-                // .secure(true)
+                .httpOnly(true)
+                .secure(true)
                 .path("/")
                 .build();
 

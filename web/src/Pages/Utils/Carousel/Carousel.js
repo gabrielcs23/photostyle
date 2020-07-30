@@ -2,6 +2,13 @@ import React, { Component } from 'react';
 import M from "materialize-css";
 
 class Carousel extends Component {
+
+    carouselItemStyle = {
+        maxWidth: "100%",
+        height:"100%",
+        width: "auto"
+    }
+
     constructor(props) {
         super(props);
         this.state = {
@@ -12,6 +19,7 @@ class Carousel extends Component {
     componentDidMount() {
         const options = {
             duration: 200,
+            indicators: true,
         }
 
         M.Carousel.init(this.Carousel, options);
@@ -20,8 +28,12 @@ class Carousel extends Component {
     renderCarouselItems() {
         return this.state.imgs.map((img, idx) => {
             return (
-                <span className="carousel-item">
-                    <img src={img} alt={`carousel${idx}`} />
+                <span key={idx} className="carousel-item center-align">
+                    <img
+                        src={img}
+                        alt={`carousel${idx}`}
+                        style={this.carouselItemStyle}
+                    />
                 </span>
             );
         });
@@ -33,7 +45,7 @@ class Carousel extends Component {
                 ref={Carousel => {
                     this.Carousel = Carousel;
                 }}
-                className="carousel"
+                className="carousel carousel-slider"
             >
                 {this.renderCarouselItems()}
             </div>

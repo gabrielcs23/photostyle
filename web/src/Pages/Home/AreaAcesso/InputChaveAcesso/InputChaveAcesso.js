@@ -13,7 +13,7 @@ const InputChaveAcesso = props => {
 
     const formatOptions = {
         delimiter: '-',
-        blocks: [4, 4],
+        blocks: [4, 6],
         uppercase: true
     }
 

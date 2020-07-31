@@ -195,4 +195,7 @@ public class AlunoService extends BaseService<AlunoEntity, AlunoDto> {
         irmaoService.removerFotoIrmao(aluno.getIrmaoRel(), idFoto);
     }
 
+    public AlunoEntity getAlunoByCodAcesso(String codAcesso) {
+        return repository.getByCodigoAcesso(codAcesso);
+    }
 }

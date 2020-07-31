@@ -39,7 +39,7 @@ public class SecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .antMatchers("/api/authenticate").permitAll()
                 // TODO liberar rota com cod acesso
-                // .antMatchers(ROTA_COD_ACESSO).permitAll()
+                .antMatchers("/api/kit/{codAcesso}").permitAll()
                 .antMatchers("/api/**").hasRole(Roles.ADMIN)
                 .anyRequest().authenticated()
                 .and()

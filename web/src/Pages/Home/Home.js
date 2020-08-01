@@ -10,13 +10,15 @@ class Home extends BasePage {
         return (
             <>
                 <Parallax bgImage={`${process.env.PUBLIC_URL}/assets/images/parallax/01.jpg`} strength={500}>
-                    <div style={{ height: 600 }} />
+                    <div style={{ height: 500 }} />
                 </Parallax>
                 
                 <AreaAcesso />
 
-                <div className="container">
-                    {/* <Carousel /> */}
+                <div
+                    style={{margin: "3rem"}}
+                >
+                    <Carousel />
                 </div>
             </>
         );

@@ -4,9 +4,9 @@ import { NavLink } from 'react-router-dom';
 const Header = activePage => {
     activePage = activePage == null ? '' : activePage;
     
-    return ( 
+    return (
         <nav>
-            <div className="nav-wrapper blue-grey darken-3">
+            <div className="nav-wrapper grey darken-4">
                 <NavLink to="/" className="brand-logo" style={{height: "inherit"}}>
                     <img 
                         src={process.env.PUBLIC_URL + "/logo.png"}

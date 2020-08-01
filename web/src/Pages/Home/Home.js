@@ -1,32 +1,22 @@
 import React from 'react';
+import { Parallax } from 'react-parallax';
 import BasePage from '../BasePage/BasePage';
 import Carousel from '../Utils/Carousel/Carousel';
 import AreaAcesso from './AreaAcesso/AreaAcesso';
-// import Parralax from '../Utils/Parallax/Parallax';
 
 class Home extends BasePage {
-
-    carouselImgs = [
-        `${process.env.PUBLIC_URL}/assets/images/carousel/01.jpg`,
-        `${process.env.PUBLIC_URL}/assets/images/carousel/02.jpg`,
-        `${process.env.PUBLIC_URL}/assets/images/carousel/03.jpg`,
-        `${process.env.PUBLIC_URL}/assets/images/carousel/04.jpg`,
-        `${process.env.PUBLIC_URL}/assets/images/carousel/05.jpg`,
-    ]
 
     renderPage() {
         return (
             <>
-                {/* <Parralax /> */}
+                <Parallax bgImage={`${process.env.PUBLIC_URL}/assets/images/parallax/01.jpg`} strength={500}>
+                    <div style={{ height: 600 }} />
+                </Parallax>
+                
                 <AreaAcesso />
-                <hr />
-                <div className="row">
-                    <h5 className="center-align">Mostruario aqui</h5>
-                </div>
-                {/* <Mostruario /> */}
-                <hr />
+
                 <div className="container">
-                    <Carousel imgs={this.carouselImgs} />
+                    {/* <Carousel /> */}
                 </div>
             </>
         );

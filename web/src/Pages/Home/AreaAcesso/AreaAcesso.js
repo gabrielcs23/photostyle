@@ -5,25 +5,49 @@ import InputChaveAcesso from './InputChaveAcesso/InputChaveAcesso';
 class AreaAcesso extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            chave: ''
+        this.stateInicial = {
+            chave: '',
+            disabled: true
+        }
+        this.state = this.stateInicial;
+    }
+
+    onChange(value, rawValue) {
+        if (value) {
+            if (rawValue.length === 10) {
+                this.setState({chave: value});
+                this.setState({disabled: false});
+            }
+        } else {
+            this.setState(this.stateInicial);
         }
     }
 
     render() {
+        const sendButton = (
+            <button
+                className={`btn-small waves-effect waves-light grey darken-4 ${this.state.disabled ?  'disabled': ''}`}
+                type="submit"
+                name="action"
+            >
+                <i className="material-icons">send</i>
+            </button>
+        );
+
         return (
                 <div className="center-align">
                     <div className="row">
                         <h5 className="col s12">Recordação Escolar Kit 2020</h5>
                     </div>
-                    <div className="row">
-                        <form className="col s6 offset-s4">
-                            <InputChaveAcesso />
+                    <div className="container row valign-wrapper">
+                        <form className="col s8 m6 offset-m3">
+                            <InputChaveAcesso onChange={(value, rawValue) => this.onChange(value, rawValue)} />
                         </form>
-                        <div className="col s2 left-align">
-                            <button className="btn waves-effect waves-light" type="submit" name="action">
-                                <i className="material-icons">send</i>
-                            </button>
+                        <div className="col s4 hide-on-med-and-up">
+                            {sendButton}
+                        </div>
+                        <div className="col m3 hide-on-small-only left-align">
+                            {sendButton}
                         </div>
                     </div>
                 </div>

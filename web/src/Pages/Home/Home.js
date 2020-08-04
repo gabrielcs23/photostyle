@@ -13,7 +13,7 @@ class Home extends BasePage {
                     <div style={{ height: 500 }} />
                 </Parallax>
                 
-                <AreaAcesso />
+                <AreaAcesso {...this.props} />
 
                 <div
                     style={{margin: "3rem"}}

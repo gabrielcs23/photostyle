@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import './AreaAcesso.css';
 import InputChaveAcesso from './InputChaveAcesso/InputChaveAcesso';
+import rotas from '../../../AppRotas'
 
 class AreaAcesso extends Component {
+
     constructor(props) {
         super(props);
         this.stateInicial = {
@@ -23,12 +25,16 @@ class AreaAcesso extends Component {
         }
     }
 
+    submit() {
+        this.props.history.push(rotas.MOSTRUARIO.replace(':chave', this.state.chave));
+    }
+
     render() {
         const sendButton = (
             <button
                 className={`btn-small waves-effect waves-light grey darken-4 ${this.state.disabled ?  'disabled': ''}`}
                 type="submit"
-                name="action"
+                onClick={() => this.submit()}
             >
                 <i className="material-icons">send</i>
             </button>

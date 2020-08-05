@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import M from 'materialize-css';
-import './ImgBox.scss'
 
 const ImgBox = (props) => {
 
@@ -13,7 +12,7 @@ const ImgBox = (props) => {
             }}
             className="materialboxed responsive-img"
             src={props.img}
-            alt="foto individual"
+            alt={props.alt}
         />
     )
 

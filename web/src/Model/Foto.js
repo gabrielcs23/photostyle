@@ -1,6 +1,7 @@
 class Foto {
     id;
     url;
+    descricao;
     formData;
 
     constructor(file) {

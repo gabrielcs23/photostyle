@@ -3,6 +3,8 @@ import BasePage from '../BasePage/BasePage';
 import service from './MostruarioService';
 import PopUp from '../Utils/pop-up/PopUp';
 import ImgBox from '../Utils/ImgBox/ImgBox';
+import DisplayFotos from './DisplayFotos/DisplayFotos';
+import styles from './Mostruario.module.scss';
 
 export default class Mostruario extends BasePage {
 
@@ -36,11 +38,11 @@ export default class Mostruario extends BasePage {
         const { codigoAcesso, escola, turma, nomeAluno, fotoIndividual, fotosIrmaos, fotosTurma } = kit;
         return (
             <>
-                <div className="title center">
-                    <h3>Kit Escolar</h3>
+                <div className={`${styles.title} center`}>
+                    <h3>Kit Fotográfico Escolar 2020</h3>
                 </div>
-                <div className="content">
-                    <div className="container">
+                <div className="content container">
+                    <div className="header">
                         <div className="left-align">
                             <p>
                                 <b>Código de Acesso:</b> {codigoAcesso}
@@ -57,10 +59,32 @@ export default class Mostruario extends BasePage {
                         </div>
                     </div>
 
-                    
-                    <div className="container center" id="fotoIndividual">
-                        <ImgBox img={fotoIndividual.url} />
+                    <hr />
+
+                    <div className={`${styles.title} center`}>
+                        <h4>Foto Individual</h4>
                     </div>
+
+                    
+                    <div className={`center mb-5 ${styles.fotoIndividual}`} id="fotoIndividual">
+                        <ImgBox img={fotoIndividual.url} alt="foto individual" />
+                    </div>
+
+                    <hr />
+
+                    <div className={`${styles.title} center`}>
+                        <h4>{`Foto${fotosTurma.length > 1 ? '(s)' : ''} de Turma ${fotosIrmaos?.length > 0 ? 'e de Irmãos' : ''}`}</h4>
+                    </div>
+
+                    {fotosTurma?.length ?
+                        <div className="row mb-5">
+                            <div className="col s12 mt-2">
+                                <DisplayFotos
+                                    fotos={[...fotosTurma, ...fotosIrmaos]}
+                                />
+                            </div>
+                        </div>
+                        : null}
 
                 </div>
             </>

@@ -31,8 +31,8 @@ const Carousel = () => {
         )
     });
 
-    const arrowLeft = <i className="material-icons">arrow_back_ios</i>
-    const arrowRight = <i className="material-icons">arrow_forward_ios</i>
+    const arrowLeft = <i className="material-icons" style={{cursor: "pointer"}}>arrow_back_ios</i>
+    const arrowRight = <i className="material-icons" style={{cursor: "pointer"}}>arrow_forward_ios</i>
 
     return (
         <ReactCarousel

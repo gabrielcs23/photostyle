@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import './AreaAcesso.css';
 import InputChaveAcesso from './InputChaveAcesso/InputChaveAcesso';
 import rotas from '../../../AppRotas';
 import styles from './AreaAcesso.module.scss';

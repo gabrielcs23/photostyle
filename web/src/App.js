@@ -1,5 +1,5 @@
 import './App.css';
-import 'materialize-css/dist/css/materialize.min.css'
+import './materialize-custom.css'
 import React from 'react';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 

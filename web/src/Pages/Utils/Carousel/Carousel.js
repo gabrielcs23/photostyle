@@ -31,13 +31,20 @@ const Carousel = () => {
         )
     });
 
+    const arrowLeft = <i className="material-icons">arrow_back_ios</i>
+    const arrowRight = <i className="material-icons">arrow_forward_ios</i>
+
     return (
         <ReactCarousel
             centered
             infinite
             slides={slides}
             autoPlay={4000}
-            slidesPerPage={3}
+            offset={100}
+            dots
+            arrowLeft={arrowLeft}
+            arrowRight={arrowRight}
+            keepDirectionWhenDragging
         >
         </ReactCarousel>
     );

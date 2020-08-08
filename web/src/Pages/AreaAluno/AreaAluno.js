@@ -5,6 +5,7 @@ import PopUp from '../Utils/pop-up/PopUp';
 import ImgBox from '../Utils/ImgBox/ImgBox';
 import DisplayFotos from './DisplayFotos/DisplayFotos';
 import styles from './AreaAluno.module.scss';
+import PedidoForm from './PedidoForm/PedidoForm';
 
 export default class AreaAluno extends BasePage {
 
@@ -107,7 +108,19 @@ export default class AreaAluno extends BasePage {
                                 </div>
                             </div>
                         </>
-                        : null}
+                        : null
+                    }
+                    
+                    <hr />
+
+                    <div className={`${styles.title}`}>
+                        <h4>Pedido</h4>
+                    </div>
+
+                    <PedidoForm 
+                        aluno={nomeAluno}
+                        turma={turma}
+                    />
 
                 </div>
             </>

@@ -1,27 +1,51 @@
+@import "../../../../node_modules/materialize-css/sass/components/color-variables";
+@import "../../../../node_modules/materialize-css/sass/components/variables";
+
+@import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
+
+.title {
+	font-family: 'Indie Flower', cursive, 'Ubuntu', 'Roboto', sans-serif;
+	@media #{$extra-large-and-up} {
+		margin-top: 1em;
+	} 
+}
+
 .inputChave input {
-    color: white;
+	color: white;
 }
 
 .inputChave input::placeholder {
-    color: white;
-    opacity: 0.8;
+	color: white;
+	opacity: 0.8;
 }
 
 .containerBox {
-    padding: 2rem;
-    margin-top: 2rem;
+	padding: 2rem;
+	margin-top: 2rem;
 }
 
 .inputBox {
-    color: white;
-    height: 425px;
-    background-repeat: no-repeat;
-    background-position-x: center;
-    background-size: contain;
-    padding-top: 1rem;
+	color: white;
+	height: 425px;
+	background-repeat: no-repeat;
+	background-position-x: center;
+	background-size: contain;
+	padding-top: 1rem;
 }
 
-.rowInput {
-    display: flex;
-    justify-content: center;    
+.rowCenter {
+	display: flex;
+	justify-content: center;
+}
+
+.inputContainer {
+	@media #{$medium-and-up} {
+		margin-top: 4em;
+	}
+	@media #{$large-and-up} {
+		margin-top: 4.5em;
+	}
+	@media #{$extra-large-and-up} {
+		margin-top: 3.5em;
+	}
 }

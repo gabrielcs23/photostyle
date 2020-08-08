@@ -30,6 +30,7 @@ class AreaAcesso extends Component {
     }
 
     render() {
+        const title = 'Recordação Escolar 2020';
         return (
                 <div className={`container ${styles.containerBox}`}>
                     <div 
@@ -37,24 +38,27 @@ class AreaAcesso extends Component {
                         style={{backgroundImage: `url(${process.env.PUBLIC_URL}/assets/images/cb.png)`}}
                     >
                         <div className="row">
-                            <h5 className="col s12">Recordação Escolar Kit 2020</h5>
+                            <h4 className={`col s12 ${styles.title} hide-on-small-only`}>{title}</h4>
+                            <h5 className={`col s12 ${styles.title} hide-on-med-and-up`}>{title}</h5>
                         </div>
-                        <div className={`container row mt-5 ${styles.rowInput}`}>
-                            <form className={`col s12 m6 l12 xl6 ${styles.inputChave}`} style={{marginLeft: "unset"}}>
-                                <InputChaveAcesso
-                                    onChange={(value, rawValue) => this.onChange(value, rawValue)}
-                                />
-                            </form>
-                        </div>
-                        <div className={`row ${styles.rowInput}`}>
-                            <div className="col s12">
-                                <button
-                                    className={`btn-small waves-effect waves-light grey darken-4 ${this.state.disabled ?  'disabled': ''}`}
-                                    type="submit"
-                                    onClick={() => this.submit()}
-                                >
-                                    <i className="material-icons">send</i>
-                                </button>
+                        <div className={`container ${styles.inputContainer}`}>
+                            <div className={`row ${styles.rowCenter}`}>
+                                <form className={`col s12 m8 l12 xl6 ${styles.inputChave}`} style={{marginLeft: "unset"}}>
+                                    <InputChaveAcesso
+                                        onChange={(value, rawValue) => this.onChange(value, rawValue)}
+                                    />
+                                </form>
+                            </div>
+                            <div className={`row ${styles.rowCenter}`}>
+                                <div className="col s12">
+                                    <button
+                                        className={`btn-small waves-effect waves-light grey darken-4 ${this.state.disabled ?  'disabled': ''}`}
+                                        type="submit"
+                                        onClick={() => this.submit()}
+                                    >
+                                        <i className="material-icons">send</i>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>

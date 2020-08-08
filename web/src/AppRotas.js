@@ -1,6 +1,6 @@
 const AppRotas = {
     HOME: '/',
-    MOSTRUARIO: '/mostruario/:chave',
+    AREA_ALUNO: '/aluno/:chave',
     SOBRE: '/sobre',
     CONTATO: '/contato',
     ADMIN: '/admin'

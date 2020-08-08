@@ -26,7 +26,7 @@ class AreaAcesso extends Component {
     }
 
     submit() {
-        this.props.history.push(rotas.MOSTRUARIO.replace(':chave', this.state.chave));
+        this.props.history.push(rotas.AREA_ALUNO.replace(':chave', this.state.chave));
     }
 
     render() {

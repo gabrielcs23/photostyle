@@ -1,0 +1,15 @@
+.image-gallery-slide .image-gallery-description {
+    background: black;
+    bottom: 0;
+    text-shadow: 1px 1px #000;
+    opacity: 0.8;
+    font-family: Verdana;
+}
+
+.image-gallery-content.fullscreen {
+    width: 100vw;
+
+    .image-gallery-slide .image-gallery-image {
+        object-fit: inherit;
+    }
+}

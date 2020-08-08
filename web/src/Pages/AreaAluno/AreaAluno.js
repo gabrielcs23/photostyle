@@ -1,12 +1,12 @@
 import React from 'react';
 import BasePage from '../BasePage/BasePage';
-import service from './MostruarioService';
+import service from './AreaAlunoService';
 import PopUp from '../Utils/pop-up/PopUp';
 import ImgBox from '../Utils/ImgBox/ImgBox';
 import DisplayFotos from './DisplayFotos/DisplayFotos';
-import styles from './Mostruario.module.scss';
+import styles from './AreaAluno.module.scss';
 
-export default class Mostruario extends BasePage {
+export default class AreaAluno extends BasePage {
 
     constructor(props) {
         super(props);
@@ -26,6 +26,28 @@ export default class Mostruario extends BasePage {
                     PopUp.erro(error);
                 }
             });
+    }
+
+    getFotosDisplay(ftTurmas, ftIrmaos) {
+        let fotos = [];
+        if (ftTurmas && ftTurmas.length > 0) {
+            ftTurmas.sort((a, b) => {
+                const descA = a.descricao.toUpperCase();
+                const descB = b.descricao.toUpperCase();
+                if (descA < descB) {
+                    return -1;
+                }
+                if (descA > descB) {
+                    return 1;
+                }
+                return 0;
+            });
+            fotos = [...ftTurmas];
+        }
+        if (ftIrmaos && ftIrmaos.length > 0) {
+            fotos = [...fotos, ...ftIrmaos];
+        }
+        return fotos;
     }
 
     renderPage() {
@@ -67,23 +89,24 @@ export default class Mostruario extends BasePage {
 
                     
                     <div className={`center mb-5 ${styles.fotoIndividual}`} id="fotoIndividual">
-                        <ImgBox img={fotoIndividual.url} alt="foto individual" />
+                        <ImgBox img={fotoIndividual?.url} alt="foto individual" />
                     </div>
 
-                    <hr />
-
-                    <div className={`${styles.title} center`}>
-                        <h4>{`Foto${fotosTurma.length > 1 ? '(s)' : ''} de Turma ${fotosIrmaos?.length > 0 ? 'e de Irmãos' : ''}`}</h4>
-                    </div>
 
                     {fotosTurma?.length ?
-                        <div className="row mb-5">
-                            <div className="col s12 mt-2">
-                                <DisplayFotos
-                                    fotos={[...fotosTurma, ...fotosIrmaos]}
-                                />
+                        <>
+                            <hr />
+                            <div className={`${styles.title} center`}>
+                                <h4>{`Foto${fotosTurma.length > 1 ? 's' : ''} de Turma ${fotosIrmaos?.length > 0 ? 'e de Irmãos' : ''}`}</h4>
                             </div>
-                        </div>
+                            <div className="row mb-5">
+                                <div className="col s12 mt-2">
+                                    <DisplayFotos
+                                        fotos={this.getFotosDisplay(fotosTurma, fotosIrmaos)}
+                                    />
+                                </div>
+                            </div>
+                        </>
                         : null}
 
                 </div>

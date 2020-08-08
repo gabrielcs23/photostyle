@@ -1,7 +1,7 @@
 import axios from 'axios'
 import ServiceConstants from '../Utils/ServiceUtils/ServiceConstants'
 
-class MostruarioService {
+class AreaAlunoService {
 
     constructor() {
         this.axiosInstance = axios.create(
@@ -25,4 +25,4 @@ class MostruarioService {
     }
 
 }
-export default new MostruarioService();
+export default new AreaAlunoService();

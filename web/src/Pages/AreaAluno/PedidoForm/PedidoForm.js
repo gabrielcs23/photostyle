@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import FormValidator from '../../AreaAdmin/form-utils/FormValidator';
 import PopUp from '../../Utils/pop-up/PopUp';
+import SelecaoPedido from './SelecaoPedido/SelecaoPedido';
 import M from 'materialize-css';
 import Cleave from 'cleave.js/react';
 
@@ -22,13 +23,14 @@ export default class PedidoForm extends Component {
                 mensagem: 'Digite telefone para contato'
             },
         ]);
-
         this.state = {
             aluno: props.aluno,
             turma: props.turma,
             responsavel: '',
             tel: '',
             validacao: this.validador.valido(),
+            opcoes: undefined,
+            valorTotal: 0,
             canSubmit: false
         }
     }
@@ -59,6 +61,12 @@ export default class PedidoForm extends Component {
             const camposInvalidos = campos.filter(elem => elem.isInvalid);
             camposInvalidos.forEach(campo => PopUp.erro(campo.message));
         }
+    }
+
+    selecionaPedido(opcoes) {
+        let valorTotal = opcoes.item.val;
+        opcoes.extras.forEach(extra => valorTotal += (extra.val * extra.qtd));
+        this.setState({opcoes, valorTotal});
     }
 
     render() {
@@ -124,31 +132,19 @@ export default class PedidoForm extends Component {
                     </div>
                 </div>
 
-                <div className="row input-field">
-                    {/* <label htmlFor="tel">Tel. Contato</label> */}
-                    <div className="col s12">
-                        <input
-                            className="filled-in"
-                            type="checkbox"
-                            id="kit"
-                            name="kit"
-                        />
-                        <span>Kit Fotográfico (duas fotos diagramadas 15x21, aluno e turma)</span>
-                    </div>
-                    <div className="col s12">
-                        <input
-                            className="filled-in"
-                            type="checkbox"
-                            id="kitIrmao"
-                            name="kitIrmao"
-                        />
-                        <span>Kit Fotográfico (idem acima + uma 10x15 dos irmãos)</span>
+                <SelecaoPedido seleciona={opcoes => this.selecionaPedido(opcoes)} />
+
+                <div className="row">
+                    <div className="col left">
+                        <p>
+                            <b>Total:</b> R${this.state.valorTotal}
+                        </p>
                     </div>
                 </div>
 
                 {/* Submit Form */}
                 <div className="row">
-                    <div className="col right">
+                    <div className="col left">
                         <button
                             className="btn btn-small waves-effect waves-light blue"
                             disabled={!this.state.canSubmit}

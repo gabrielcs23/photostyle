@@ -20,6 +20,7 @@ public class PedidoAdapter {
         PedidoEntity entity = new PedidoEntity();
         entity.setNomeAluno(dto.getAluno());
         entity.setNomeTurma(dto.getTurma());
+        entity.setNomeEscola(dto.getEscola());
         entity.setNomeResponsavel(dto.getResponsavel());
         entity.setTelContato(dto.getTel());
         entity.setEmail(dto.getEmail());

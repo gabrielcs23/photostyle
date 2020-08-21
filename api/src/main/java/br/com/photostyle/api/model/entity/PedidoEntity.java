@@ -20,6 +20,9 @@ public class PedidoEntity {
     private String nomeTurma;
 
     @Column(nullable = false)
+    private String nomeEscola;
+
+    @Column(nullable = false)
     private String nomeResponsavel;
 
     @Column(nullable = false)
@@ -28,10 +31,10 @@ public class PedidoEntity {
     @Column(nullable = false)
     private String email;
 
-    @OneToOne(optional = false, cascade = CascadeType.REMOVE)
+    @OneToOne(optional = false, cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     private ItemPedidoEntity kit;
 
-    @OneToMany(cascade = CascadeType.REMOVE)
+    @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     @JoinTable(name="RL_PEDIDO_EXTRAS", joinColumns=@JoinColumn(name="ID_PEDIDO"), inverseJoinColumns=@JoinColumn(name="ID_EXTRA"))
     private List<ItemPedidoEntity> extras;
 
@@ -60,6 +63,14 @@ public class PedidoEntity {
 
     public void setNomeTurma(String nomeTurma) {
         this.nomeTurma = nomeTurma;
+    }
+
+    public String getNomeEscola() {
+        return nomeEscola;
+    }
+
+    public void setNomeEscola(String nomeEscola) {
+        this.nomeEscola = nomeEscola;
     }
 
     public String getNomeResponsavel() {

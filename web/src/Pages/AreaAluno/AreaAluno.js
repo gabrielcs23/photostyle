@@ -120,6 +120,7 @@ export default class AreaAluno extends BasePage {
                     <PedidoForm 
                         aluno={nomeAluno}
                         turma={turma}
+                        escola={escola}
                     />
 
                 </div>

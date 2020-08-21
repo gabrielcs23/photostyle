@@ -6,6 +6,7 @@ public class PedidoDto {
 
     private String aluno;
     private String turma;
+    private String escola;
     private String responsavel;
     private String tel;
     private String email;
@@ -26,6 +27,14 @@ public class PedidoDto {
 
     public void setTurma(String turma) {
         this.turma = turma;
+    }
+
+    public String getEscola() {
+        return escola;
+    }
+
+    public void setEscola(String escola) {
+        this.escola = escola;
     }
 
     public String getResponsavel() {

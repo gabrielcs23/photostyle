@@ -27,9 +27,14 @@ export default class PedidoForm extends Component {
                 campo: 'email',
                 metodo: 'isEmail',
                 validoQuando: true,
-                mensagem: 'Digite email para contato'
+                mensagem: 'Email inválido'
             }
         ]);
+
+        this.aluno = props.aluno;
+        this.turma = props.turma;
+        this.escola = props.escola;
+
         this.state = {
             aluno: props.aluno,
             turma: props.turma,
@@ -39,8 +44,7 @@ export default class PedidoForm extends Component {
             validacao: this.validador.valido(),
             item: undefined,
             extras: undefined,
-            valorTotal: 0,
-            canSubmit: false
+            valorTotal: 0
         }
     }
 
@@ -51,14 +55,10 @@ export default class PedidoForm extends Component {
     inputChangeHandler = (event) => {
         const { name, value } = event.target;
 
-        this.setState({
-            [name]: value,
-            canSubmit: this.state.canSubmit ? this.state.canSubmit : !this.state.canSubmit
-        });
+        this.setState({[name]: value});
     }
 
     submitForm = () => {
-        this.setState({canSubmit: false});
         const validacao = this.validador.valida(this.state);
 
         if (validacao.isValid) {
@@ -67,8 +67,9 @@ export default class PedidoForm extends Component {
                 return;
             }
             const pedido = {
-                aluno: this.state.aluno,
-                turma: this.state.turma,
+                aluno: this.aluno,
+                turma: this.turma,
+                escola: this.escola,
                 responsavel: this.state.responsavel,
                 tel: this.state.tel,
                 email: this.state.email,
@@ -100,40 +101,13 @@ export default class PedidoForm extends Component {
     }
 
     render() {
-        const { aluno, turma, responsavel, tel, email } = this.state;
+        const { responsavel, tel, email } = this.state;
         const telFormat = {
-            delimiters: [' ', '-'],
-            blocks: [2, 5, 4]
+            delimiters: ['(', ') ', '-'],
+            blocks: [0, 2, 5, 4]
         }
         return (
             <form>
-                <div className="row">
-                    <div className="input-field col s12">
-                        <label htmlFor="aluno">Aluno</label>
-                        <input 
-                            className="validate"
-                            id="aluno"
-                            type="text"
-                            name="aluno"
-                            value={aluno}
-                            disabled
-                        />
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="input-field col s12 m6">
-                        <label htmlFor="turma">Turma</label>
-                        <input 
-                            className="validate"
-                            id="turma"
-                            type="text"
-                            name="turma"
-                            value={turma}
-                            disabled
-                        />
-                    </div>
-                </div>
-
                 <div className="row">
                     <div className="input-field col s12 m6">
                         <label htmlFor="responsavel">Nome do(a) Responsável</label>
@@ -189,7 +163,6 @@ export default class PedidoForm extends Component {
                     <div className="col left">
                         <button
                             className="btn btn-small waves-effect waves-light blue"
-                            disabled={!this.state.canSubmit}
                             onClick={() => this.submitForm()}
                             type="button"
                             >

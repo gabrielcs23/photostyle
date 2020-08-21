@@ -24,5 +24,13 @@ class AreaAlunoService {
         }
     }
 
+    async fazerPedido(pedido) {
+        try {
+            await this.axiosInstance.post('/pedido', pedido);
+        } catch (error) {
+            throw this.parseError(error);
+        }
+    }
+
 }
 export default new AreaAlunoService();

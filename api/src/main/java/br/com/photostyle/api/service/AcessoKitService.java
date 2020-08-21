@@ -1,12 +1,12 @@
 package br.com.photostyle.api.service;
 
 import br.com.photostyle.api.model.adapter.FotoAdapter;
+import br.com.photostyle.api.model.adapter.PedidoAdapter;
 import br.com.photostyle.api.model.dto.FotoDto;
 import br.com.photostyle.api.model.dto.KitDto;
-import br.com.photostyle.api.model.entity.AlunoEntity;
-import br.com.photostyle.api.model.entity.FotoEntity;
-import br.com.photostyle.api.model.entity.IrmaoRelEntity;
-import br.com.photostyle.api.model.entity.TurmaEntity;
+import br.com.photostyle.api.model.dto.PedidoDto;
+import br.com.photostyle.api.model.entity.*;
+import br.com.photostyle.api.repository.PedidoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -21,6 +21,12 @@ public class AcessoKitService {
 
     @Autowired
     private FotoAdapter fotoAdapter;
+
+    @Autowired
+    private PedidoAdapter pedidoAdapter;
+
+    @Autowired
+    private PedidoRepository pedidoRepository;
 
     public KitDto montarKit(String codAcesso) {
         AlunoEntity aluno = alunoService.getAlunoByCodAcesso(codAcesso);
@@ -56,5 +62,13 @@ public class AcessoKitService {
         return kit;
     }
 
+    public void realizarPedido(PedidoDto dto) {
+        PedidoEntity pedidoEntity = pedidoAdapter.dtoToEntity(dto);
+        pedidoEntity.getId();
+//        PedidoEntity pedido = pedidoRepository.save(pedidoEntity);
+//        Long numeroPedido = pedido.getId();
+        // TODO mandar email para o responsável
+        // TODO mandar email para caixa interna
+    }
 }
 

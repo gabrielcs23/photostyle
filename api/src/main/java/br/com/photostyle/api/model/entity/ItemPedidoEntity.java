@@ -1,0 +1,66 @@
+package br.com.photostyle.api.model.entity;
+
+import javax.persistence.*;
+import java.math.BigDecimal;
+
+@Entity
+@Table(name = "ITM_PEDIDO")
+@SequenceGenerator(name = "itm_pedido_seq", sequenceName = "itm_pedido_seq", initialValue = 1, allocationSize = 1)
+public class ItemPedidoEntity {
+
+    @Id
+    @GeneratedValue(generator = "itm_pedido_seq", strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
+    private String nome;
+
+    @Column(nullable = false)
+    private BigDecimal valorInd;
+
+    @Column(nullable = false)
+    private int qtd;
+
+    @Column(nullable = false)
+    private BigDecimal totalInd;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public BigDecimal getValorInd() {
+        return valorInd;
+    }
+
+    public void setValorInd(BigDecimal valorInd) {
+        this.valorInd = valorInd;
+    }
+
+    public int getQtd() {
+        return qtd;
+    }
+
+    public void setQtd(int qtd) {
+        this.qtd = qtd;
+    }
+
+    public BigDecimal getTotalInd() {
+        return totalInd;
+    }
+
+    public void setTotalInd(BigDecimal totalInd) {
+        this.totalInd = totalInd;
+    }
+}

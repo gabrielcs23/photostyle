@@ -84,7 +84,7 @@ export default class SelecaoPedido extends Component {
                     </div>
                     { extra.qtd > 0 ?    
                         <div
-                            className="col s6 m4 l3 mb-3"
+                            className="col s6 m4 l3 xl2 mb-3"
                             style={{paddingLeft: "3.5rem"}}
                         >
                             <label>Quantidade</label>
@@ -106,14 +106,23 @@ export default class SelecaoPedido extends Component {
 
         return (
             <>
+                <div>
+                    <h6>Kit (obrigatório)</h6>
+                </div>
+
                 <div className="row input-field mb-2">
                     {radioItens}
                 </div>
 
                 {this.state.itemSel != null ? 
-                    <div className="row input-field">
-                        {checkBoxExtras}
-                    </div>
+                    <>
+                        <div>
+                            <h6>Extras (opcional)</h6>
+                        </div>
+                        <div className="row input-field">
+                            {checkBoxExtras}
+                        </div>
+                    </>
                     : null
                 }
             </>

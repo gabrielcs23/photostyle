@@ -4,6 +4,7 @@ import PopUp from '../../Utils/pop-up/PopUp';
 import SelecaoPedido from './SelecaoPedido/SelecaoPedido';
 import M from 'materialize-css';
 import Cleave from 'cleave.js/react';
+import AreaAlunoService from '../AreaAlunoService';
 
 export default class PedidoForm extends Component {
     constructor(props) {
@@ -22,14 +23,22 @@ export default class PedidoForm extends Component {
                 validoQuando: false,
                 mensagem: 'Digite telefone para contato'
             },
+            {
+                campo: 'email',
+                metodo: 'isEmail',
+                validoQuando: true,
+                mensagem: 'Digite email para contato'
+            }
         ]);
         this.state = {
             aluno: props.aluno,
             turma: props.turma,
             responsavel: '',
             tel: '',
+            email: '',
             validacao: this.validador.valido(),
-            opcoes: undefined,
+            item: undefined,
+            extras: undefined,
             valorTotal: 0,
             canSubmit: false
         }
@@ -53,10 +62,31 @@ export default class PedidoForm extends Component {
         const validacao = this.validador.valida(this.state);
 
         if (validacao.isValid) {
-
+            if (!this.state.item) {
+                PopUp.erro('Escolha uma opção de kit');
+                return;
+            }
+            const pedido = {
+                aluno: this.state.aluno,
+                turma: this.state.turma,
+                responsavel: this.state.responsavel,
+                tel: this.state.tel,
+                email: this.state.email,
+                item: this.state.item,
+                extras: this.state.extras
+            };
+            AreaAlunoService.fazerPedido(pedido)
+                .then(() => PopUp.sucesso('Deu tudo certo meu bom valeu pelo dinheiro'))
+                .catch(error => {
+                    if (error.status) {
+                        PopUp.erro(`Erro ${error.status}: ${error.data}`);
+                    } else {
+                        PopUp.erro(error);
+                    }
+                });
         } else {
-            const { nome, matricula } = validacao;
-            const campos = [nome, matricula];
+            const { responsavel, tel, email } = validacao;
+            const campos = [responsavel, tel, email];
 
             const camposInvalidos = campos.filter(elem => elem.isInvalid);
             camposInvalidos.forEach(campo => PopUp.erro(campo.message));
@@ -66,15 +96,14 @@ export default class PedidoForm extends Component {
     selecionaPedido(opcoes) {
         let valorTotal = opcoes.item.val;
         opcoes.extras.forEach(extra => valorTotal += (extra.val * extra.qtd));
-        this.setState({opcoes, valorTotal});
+        this.setState({item: opcoes.item, extras: opcoes.extras, valorTotal});
     }
 
     render() {
-        const { aluno, turma, responsavel, tel } = this.state;
+        const { aluno, turma, responsavel, tel, email } = this.state;
         const telFormat = {
             delimiters: [' ', '-'],
-            blocks: [2, 5, 4],
-            uppercase: true
+            blocks: [2, 5, 4]
         }
         return (
             <form>
@@ -128,7 +157,20 @@ export default class PedidoForm extends Component {
                             options={telFormat}
                             onChange={this.inputChangeHandler}
                         />
+                    </div>
+                </div>
 
+                <div className="row">
+                    <div className="input-field col s12 m6">
+                        <label htmlFor="email">Email Contato</label>
+                        <input 
+                            className="validate"
+                            id="email"
+                            type="text"
+                            name="email"
+                            value={email}
+                            onChange={this.inputChangeHandler}
+                        />
                     </div>
                 </div>
 

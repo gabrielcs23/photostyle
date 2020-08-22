@@ -89,8 +89,7 @@ public class AcessoKitService {
         templateModel.put("valorTotal", pedido.getValorTotal());
 
         emailService.enviarEmailSistema(templateModel);
-        // TODO mandar email para o responsável
-//        emailService.enviarEmailResponsavel(pedidoEntity.getEmail());
+        emailService.enviarEmailResponsavel(pedidoEntity.getEmail(), templateModel);
     }
 }
 

@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  </head>
+
+  <body>
+
+    <table style="width:100%;
+          border-spacing: 0 !important;
+          border-collapse: collapse !important;"
+        cellspacing="0" cellpadding="0" border="0"
+    >
+      <tbody>
+        <tr>
+          <td style="padding:0">
+            <div align="center">
+              <table style="max-width: 600px"
+                   cellspacing="0"
+                   cellpadding="0"
+                   border="0"
+              >
+                <tbody style="width: 100%">
+
+                  <tr>
+                    <td style="background: black">
+                      <div style="margin: 20px auto;
+                                  text-align: center;
+                                  width: 50%;"
+                      >
+                        <img style="width: auto;
+                                    height: 150px !important;"
+                              src="https://photostyle.com.br/logo.png"
+                              alt="Photostyle Logo"
+                              title="Photostyle"
+                        />
+                      </div>
+                    </td>
+                  </tr>
+
+                  <tr style="height: 20px">
+                    <td style="background: white"></td>
+                  </tr>
+
+                  <tr>
+                    <td>
+                      <table style="width:100%">
+                        <tbody>
+                          <tr>
+                            <td>
+                              <p>
+                                Mussum Ipsum, cacilds vidis litro abertis. Leite de capivaris, leite de mula manquis sem
+                                cabeça. Atirei o pau no gatis, per gatis num morreus. Viva Forevis aptent taciti sociosqu ad
+                                litora torquent. Mé faiz elementum girarzis, nisi eros vermeio.
+                              </p>
+                              <p>
+                                In elementis mé pra quem é amistosis quis leo. Interessantiss quisso pudia ce receita de
+                                bolis, mais bolis eu num gostis. Admodum accumsan disputationi eu sit. Vide electram
+                                sadipscing et per. Copo furadis é disculpa de bebadis, arcu quam euismod magna.
+                              </p>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>
+                              <div style="margin: 10px 0 !important;">
+                                <h4>Resumo Pedido <span th:text="${nPedido}"></span></h4>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>
+                              <p>
+                                <b>Escola: </b>
+                                <span th:text="${escola}"></span>
+                              </p>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>
+                              <p>
+                                <b>Nome Aluno: </b>
+                                <span th:text="${aluno}"></span>
+                              </p>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>
+                              <p>
+                                <b>Turma: </b>
+                                <span th:text="${turma}"></span>
+                              </p>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>
+                              <p>
+                                <b>Responsável: </b>
+                                <span th:text="${responsavel}"></span>
+                              </p>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>
+                              <p>
+                                <b>Tel. Contato: </b>
+                                <span th:text="${tel}"></span>
+                              </p>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>
+                              <p>
+                                <b>Email: </b>
+                                <span th:text="${email}"></span>
+                              </p>
+                            </td>
+                          </tr>
+
+                          <tr>
+                            <td>
+                              <div>
+                                <p><b>Kit:</b></p>
+                                <table style="width: 100%;
+                                              border:none;
+                                              display:table;
+                                              border-collapse:collapse;
+                                              border-spacing:0;"
+                                >
+                                  <thead>
+                                    <tr style="border-bottom:1px solid #cccccc;text-align:center;">
+                                      <th style="border:none;
+                                                  padding:15px 5px;
+                                                  display:table-cell;
+                                                  vertical-align:middle;
+                                                  border-radius:2px;
+                                                  text-align:center;"
+                                      >
+                                        Opção
+                                      </th>
+                                      <th style="border:none;
+                                                  padding:15px 5px;
+                                                  display:table-cell;
+                                                  vertical-align:middle;
+                                                  border-radius:2px;
+                                                  text-align:center;"
+                                      >
+                                        Valor
+                                      </th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <tr style="border-bottom:1px solid #cccccc;text-align:center;"
+                                    >
+                                      <td th:text="${kit.nome}"
+                                          style="border:none;
+                                                padding:15px 5px;
+                                                display:table-cell;
+                                                vertical-align:middle;
+                                                border-radius:2px;
+                                                text-align:center;"
+                                      >
+                                      </td>
+                                      <td th:text="${kit.totalInd}"
+                                          style="border:none;
+                                                  padding:15px 5px;
+                                                  display:table-cell;
+                                                  vertical-align:middle;
+                                                  border-radius:2px;
+                                                  text-align:center;"
+                                      >
+                                      </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                            </td>
+                          </tr>
+
+                          <tr>
+                            <td>
+                              <div th:if="${not #lists.isEmpty(extras)}">
+                                <p><b>Extras:</b></p>
+                                <table style="width: 100%;
+                                              border:none;
+                                              display:table;
+                                              border-collapse:collapse;
+                                              border-spacing:0;"
+                                >
+                                  <tr style="border-bottom:1px solid #cccccc;text-align:center;">
+                                    <th style="border:none;
+                                                padding:15px 5px;
+                                                display:table-cell;
+                                                vertical-align:middle;
+                                                border-radius:2px;
+                                                text-align:center;"
+                                    >
+                                      Extra
+                                    </th>
+                                    <th style="border:none;
+                                                padding:15px 5px;
+                                                display:table-cell;
+                                                vertical-align:middle;
+                                                border-radius:2px;
+                                                text-align:center;"
+                                    >
+                                      Valor Ind.
+                                    </th>
+                                    <th style="border:none;
+                                                padding:15px 5px;
+                                                display:table-cell;
+                                                vertical-align:middle;
+                                                border-radius:2px;
+                                                text-align:center;"
+                                    >
+                                      Quantidade
+                                    </th>
+                                    <th style="border:none;
+                                                padding:15px 5px;
+                                                display:table-cell;
+                                                vertical-align:middle;
+                                                border-radius:2px;
+                                                text-align:center;"
+                                    >
+                                      Total Ind.
+                                    </th>
+                                  </tr>
+                                  <tr th:each="extra : ${extras}"
+                                      style="border-bottom:1px solid #cccccc;text-align:center;"
+                                  >
+                                    <td th:text="${extra.nome}"
+                                        style="border:none;
+                                                padding:15px 5px;
+                                                display:table-cell;
+                                                vertical-align:middle;
+                                                border-radius:2px;
+                                                text-align:center;"
+                                    >
+                                    </td>
+                                    <td th:text="${extra.valorInd}"
+                                        style="border:none;
+                                                padding:15px 5px;
+                                                display:table-cell;
+                                                vertical-align:middle;
+                                                border-radius:2px;
+                                                text-align:center;"
+                                    >
+                                    </td>
+                                    <td th:text="${extra.qtd}"
+                                        style="border:none;
+                                                padding:15px 5px;
+                                                display:table-cell;
+                                                vertical-align:middle;
+                                                border-radius:2px;
+                                                text-align:center;"
+                                    >
+                                    </td>
+                                    <td th:text="${extra.totalInd}"
+                                        style="border:none;
+                                                padding:15px 5px;
+                                                display:table-cell;
+                                                vertical-align:middle;
+                                                border-radius:2px;
+                                                text-align:center;"
+                                    >
+                                    </td>
+                                  </tr>
+                                </table>
+                              </div>
+                            </td>
+                          </tr>
+
+                          <tr>
+                            <td>
+                              <p>
+                                <b>Total do pedido: </b> R$
+                                <span th:text="${valorTotal}"></span>
+                              </p>
+                            </td>
+                          </tr>
+
+                          <tr>
+                            <td>
+                              <div style="margin: 10px 0 !important;">
+                                <div>Att.</div>
+                                <hr />
+                                <div>Angela e Eduardo / Photostyle</div>
+                                <div>(21) 99479-1726</div>
+                                <div>contato@photostyle.com.br</div>
+                              </div>
+                            </td>
+                          </tr>
+
+                        </tbody>
+                      </table>
+                    </td>
+                  </tr>
+
+                </tbody>
+              </table>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+  </body>
+</html>

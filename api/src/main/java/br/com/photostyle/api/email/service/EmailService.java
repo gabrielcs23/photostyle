@@ -40,8 +40,9 @@ public class EmailService {
 
     public void enviarEmailResponsavel(String to, Map<String, Object> templateModel) {
         try {
-            String subject = "";
-            enviarEmailComTemplate(to, subject, templateModel, TemplatesEmail.RESUMO_PEDIDO_SISTEMA);
+            String nPedido = (String) templateModel.get("nPedido");
+            String subject = "Pedido realizado " + nPedido;
+            enviarEmailComTemplate(to, subject, templateModel, TemplatesEmail.CONFIRMACAO_PEDIDO);
         } catch (MessagingException e) {
             e.printStackTrace();
         }

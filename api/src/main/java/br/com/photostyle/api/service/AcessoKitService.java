@@ -1,5 +1,6 @@
 package br.com.photostyle.api.service;
 
+import br.com.photostyle.api.email.service.EmailService;
 import br.com.photostyle.api.model.adapter.FotoAdapter;
 import br.com.photostyle.api.model.adapter.PedidoAdapter;
 import br.com.photostyle.api.model.dto.FotoDto;
@@ -11,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class AcessoKitService {
@@ -27,6 +30,9 @@ public class AcessoKitService {
 
     @Autowired
     private PedidoRepository pedidoRepository;
+
+    @Autowired
+    private EmailService emailService;
 
     public KitDto montarKit(String codAcesso) {
         AlunoEntity aluno = alunoService.getAlunoByCodAcesso(codAcesso);
@@ -64,11 +70,27 @@ public class AcessoKitService {
 
     public void realizarPedido(PedidoDto dto) {
         PedidoEntity pedidoEntity = pedidoAdapter.dtoToEntity(dto);
-        pedidoEntity.getId();
+        PedidoEntity pedido = pedidoEntity;
 //        PedidoEntity pedido = pedidoRepository.save(pedidoEntity);
 //        Long numeroPedido = pedido.getId();
+        // TODO montar número pedido com id
+        String nPedido = "#0000001";
+
+        Map<String, Object> templateModel = new HashMap<>();
+        templateModel.put("nPedido", nPedido);
+        templateModel.put("escola", pedido.getNomeEscola());
+        templateModel.put("turma", pedido.getNomeTurma());
+        templateModel.put("aluno", pedido.getNomeAluno());
+        templateModel.put("responsavel", pedido.getNomeResponsavel());
+        templateModel.put("tel", pedido.getTelContato());
+        templateModel.put("email", pedido.getEmail());
+        templateModel.put("kit", pedido.getKit());
+        templateModel.put("extras", pedido.getExtras());
+        templateModel.put("valorTotal", pedido.getValorTotal());
+
+        emailService.enviarEmailSistema(templateModel);
         // TODO mandar email para o responsável
-        // TODO mandar email para caixa interna
+//        emailService.enviarEmailResponsavel(pedidoEntity.getEmail());
     }
 }
 

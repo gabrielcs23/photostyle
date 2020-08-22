@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    </head>
+
+    <body>
+        <h3>Resumo Pedido <span th:text="${nPedido}"></span></h3>
+
+        <p>
+            <b>Escola: </b>
+            <span th:text="${escola}"></span>
+        </p>
+
+        <p>
+            <b>Nome Aluno: </b>
+            <span th:text="${aluno}"></span>
+        </p>
+
+        <p>
+            <b>Turma: </b>
+            <span th:text="${turma}"></span>
+        </p>
+
+        <p>
+            <b>Responsável: </b>
+            <span th:text="${responsavel}"></span>
+        </p>
+
+        <p>
+            <b>Tel. Contato: </b>
+            <span th:text="${tel}"></span>
+        </p>
+
+        <p>
+            <b>Email: </b>
+            <span th:text="${email}"></span>
+        </p>
+
+
+        <div>
+            <p><b>Kit:</b></p>
+            <table style="border:none;
+                    display:table;
+                    border-collapse:collapse;
+                    border-spacing:0;"
+            >
+                <thead>
+                    <tr style="border-bottom:1px solid rgba(0,0,0,0.12);text-align:center;"
+                    >
+                        <th style="border:none;
+                                    padding:15px 5px;
+                                    display:table-cell;
+                                    vertical-align:middle;
+                                    border-radius:2px;
+                                    text-align:center;"
+                        >
+                            Opção
+                        </th>
+                        <th style="border:none;
+                                    padding:15px 5px;
+                                    display:table-cell;
+                                    vertical-align:middle;
+                                    border-radius:2px;
+                                    text-align:center;"
+                        >
+                            Valor
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="border-bottom:1px solid rgba(0,0,0,0.12);text-align:center;"
+                    >
+                        <td th:text="${kit.nome}"
+                            style="border:none;
+                                    padding:15px 5px;
+                                    display:table-cell;
+                                    vertical-align:middle;
+                                    border-radius:2px;
+                                    text-align:center;"
+                        >
+                        </td>
+                        <td th:text="${kit.totalInd}"
+                            style="border:none;
+                                    padding:15px 5px;
+                                    display:table-cell;
+                                    vertical-align:middle;
+                                    border-radius:2px;
+                                    text-align:center;"
+                        >
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div th:if="${not #lists.isEmpty(extras)}">
+            <p><b>Extras:</b></p>
+            <table style="border:none;
+                    display:table;
+                    border-collapse:collapse;
+                    border-spacing:0;"
+            >
+                <tr style="border-bottom:1px solid rgba(0,0,0,0.12);text-align:center;"
+                >
+                    <th style="border:none;
+                            padding:15px 5px;
+                            display:table-cell;
+                            vertical-align:middle;
+                            border-radius:2px;
+                            text-align:center;"
+                    >
+                        Extra
+                    </th>
+                    <th style="border:none;
+                            padding:15px 5px;
+                            display:table-cell;
+                            vertical-align:middle;
+                            border-radius:2px;
+                            text-align:center;"
+                    >
+                        Valor Ind.
+                    </th>
+                    <th style="border:none;
+                            padding:15px 5px;
+                            display:table-cell;
+                            vertical-align:middle;
+                            border-radius:2px;
+                            text-align:center;"
+                    >
+                        Quantidade
+                    </th>
+                    <th style="border:none;
+                            padding:15px 5px;
+                            display:table-cell;
+                            vertical-align:middle;
+                            border-radius:2px;
+                            text-align:center;"
+                    >
+                        Total Ind.
+                    </th>
+                </tr>
+                <tr th:each="extra : ${extras}"
+                    style="border-bottom:1px solid rgba(0,0,0,0.12);text-align:center;"
+                >
+                    <td th:text="${extra.nome}"
+                        style="border:none;
+                            padding:15px 5px;
+                            display:table-cell;
+                            vertical-align:middle;
+                            border-radius:2px;
+                            text-align:center;"
+                    >
+                    </td>
+                    <td th:text="${extra.valorInd}"
+                        style="border:none;
+                            padding:15px 5px;
+                            display:table-cell;
+                            vertical-align:middle;
+                            border-radius:2px;
+                            text-align:center;"
+                    >
+                    </td>
+                    <td th:text="${extra.qtd}"
+                        style="border:none;
+                            padding:15px 5px;
+                            display:table-cell;
+                            vertical-align:middle;
+                            border-radius:2px;
+                            text-align:center;"
+                    >
+                    </td>
+                    <td th:text="${extra.totalInd}"
+                        style="border:none;
+                            padding:15px 5px;
+                            display:table-cell;
+                            vertical-align:middle;
+                            border-radius:2px;
+                            text-align:center;"
+                    >
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <p>
+            <b>Total do pedido: </b> R$
+            <span th:text="${valorTotal}"></span>
+        </p>
+    </body>
+</html>

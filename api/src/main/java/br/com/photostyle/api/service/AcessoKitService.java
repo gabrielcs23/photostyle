@@ -70,11 +70,8 @@ public class AcessoKitService {
 
     public void realizarPedido(PedidoDto dto) {
         PedidoEntity pedidoEntity = pedidoAdapter.dtoToEntity(dto);
-        PedidoEntity pedido = pedidoEntity;
-//        PedidoEntity pedido = pedidoRepository.save(pedidoEntity);
-//        Long numeroPedido = pedido.getId();
-        // TODO montar número pedido com id
-        String nPedido = "#0000001";
+        PedidoEntity pedido = pedidoRepository.save(pedidoEntity);
+        String nPedido = geraNumeroPedido(pedido.getId());
 
         Map<String, Object> templateModel = new HashMap<>();
         templateModel.put("nPedido", nPedido);
@@ -91,5 +88,15 @@ public class AcessoKitService {
         emailService.enviarEmailSistema(templateModel);
         emailService.enviarEmailResponsavel(pedidoEntity.getEmail(), templateModel);
     }
+
+    private String geraNumeroPedido(Long id) {
+        String idString = id.toString();
+        // preenche numero pedido com zeros
+        while(idString.length() < 7) {
+            idString = '0' + idString;
+        }
+        return '#' + idString;
+    }
+
 }
 

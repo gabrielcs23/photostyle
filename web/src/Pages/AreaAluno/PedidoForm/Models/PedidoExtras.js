@@ -21,7 +21,8 @@ export default class PedidoExtras {
             new ModeloPedido('Conjunto 2 fotos scrap ímã tam.7x10 modelo frases boys & girls', 22),
             new ModeloPedido('Conjunto 2 fotos scrap ímã tam.7x10 modelo teen 1 boys & girls', 22),
             new ModeloPedido('Conjunto 2 fotos scrap ímã tam 7x10 modelo teen 2 boys & girls', 22),
-            new ModeloPedido('Conjunto 2 fotos ímã tam.7x10 sem arte, apenas com ano', 22)
+            new ModeloPedido('Conjunto 2 fotos ímã tam.7x10 sem arte, apenas com ano', 22),
+            new ModeloPedido('Tabuada Divertida', 13)
         ]
     }
 

@@ -6,6 +6,7 @@ import ImgBox from '../Utils/ImgBox/ImgBox';
 import DisplayFotos from './DisplayFotos/DisplayFotos';
 import styles from './AreaAluno.module.scss';
 import PedidoForm from './PedidoForm/PedidoForm';
+import MostraExtras from './PedidoForm/Models/MostraExtras';
 
 export default class AreaAluno extends BasePage {
 
@@ -15,6 +16,7 @@ export default class AreaAluno extends BasePage {
             kit: null,
             nPedido: undefined
         }
+        this.mostraExtras = MostraExtras.get();
     }
 
     componentDidMount() {
@@ -130,6 +132,19 @@ export default class AreaAluno extends BasePage {
                             </>
                             : null
                         }
+
+                        <hr />
+
+                        <div className={`${styles.title} center`}>
+                            <h4>Extras</h4>
+                        </div>
+                        <div className="row mb-5">
+                            <div className="col s12 mt-2">
+                                <DisplayFotos
+                                    fotos={this.mostraExtras}
+                                />
+                            </div>
+                        </div>
                         
                         <hr />
     

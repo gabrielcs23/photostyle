@@ -6,6 +6,7 @@ import br.com.photostyle.api.model.adapter.PedidoAdapter;
 import br.com.photostyle.api.model.dto.FotoDto;
 import br.com.photostyle.api.model.dto.KitDto;
 import br.com.photostyle.api.model.dto.PedidoDto;
+import br.com.photostyle.api.model.dto.RetornoPedidoDto;
 import br.com.photostyle.api.model.entity.*;
 import br.com.photostyle.api.repository.PedidoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,7 +69,7 @@ public class AcessoKitService {
         return kit;
     }
 
-    public void realizarPedido(PedidoDto dto) {
+    public RetornoPedidoDto realizarPedido(PedidoDto dto) {
         PedidoEntity pedidoEntity = pedidoAdapter.dtoToEntity(dto);
         PedidoEntity pedido = pedidoRepository.save(pedidoEntity);
         String nPedido = geraNumeroPedido(pedido.getId());
@@ -87,15 +88,16 @@ public class AcessoKitService {
 
         emailService.enviarEmailSistema(templateModel);
         emailService.enviarEmailResponsavel(pedidoEntity.getEmail(), templateModel);
+        return new RetornoPedidoDto(nPedido);
     }
 
     private String geraNumeroPedido(Long id) {
-        String idString = id.toString();
+        StringBuilder idString = new StringBuilder(id.toString());
         // preenche numero pedido com zeros
         while(idString.length() < 7) {
-            idString = '0' + idString;
+            idString.insert(0, '0');
         }
-        return '#' + idString;
+        return '#' + idString.toString();
     }
 
 }

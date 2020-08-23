@@ -26,7 +26,8 @@ class AreaAlunoService {
 
     async fazerPedido(pedido) {
         try {
-            await this.axiosInstance.post('/pedido', pedido);
+            const res = await this.axiosInstance.post('/pedido', pedido);
+            return res.data;
         } catch (error) {
             throw this.parseError(error);
         }

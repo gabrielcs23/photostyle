@@ -44,7 +44,8 @@ export default class PedidoForm extends Component {
             validacao: this.validador.valido(),
             item: undefined,
             extras: undefined,
-            valorTotal: 0
+            valorTotal: 0,
+            submitDisabled: false
         }
     }
 
@@ -66,6 +67,7 @@ export default class PedidoForm extends Component {
                 PopUp.erro('Escolha uma opção de kit');
                 return;
             }
+            this.setState({submitDisabled: true});
             const pedido = {
                 aluno: this.aluno,
                 turma: this.turma,
@@ -77,13 +79,16 @@ export default class PedidoForm extends Component {
                 extras: this.state.extras
             };
             AreaAlunoService.fazerPedido(pedido)
-                .then(() => PopUp.sucesso('Deu tudo certo meu bom valeu pelo dinheiro'))
+                .then(res => {
+                    this.props.onPedidoFeito(res.nPedido);
+                })
                 .catch(error => {
                     if (error.status) {
-                        PopUp.erro(`Erro ${error.status}: ${error.data}`);
+                        PopUp.erro(`Erro ${error.status}: ${error.data.toString()}`);
                     } else {
                         PopUp.erro(error);
                     }
+                    this.setState({submitDisabled: false});
                 });
         } else {
             const { responsavel, tel, email } = validacao;
@@ -160,16 +165,35 @@ export default class PedidoForm extends Component {
 
                 {/* Submit Form */}
                 <div className="row">
-                    <div className="col left">
+                    <div className="col left d-inline-flex">
                         <button
                             className="btn btn-small waves-effect waves-light blue"
                             onClick={() => this.submitForm()}
+                            disabled={this.state.submitDisabled}
                             type="button"
                             >
                             <span className="d-inline-flex">
                                 <span className="pl-2">Fazer pedido!</span>
                             </span>
                         </button>
+                        <div style={{padding: '0 1rem'}}>
+                            {this.state.submitDisabled ?
+                                <div className="preloader-wrapper small active">
+                                    <div className="spinner-layer spinner-green-only">
+                                        <div className="circle-clipper left">
+                                            <div className="circle"></div>
+                                        </div>
+                                        <div className="gap-patch">
+                                            <div className="circle"></div>
+                                        </div>
+                                        <div className="circle-clipper right">
+                                            <div className="circle"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                : null
+                            }
+                        </div>
                     </div>
                 </div>
             </form>

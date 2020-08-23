@@ -2,6 +2,7 @@ package br.com.photostyle.api.controller;
 
 import br.com.photostyle.api.model.dto.KitDto;
 import br.com.photostyle.api.model.dto.PedidoDto;
+import br.com.photostyle.api.model.dto.RetornoPedidoDto;
 import br.com.photostyle.api.service.AcessoKitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,9 +24,9 @@ public class AcessoKitController {
     }
 
     @PostMapping("/pedido")
-    public ResponseEntity<?> fazerPedido(@RequestBody PedidoDto pedido) {
-        service.realizarPedido(pedido);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<RetornoPedidoDto> fazerPedido(@RequestBody PedidoDto pedido) {
+        RetornoPedidoDto retorno = service.realizarPedido(pedido);
+        return ResponseEntity.ok(retorno);
     }
 
 }

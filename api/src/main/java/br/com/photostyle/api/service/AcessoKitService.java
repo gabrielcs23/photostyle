@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import javax.transaction.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -69,6 +70,7 @@ public class AcessoKitService {
         return kit;
     }
 
+    @Transactional
     public RetornoPedidoDto realizarPedido(PedidoDto dto) {
         PedidoEntity pedidoEntity = pedidoAdapter.dtoToEntity(dto);
         PedidoEntity pedido = pedidoRepository.save(pedidoEntity);

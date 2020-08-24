@@ -15,6 +15,8 @@ public class ItemPedidoEntity {
     @Column(nullable = false)
     private String nome;
 
+    private String opcao;
+
     @Column(nullable = false)
     private BigDecimal valorInd;
 
@@ -34,6 +36,14 @@ public class ItemPedidoEntity {
 
     public String getNome() {
         return nome;
+    }
+
+    public String getOpcao() {
+        return opcao;
+    }
+
+    public void setOpcao(String opcao) {
+        this.opcao = opcao;
     }
 
     public void setNome(String nome) {

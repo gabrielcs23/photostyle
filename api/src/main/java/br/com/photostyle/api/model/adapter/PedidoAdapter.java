@@ -44,15 +44,16 @@ public class PedidoAdapter {
     }
 
     private ItemPedidoEntity itemDtoToEntity(OpcaoPedidoDto item) {
-        ItemPedidoEntity kitEntity = new ItemPedidoEntity();
-        kitEntity.setNome(item.getNome());
-        kitEntity.setQtd(item.getQtd());
+        ItemPedidoEntity itemEntity = new ItemPedidoEntity();
+        itemEntity.setNome(item.getNome());
+        itemEntity.setOpcao(item.getOpcao());
+        itemEntity.setQtd(item.getQtd());
 
         BigDecimal valorInd = item.getVal();
-        kitEntity.setValorInd(valorInd);
+        itemEntity.setValorInd(valorInd);
         BigDecimal totalInd = valorInd.multiply(new BigDecimal(item.getQtd()));
-        kitEntity.setTotalInd(totalInd);
-        return kitEntity;
+        itemEntity.setTotalInd(totalInd);
+        return itemEntity;
     }
 
 }

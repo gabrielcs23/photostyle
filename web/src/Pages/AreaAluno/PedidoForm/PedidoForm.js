@@ -153,7 +153,11 @@ export default class PedidoForm extends Component {
                     </div>
                 </div>
 
-                <SelecaoPedido seleciona={opcoes => this.selecionaPedido(opcoes)} />
+                <SelecaoPedido
+                    seleciona={opcoes => this.selecionaPedido(opcoes)}
+                    opcoesTurma={this.props.opcoes?.turma}
+                    opcoesIrmaos={this.props.opcoes?.irmaos}
+                />
 
                 <div className="row">
                     <div className="col left">

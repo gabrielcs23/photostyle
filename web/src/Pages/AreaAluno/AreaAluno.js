@@ -22,7 +22,10 @@ export default class AreaAluno extends BasePage {
     componentDidMount() {
         const { match: { params: {chave} } } = this.props;
         service.getKit(chave)
-            .then(kit => this.setState({kit: kit}))
+            .then(kit => {
+                kit.fotosTurma = this.ordenaFotos(kit.fotosTurma);
+                this.setState({kit: kit});
+            })
             .catch(error => {
                 if (error.status) {
                     PopUp.erro(`Erro ${error.status}: ${error.data}`);
@@ -32,10 +35,9 @@ export default class AreaAluno extends BasePage {
             });
     }
 
-    getFotosDisplay(ftTurmas, ftIrmaos) {
-        let fotos = [];
-        if (ftTurmas && ftTurmas.length > 0) {
-            ftTurmas.sort((a, b) => {
+    ordenaFotos(fts) {
+        if (fts && fts.length > 0) {
+            fts = fts.sort((a, b) => {
                 const descA = a.descricao.toUpperCase();
                 const descB = b.descricao.toUpperCase();
                 if (descA < descB) {
@@ -46,10 +48,32 @@ export default class AreaAluno extends BasePage {
                 }
                 return 0;
             });
-            fotos = [...ftTurmas];
         }
-        if (ftIrmaos && ftIrmaos.length > 0) {
-            fotos = [...fotos, ...ftIrmaos];
+        return fts;
+    }
+
+    getFotosDisplay(ftsTurma, ftsIrmaos) {
+        let fotos = [];
+        if (ftsTurma && ftsTurma.length > 0) {
+            fotos = [...ftsTurma];
+        }
+        if (ftsIrmaos && ftsIrmaos.length > 0) {
+            fotos = [...fotos, ...ftsIrmaos];
+        }
+        return fotos;
+    }
+
+    getOpcoesFotos(ftsTurma, ftsIrmaos) {
+        let fotos = {};
+        if (ftsTurma && ftsTurma.length > 0) {
+            fotos.turma = ftsTurma.map(ft => {
+                return {nome : ft.descricao}
+            });
+        }
+        if (ftsIrmaos && ftsIrmaos.length > 0) {
+            fotos.irmaos = ftsIrmaos.map(ft => {
+                return {nome : ft.descricao}
+            });
         }
         return fotos;
     }
@@ -81,6 +105,7 @@ export default class AreaAluno extends BasePage {
         }
         if (!this.state.nPedido) {
             const { codigoAcesso, escola, turma, nomeAluno, fotoIndividual, fotosIrmaos, fotosTurma } = kit;
+            const opcoes = this.getOpcoesFotos(fotosTurma, fotosIrmaos);
             return (
                 <>
                     <div className={`${styles.title} center`}>
@@ -156,6 +181,7 @@ export default class AreaAluno extends BasePage {
                             aluno={nomeAluno}
                             turma={turma}
                             escola={escola}
+                            opcoes={opcoes}
                             onPedidoFeito={nPedido => this.onPedidoFeito(nPedido)}
                         />
     

@@ -1,7 +1,9 @@
 import React, { Component, Fragment } from 'react';
+import Select from '../../../Utils/Select/Select';
 import PedidoItens from '../Models/PedidoItens';
 import PedidoExtras from '../Models/PedidoExtras';
 import Cleave from 'cleave.js/react';
+import './SelecaoPedido.scss'
 
 export default class SelecaoPedido extends Component {
 
@@ -30,6 +32,37 @@ export default class SelecaoPedido extends Component {
         const campo = extras[idx];
         campo.qtd = qtd;
         campo.total = campo.val * campo.qtd;
+        this.setState({extrasSel: extras});
+        this.montaSelecao(this.state.itemSel, extras);
+    }
+
+    getOpcoes(modeloOpcao) {
+        switch (modeloOpcao) {
+            case 'T':
+                return this.props.opcoesTurma?.slice();
+            case 'I':
+                return this.props.opcoesIrmaos?.slice();
+            default:
+                return [];
+        }
+    }
+
+    setOpcao(idx, modeloOpcao, idxOpcao) {
+        const extras = this.state.extrasSel.slice();
+        const campo = extras[idx];
+        let opcao;
+        switch (modeloOpcao) {
+            case 'T':
+                opcao = this.props.opcoesTurma[idxOpcao]?.nome;
+                break;
+            case 'I':
+                opcao = this.props.opcoesIrmaos[idxOpcao]?.nome;
+                break;
+            default:
+                opcao = '';
+                break;
+        }
+        campo.opcao = opcao;
         this.setState({extrasSel: extras});
         this.montaSelecao(this.state.itemSel, extras);
     }
@@ -96,6 +129,18 @@ export default class SelecaoPedido extends Component {
                                 value={extra.qtd}
                                 options={{numeral: true}}
                                 onChange={e => this.setQtdExtra(idx, parseInt(e.target.value))}
+                            />
+                        </div>
+                        : null
+                    }
+                    { extra.qtd > 0 && extra.modeloOpcao != null ?
+                        <div className="input-field col s12 m6 mb-3 select-opcoes">
+                            <Select
+                                composedKey={`extra${idx}.opcao`}
+                                label={'Opção'}
+                                options={this.getOpcoes(extra.modeloOpcao)}
+                                disabled={false}
+                                selecionar={idxOpcao => this.setOpcao(idx, extra.modeloOpcao, idxOpcao)}
                             />
                         </div>
                         : null

@@ -8,6 +8,7 @@ public class OpcaoPedidoDto {
     private BigDecimal val;
     private int qtd;
     private BigDecimal total;
+    private String opcao;
 
     public String getNome() {
         return nome;
@@ -39,5 +40,13 @@ public class OpcaoPedidoDto {
 
     public void setTotal(BigDecimal total) {
         this.total = total;
+    }
+
+    public String getOpcao() {
+        return opcao;
+    }
+
+    public void setOpcao(String opcao) {
+        this.opcao = opcao;
     }
 }

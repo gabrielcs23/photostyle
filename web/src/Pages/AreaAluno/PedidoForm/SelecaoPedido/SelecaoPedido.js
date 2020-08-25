@@ -29,7 +29,14 @@ export default class SelecaoPedido extends Component {
 
     selecionarFotoTurma(idxItem, idxOpcao) {
         const item = Object.assign({}, this.itens[idxItem]);
-        item.opcao = Object.assign({}, this.props.opcoesTurma[idxOpcao]);
+        item.opcao = this.props.opcoesTurma[idxOpcao].nome;
+        this.setState({itemSel: item});
+        this.montaSelecao(item, this.state.extrasSel.slice());
+    }
+
+    selecionarFotoIrmao(idxOpcao) {
+        const item = this.state.itemSel;
+        item.opcao += ` + ${this.props.opcoesIrmaos[idxOpcao].nome}`;
         this.setState({itemSel: item});
         this.montaSelecao(item, this.state.extrasSel.slice());
     }
@@ -108,7 +115,8 @@ export default class SelecaoPedido extends Component {
 
     render() {
         const radioItens = this.itens.map((item, idx) => {
-            const opcoes = this.getOpcoes('T');
+            const opcoesTurma = this.getOpcoes('T');
+            const opcoesIrmaos = this.getOpcoes('I');
             return (
                 <div className="row" key={`item${idx}`}>
                     <div className="col s12 mb-2">
@@ -126,18 +134,37 @@ export default class SelecaoPedido extends Component {
                     </div>
 
                     { item.qtd > 0 && this.state.itemSel?.nome === item.nome ?    
-                        <div
-                            className="input-field col s12 m6 select-opcoes select-opcoes-fotos"
-                            style={{paddingLeft: "3.5rem"}}
-                        >
-                            <Select
-                                composedKey={`item${idx}.opcao`}
-                                label={'Opção'}
-                                options={opcoes}
-                                disabled={false}
-                                selecionar={idxFoto => this.selecionarFotoTurma(idx, idxFoto)}
-                            />
-                        </div>
+                        <>
+                            <div
+                                className="input-field col s12 m6 select-opcoes select-opcoes-fotos"
+                                style={{paddingLeft: "3.5rem"}}
+                            >
+                                <Select
+                                    composedKey={`item${idx}.opcao`}
+                                    label={'Foto Turma'}
+                                    options={opcoesTurma}
+                                    disabled={false}
+                                    selecionar={idxFoto => this.selecionarFotoTurma(idx, idxFoto)}
+                                />
+                            </div>
+                            {
+                                // Se ft de turma selecionada e é kit c irmão então escolhe irmão
+                                this.state.itemSel.opcao && item.modeloOpcao === 'I' ?
+                                    <div
+                                        className="input-field col s12 m6 select-opcoes select-opcoes-fotos"
+                                        style={{paddingLeft: "3.5rem"}}
+                                    >
+                                        <Select
+                                            composedKey={`item${idx}.opcao`}
+                                            label={'Foto Irmãos'}
+                                            options={opcoesIrmaos}
+                                            disabled={false}
+                                            selecionar={idxFoto => this.selecionarFotoIrmao(idxFoto)}
+                                        />
+                                    </div>
+                                : null
+                            }
+                        </>
                         : null
                     }
                 </div>

@@ -69,9 +69,6 @@ export default class PedidoForm extends Component {
             }
             this.setState({submitDisabled: true});
 
-            const item = this.state.item;
-            item.opcao = item.opcao.nome;
-
             const extras = [];
             for (const extra of this.state.extras.slice()) {
                 if (!extra.opcao || (typeof extra.opcao === 'string')) {
@@ -100,7 +97,7 @@ export default class PedidoForm extends Component {
                 responsavel: this.state.responsavel,
                 tel: this.state.tel,
                 email: this.state.email,
-                item: item,
+                item: this.state.item,
                 extras: extras
             };
             AreaAlunoService.fazerPedido(pedido)

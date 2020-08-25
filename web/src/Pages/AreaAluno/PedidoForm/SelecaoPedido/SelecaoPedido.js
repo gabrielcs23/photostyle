@@ -16,15 +16,36 @@ export default class SelecaoPedido extends Component {
             itemSel: undefined,
             extrasSel: PedidoExtras.get()
         };
+
+        this.cleaveRefs = new Array(this.state.extrasSel.length);
+
     }
 
     selectItem(idx) {
-        this.setState({itemSel: idx});
-        this.montaSelecao(idx, this.state.extrasSel.slice());
+        const item = this.itens[idx];
+        this.setState({itemSel: item});
+        this.montaSelecao(item, this.state.extrasSel.slice());
+    }
+
+    selecionarFotoTurma(idxItem, idxOpcao) {
+        const item = Object.assign({}, this.itens[idxItem]);
+        item.opcao = Object.assign({}, this.props.opcoesTurma[idxOpcao]);
+        this.setState({itemSel: item});
+        this.montaSelecao(item, this.state.extrasSel.slice());
     }
 
     checkExtra(checked, idx) {
         checked ? this.setQtdExtra(idx, 1) : this.setQtdExtra(idx, 0);
+    }
+
+    onChangeQtdExtra(idx, qtd, cleaveRef) {
+        if (this.state.extrasSel[idx].isDigital && qtd > 1) {
+            if (cleaveRef) {
+                cleaveRef.setRawValue('1');
+            }
+            qtd = 1;
+        }
+        this.setQtdExtra(idx, qtd)
     }
 
     setQtdExtra(idx, qtd) {
@@ -47,29 +68,35 @@ export default class SelecaoPedido extends Component {
         }
     }
 
-    setOpcao(idx, modeloOpcao, idxOpcao) {
-        const extras = this.state.extrasSel.slice();
-        const campo = extras[idx];
-        let opcao;
-        switch (modeloOpcao) {
-            case 'T':
-                opcao = this.props.opcoesTurma[idxOpcao]?.nome;
-                break;
-            case 'I':
-                opcao = this.props.opcoesIrmaos[idxOpcao]?.nome;
-                break;
-            default:
-                opcao = '';
-                break;
+    inicializaOpcao(extra, opcao) {
+        if (!extra.opcao) {
+            extra.opcao = new Map();
         }
-        campo.opcao = opcao;
+        if (!extra.opcao.has(opcao.nome)) {
+            extra.opcao = extra.opcao.set(opcao.nome, 0);
+        }
+    }
+
+    onChangeQtdOpcaoExtra(idxExtra, nome, qtd, cleaveRef) {
+        if (this.state.extrasSel[idxExtra].isDigital && qtd > 1) {
+            if (cleaveRef) {
+                cleaveRef.setRawValue('1');
+            }
+            qtd = 1;
+        }
+        this.selecionaQtdOpcao(idxExtra, nome, qtd)
+    }
+
+    selecionaQtdOpcao(idxExtra, nome, qtd) {
+        const extras = this.state.extrasSel.slice();
+        const extra = extras[idxExtra];
+        extra.opcao.set(nome, qtd);
         this.setState({extrasSel: extras});
         this.montaSelecao(this.state.itemSel, extras);
     }
 
-    montaSelecao(itemIdx, extrasSel) {
+    montaSelecao(item, extrasSel) {
         const extras = extrasSel.filter(extra => extra.qtd > 0);
-        const item = this.itens[itemIdx];
         item.qtd = 1;
         item.total = item.val;
         const opcoes = {
@@ -81,19 +108,38 @@ export default class SelecaoPedido extends Component {
 
     render() {
         const radioItens = this.itens.map((item, idx) => {
+            const opcoes = this.getOpcoes('T');
             return (
-                <div className="col s12 mb-2" key={`item${idx}`}>
-                    <label style={{color: 'initial'}}>
-                        <input
-                            className="with-gap"
-                            type="radio"
-                            id={`item${idx}`}
-                            name={`item${idx}`}
-                            checked={this.state.itemSel === idx}
-                            onChange={() => this.selectItem(idx)}
-                        />
-                        <span>{item.nome} <b>+R${item.val}</b></span>
-                    </label>
+                <div className="row" key={`item${idx}`}>
+                    <div className="col s12 mb-2">
+                        <label style={{color: 'initial'}}>
+                            <input
+                                className="with-gap"
+                                type="radio"
+                                id={`item${idx}`}
+                                name={`item${idx}`}
+                                checked={this.state.itemSel?.nome === item.nome}
+                                onChange={() => this.selectItem(idx)}
+                            />
+                            <span>{item.nome} <b>+R${item.val}</b></span>
+                        </label>
+                    </div>
+
+                    { item.qtd > 0 && this.state.itemSel?.nome === item.nome ?    
+                        <div
+                            className="input-field col s12 m6 select-opcoes select-opcoes-fotos"
+                            style={{paddingLeft: "3.5rem"}}
+                        >
+                            <Select
+                                composedKey={`item${idx}.opcao`}
+                                label={'Opção'}
+                                options={opcoes}
+                                disabled={false}
+                                selecionar={idxFoto => this.selecionarFotoTurma(idx, idxFoto)}
+                            />
+                        </div>
+                        : null
+                    }
                 </div>
             );
         });
@@ -115,7 +161,7 @@ export default class SelecaoPedido extends Component {
                             <span>{extra.nome} <b>+R${extra.val}</b></span>
                         </label>
                     </div>
-                    { extra.qtd > 0 ?    
+                    { extra.qtd > 0 && extra.modeloOpcao == null ?    
                         <div
                             className="col s6 m4 l3 xl2 mb-3"
                             style={{paddingLeft: "3.5rem"}}
@@ -128,21 +174,45 @@ export default class SelecaoPedido extends Component {
                                 name={`extra${idx}.qtd`}
                                 value={extra.qtd}
                                 options={{numeral: true}}
-                                onChange={e => this.setQtdExtra(idx, parseInt(e.target.value))}
+                                onInit={cleave => this.cleaveRefs[idx] = cleave}
+                                onChange={e => this.onChangeQtdExtra(idx, parseInt(e.target.value), this.cleaveRefs[idx])}
                             />
                         </div>
                         : null
                     }
                     { extra.qtd > 0 && extra.modeloOpcao != null ?
-                        <div className="input-field col s12 m6 mb-3 select-opcoes">
-                            <Select
-                                composedKey={`extra${idx}.opcao`}
-                                label={'Opção'}
-                                options={this.getOpcoes(extra.modeloOpcao)}
-                                disabled={false}
-                                selecionar={idxOpcao => this.setOpcao(idx, extra.modeloOpcao, idxOpcao)}
-                            />
-                        </div>
+                        this.getOpcoes(extra.modeloOpcao).map((opcao, idxOpcao) => {
+                            this.inicializaOpcao(extra, opcao);
+                            return (
+                                <div className="row" key={`extra${idx}.opcao${idxOpcao}`}>
+                                    <div
+                                        className="col s6 m4 l3 xl2 mb-3"
+                                        style={{paddingLeft: "3.5rem"}}
+                                    >
+                                        <label>Quantidade</label>
+                                        <Cleave
+                                            className="validate"
+                                            type="text"
+                                            id={`extra${idx}.opcao${idxOpcao}.qtd`}
+                                            name={`extra${idx}.opcao${idxOpcao}.qtd`}
+                                            value={extra.opcao.get(opcao.nome)}
+                                            options={{numeral: true}}
+                                            onInit={cleave => this.cleaveRefs[idx] = cleave}
+                                            onChange={e => this.onChangeQtdOpcaoExtra(idx, opcao.nome, parseInt(e.target.value), this.cleaveRefs[idx])}
+                                        />
+                                    </div>
+                                    <div className="input-field col s12 m6 mb-3 select-opcoes">
+                                        <Select
+                                            composedKey={`extra${idx}.opcao${idxOpcao}.select`}
+                                            label={'Opção'}
+                                            options={[opcao]}
+                                            autoSelect
+                                            disabled
+                                        />
+                                    </div>
+                                </div>
+                            )
+                        })
                         : null
                     }
                 </Fragment>

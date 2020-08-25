@@ -42,7 +42,7 @@ class Select extends Component {
 
     render() {
         const options = this.props.options.slice().map((option, idx) => (
-            <option value={idx} key={this.composedKey + option.id}>
+            <option value={idx} key={this.composedKey + idx + option.id}>
                 {option.nome}
             </option>
         ));
@@ -57,7 +57,11 @@ class Select extends Component {
                     onChange={event => this.select(event)}
                     disabled={this.props.disabled}
                 >
-                    <option value="" disabled={true}>Selecione</option>
+                    {!this.props.autoSelect ?
+                        <option value="" disabled={true}>Selecione</option>
+                        :
+                        null
+                    }
                     {options}
                 </select>
                 <label>{this.props.label}</label>

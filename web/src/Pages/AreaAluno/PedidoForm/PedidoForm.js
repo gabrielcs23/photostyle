@@ -68,6 +68,31 @@ export default class PedidoForm extends Component {
                 return;
             }
             this.setState({submitDisabled: true});
+
+            const item = this.state.item;
+            item.opcao = item.opcao.nome;
+
+            const extras = [];
+            for (const extra of this.state.extras.slice()) {
+                if (!extra.opcao || (typeof extra.opcao === 'string')) {
+                    extras.push(extra);
+                } else {
+                    extra.opcao.forEach((qtd, opcao) => {
+                        if (qtd === 0) {
+                            return;
+                        }
+                        const item = {
+                            nome: extra.nome,
+                            val: extra.val,
+                            qtd: qtd,
+                            total: (extra.val * qtd),
+                            opcao: opcao,
+                        }
+                        extras.push(item);
+                    });
+                }
+            }
+            
             const pedido = {
                 aluno: this.aluno,
                 turma: this.turma,
@@ -75,8 +100,8 @@ export default class PedidoForm extends Component {
                 responsavel: this.state.responsavel,
                 tel: this.state.tel,
                 email: this.state.email,
-                item: this.state.item,
-                extras: this.state.extras
+                item: item,
+                extras: extras
             };
             AreaAlunoService.fazerPedido(pedido)
                 .then(res => {
@@ -101,7 +126,13 @@ export default class PedidoForm extends Component {
 
     selecionaPedido(opcoes) {
         let valorTotal = opcoes.item.val;
-        opcoes.extras.forEach(extra => valorTotal += (extra.val * extra.qtd));
+        opcoes.extras.forEach(extra => {
+            if (!extra.modeloOpcao) {
+                valorTotal += (extra.val * extra.qtd)
+            } else if(extra.opcao) {
+                extra.opcao.forEach(qtd => valorTotal += (extra.val * qtd));
+            }
+        });
         this.setState({item: opcoes.item, extras: opcoes.extras, valorTotal});
     }
 

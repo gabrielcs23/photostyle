@@ -249,7 +249,10 @@ export default class SelecaoPedido extends Component {
         return (
             <>
                 <div>
-                    <h6>Kit (obrigatório)</h6>
+                    <h6 style={{fontWeight: 'bold'}}>Kit (obrigatório)</h6>
+                    <blockquote style={{fontStyle: 'italic'}}>
+                        Selecione uma opção de kit
+                    </blockquote>
                 </div>
 
                 <div className="row input-field mb-2">
@@ -259,7 +262,10 @@ export default class SelecaoPedido extends Component {
                 {this.state.itemSel != null ? 
                     <>
                         <div>
-                            <h6>Extras (opcional)</h6>
+                            <h6  style={{fontWeight: 'bold'}}>Extras (opcional)</h6>
+                            <blockquote style={{fontStyle: 'italic'}}>
+                                Fique a vontade para escolher opções adicionais
+                            </blockquote>
                         </div>
                         <div className="row input-field">
                             {checkBoxExtras}

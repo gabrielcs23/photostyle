@@ -112,6 +112,22 @@ export default class AreaAluno extends BasePage {
                         <h3>Kit Fotográfico Escolar 2020</h3>
                     </div>
                     <div className="content container">
+
+                        <blockquote style={{fontStyle: 'italic'}}>
+                            O kit é composto por 2 (duas) fotos diagramadas, sendo:
+                            <ul className="browser-default">
+                                <li>
+                                    Uma individual com legenda: nome, turma e ano. 
+                                </li>
+                                <li>
+                                    Uma foto do grupo com legenda: nomes dos alunos em ordem, nome dos professores, turma e ano.
+                                </li>
+                            </ul> 
+                            <p>
+                                As fotos são impressas em papel profissional mate ou fosco e entregues dentro de um folder.  
+                            </p>
+                        </blockquote>
+
                         <div className="header">
                             <div className="left-align">
                                 <p>
@@ -147,6 +163,14 @@ export default class AreaAluno extends BasePage {
                                 <div className={`${styles.title} center`}>
                                     <h4>{`Foto${fotosTurma.length > 1 ? 's' : ''} de Turma ${fotosIrmaos?.length > 0 ? 'e de Irmãos' : ''}`}</h4>
                                 </div>
+
+                                <div className={styles.explicacaoCenter}>
+                                    <blockquote>
+                                        Mostra das fotos de turma oficial e funny
+                                        {`${fotosIrmaos?.length > 0 ? ' e foto de Irmãos' : ''}`}
+                                    </blockquote>
+                                </div>
+
                                 <div className="row mb-5">
                                     <div className="col s12 mt-2">
                                         <DisplayFotos
@@ -163,6 +187,13 @@ export default class AreaAluno extends BasePage {
                         <div className={`${styles.title} center`}>
                             <h4>Extras</h4>
                         </div>
+
+                        <div className={styles.explicacaoCenter}>
+                            <blockquote>
+                                Mostra das artes do kit individual e grupo e opções de fotos extras.
+                            </blockquote>
+                        </div>
+
                         <div className="row mb-5">
                             <div className="col s12 mt-2">
                                 <DisplayFotos
@@ -199,14 +230,16 @@ export default class AreaAluno extends BasePage {
                             <span className="d-inline-flex">
                                 <i className="small material-icons" style={{color: 'green'}}>check_circle</i>
                                 <span className="pl-2">
-                                    Pedido {this.state.nPedido} realizado
+                                    Pedido {this.state.nPedido} encaminhado
                                 </span>
                             </span>
                         </div>
-                        <p>
-                            Mussum Ipsum, cacilds vidis litro abertis. Suco de cevadiss deixa as pessoas mais interessantis. 
-                            Mais vale um bebadis conhecidiss, que um alcoolatra anonimis. Delegadis gente finis, bibendum egestas 
-                            augue arcu ut est. Aenean aliquam molestie leo, vitae iaculis nisl.
+                        <p className={`${styles.confirm} ${styles.agradecimento}`}>Obrigado por realizar seu pedido!</p>
+                        <p className={`${styles.confirm}`}>
+                            Enviamos para o e-mail informado uma confirmação com o resumo de seu pedido.
+                        </p>
+                        <p className={`${styles.confirm}`}>
+                            Entraremos em contato para fechar seu pedido com as informações para o pagamento.
                         </p>
                     </div>
                 </div>

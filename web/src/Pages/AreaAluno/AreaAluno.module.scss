@@ -9,3 +9,23 @@
     position: relative;
     justify-content: center;
 }
+
+.confirm {
+    margin-bottom: 15px !important;
+}
+
+.agradecimento {
+    font-style: italic;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.explicacaoCenter {
+    display: flex;
+    justify-content: center;
+
+    blockquote {
+        margin: 0 0 15px;
+        font-style: italic;
+    }
+}

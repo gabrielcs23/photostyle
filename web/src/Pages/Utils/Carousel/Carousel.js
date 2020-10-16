@@ -44,6 +44,7 @@ const Carousel = () => {
             dots
             arrowLeft={arrowLeft}
             arrowRight={arrowRight}
+            addArrowClickHandler
             keepDirectionWhenDragging
         >
         </ReactCarousel>

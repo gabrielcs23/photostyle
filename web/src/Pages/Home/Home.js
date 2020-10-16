@@ -9,7 +9,7 @@ class Home extends BasePage {
     renderPage() {
         return (
             <>
-                <Parallax bgImage={`${process.env.PUBLIC_URL}/assets/images/parallax/01.jpg`} strength={500}>
+                <Parallax bgImage={`${process.env.PUBLIC_URL}/assets/images/parallax/02.jpg`} strength={500}>
                     <div style={{ height: 500 }} />
                 </Parallax>
                 

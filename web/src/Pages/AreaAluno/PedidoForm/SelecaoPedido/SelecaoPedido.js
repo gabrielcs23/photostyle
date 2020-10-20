@@ -249,9 +249,12 @@ export default class SelecaoPedido extends Component {
         return (
             <>
                 <div>
-                    <h6 style={{fontWeight: 'bold'}}>Kit (obrigatório)</h6>
+                    <h6 style={{fontWeight: 'bold'}}>
+                        Kit &nbsp;
+                        <span style={{color: 'red'}}>*</span>
+                    </h6>
                     <blockquote style={{fontStyle: 'italic'}}>
-                        Selecione uma opção de kit
+                        Selecione uma opção de kit. Campo obrigatório
                     </blockquote>
                 </div>
 
@@ -262,7 +265,7 @@ export default class SelecaoPedido extends Component {
                 {this.state.itemSel != null ? 
                     <>
                         <div>
-                            <h6  style={{fontWeight: 'bold'}}>Extras (opcional)</h6>
+                            <h6  style={{fontWeight: 'bold'}}>Extras</h6>
                             <blockquote style={{fontStyle: 'italic'}}>
                                 Fique a vontade para escolher opções adicionais
                             </blockquote>

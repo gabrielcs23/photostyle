@@ -124,7 +124,7 @@ export default class AreaAluno extends BasePage {
                                 </li>
                             </ul> 
                             <p>
-                                As fotos são impressas em papel profissional mate ou fosco e entregues dentro de um folder.  
+                                As fotos são impressas em papel profissional mate (fosco) e entregues dentro de um folder.  
                             </p>
                         </blockquote>
 
@@ -190,7 +190,7 @@ export default class AreaAluno extends BasePage {
 
                         <div className={styles.explicacaoCenter}>
                             <blockquote>
-                                Mostra das artes do kit individual e grupo e opções de fotos extras.
+                                Mostra das artes do Kit Fotográfico Escolar e opções de fotos extras.
                             </blockquote>
                         </div>
 

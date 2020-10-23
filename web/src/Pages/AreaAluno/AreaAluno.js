@@ -82,6 +82,10 @@ export default class AreaAluno extends BasePage {
         this.setState({nPedido});
     }
 
+    temFotosIrmaos(kit) {
+        return kit?.fotosIrmaos?.length > 0;
+    }
+
     renderPage() {
         const { kit } = this.state;
         if (kit == null) {
@@ -161,13 +165,13 @@ export default class AreaAluno extends BasePage {
                             <>
                                 <hr />
                                 <div className={`${styles.title} center`}>
-                                    <h4>{`Foto${fotosTurma.length > 1 ? 's' : ''} de Turma ${fotosIrmaos?.length > 0 ? 'e de Irmãos' : ''}`}</h4>
+                                    <h4>{`Foto${fotosTurma.length > 1 ? 's' : ''} de Turma ${this.temFotosIrmaos(kit) ? 'e de Irmãos' : ''}`}</h4>
                                 </div>
 
                                 <div className={styles.explicacaoCenter}>
                                     <blockquote>
                                         Mostra das fotos de turma oficial e funny
-                                        {`${fotosIrmaos?.length > 0 ? ' e foto de Irmãos' : ''}`}
+                                        {`${this.temFotosIrmaos(kit) ? ' e foto de Irmãos' : ''}`}
                                     </blockquote>
                                 </div>
 

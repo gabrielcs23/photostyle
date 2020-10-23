@@ -75,6 +75,10 @@ export default class SelecaoPedido extends Component {
         }
     }
 
+    possuiFotosIrmaos() {
+        return this.props.opcoesIrmaos?.length > 0;
+    }
+
     inicializaOpcao(extra, opcao) {
         if (!extra.opcao) {
             extra.opcao = new Map();
@@ -115,6 +119,9 @@ export default class SelecaoPedido extends Component {
 
     render() {
         const radioItens = this.itens.map((item, idx) => {
+            if (item.modeloOpcao === 'I' && !this.possuiFotosIrmaos()) {
+                return null;
+            }
             const opcoesTurma = this.getOpcoes('T');
             const opcoesIrmaos = this.getOpcoes('I');
             return (
@@ -171,6 +178,9 @@ export default class SelecaoPedido extends Component {
             );
         });
         const checkBoxExtras = this.state.extrasSel.map((extra, idx) => {
+            if (extra.modeloOpcao === 'I' && !this.possuiFotosIrmaos()) {
+                return null;
+            }
             return (
                 <Fragment key={`extra${idx}`}>
                     <div

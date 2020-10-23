@@ -178,7 +178,7 @@ export default class SelecaoPedido extends Component {
             );
         });
         const checkBoxExtras = this.state.extrasSel.map((extra, idx) => {
-            if (extra.modeloOpcao && !this.possuiFotosIrmaos()) {
+            if (extra.modeloOpcao === 'I' && !this.possuiFotosIrmaos()) {
                 return null;
             }
             return (

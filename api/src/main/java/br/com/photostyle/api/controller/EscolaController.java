@@ -4,15 +4,22 @@ import br.com.photostyle.api.model.dto.EscolaDto;
 import br.com.photostyle.api.model.dto.TurmaDto;
 import br.com.photostyle.api.model.entity.EscolaEntity;
 import br.com.photostyle.api.service.EscolaService;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.transaction.Transactional;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.io.File;
 import java.net.URI;
 import java.util.List;
 
@@ -75,6 +82,24 @@ public class EscolaController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(turmasSalvas);
+    }
+
+    @GetMapping("/{id}/exportar-codigos")
+    public ResponseEntity<StreamingResponseBody> exportarCodigoAlunoPorTurma(@PathVariable Long id) {
+        EscolaEntity escola = escolaService.getEntityPorId(id);
+        if (escola == null) {
+            return ResponseEntity.notFound().build();
+        }
+        if (CollectionUtils.isEmpty(escola.getTurmas())) {
+            return ResponseEntity.badRequest().build();
+        }
+        Workbook workBook = escolaService.exportarCodigoAlunoPorTurma(escola);
+
+        return ResponseEntity
+                .ok()
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline;filename=\"listagem_codigos.xlsx\"")
+                .body(workBook::write);
     }
 
 }

@@ -240,10 +240,10 @@ export default class AreaAluno extends BasePage {
                         </div>
                         <p className={`${styles.confirm} ${styles.agradecimento}`}>Obrigado por realizar seu pedido!</p>
                         <p className={`${styles.confirm}`}>
-                            Enviamos para o e-mail informado uma confirmação com o resumo de seu pedido.
+                            Verifique seu e-mail, não se esquecendo da caixa de spam
                         </p>
                         <p className={`${styles.confirm}`}>
-                            Entraremos em contato para fechar seu pedido com as informações para o pagamento.
+                            Enviamos um resumo de seu pedido com os dados para pagamento.
                         </p>
                     </div>
                 </div>

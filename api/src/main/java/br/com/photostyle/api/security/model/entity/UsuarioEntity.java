@@ -7,7 +7,7 @@ import javax.persistence.*;
 public class UsuarioEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "NOME_USR", unique = true, nullable = false)

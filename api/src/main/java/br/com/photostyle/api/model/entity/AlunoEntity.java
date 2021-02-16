@@ -4,7 +4,6 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "ALUNO")
-@SequenceGenerator(name = "sequence_gen", sequenceName = "aluno_seq", initialValue = 1, allocationSize = 1)
 public class AlunoEntity extends BaseEntity {
 
     @Column(name = "NOME", nullable = false)

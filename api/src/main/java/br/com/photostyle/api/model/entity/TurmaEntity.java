@@ -5,7 +5,6 @@ import java.util.List;
 
 @Entity
 @Table(name = "TURMA")
-@SequenceGenerator(name = "sequence_gen", sequenceName = "turma_seq", initialValue = 1, allocationSize = 1)
 public class TurmaEntity extends BaseEntity {
 
     @Column(name = "NOME", nullable = false)

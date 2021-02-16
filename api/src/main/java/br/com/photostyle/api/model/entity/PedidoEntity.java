@@ -6,11 +6,10 @@ import java.util.List;
 
 @Entity
 @Table(name = "PEDIDO")
-@SequenceGenerator(name = "pedido_seq", sequenceName = "pedido_seq", initialValue = 1, allocationSize = 1)
 public class PedidoEntity {
 
     @Id
-    @GeneratedValue(generator = "pedido_seq", strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)

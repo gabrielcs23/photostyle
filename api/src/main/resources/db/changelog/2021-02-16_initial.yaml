@@ -1,0 +1,520 @@
+databaseChangeLog:
+- changeSet:
+    id: 1613508186571-1
+    author: gabri (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: alunoPK
+            name: id
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: cod_ac
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: matr
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: nome
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: esc_id
+            type: BIGINT
+        - column:
+            name: foto_id
+            type: BIGINT
+        - column:
+            name: rl_irmao_id
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: trm_id
+            type: BIGINT
+        tableName: aluno
+- changeSet:
+    id: 1613508186571-2
+    author: gabri (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: escolaPK
+            name: id
+            type: BIGINT
+        - column:
+            name: apelido
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: nome
+            type: VARCHAR(255)
+        tableName: escola
+- changeSet:
+    id: 1613508186571-3
+    author: gabri (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: fotoPK
+            name: id
+            type: BIGINT
+        - column:
+            name: descricao
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: file_name
+            type: VARCHAR(255)
+        tableName: foto
+- changeSet:
+    id: 1613508186571-4
+    author: gabri (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: itm_pedidoPK
+            name: id
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: nome
+            type: VARCHAR(255)
+        - column:
+            name: opcao
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: qtd
+            type: INT
+        - column:
+            constraints:
+              nullable: false
+            name: total_ind
+            type: DECIMAL(19, 2)
+        - column:
+            constraints:
+              nullable: false
+            name: valor_ind
+            type: DECIMAL(19, 2)
+        tableName: itm_pedido
+- changeSet:
+    id: 1613508186571-5
+    author: gabri (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: pedidoPK
+            name: id
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: email
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: nome_aluno
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: nome_escola
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: nome_responsavel
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: nome_turma
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: tel_contato
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: valor_total
+            type: DECIMAL(19, 2)
+        - column:
+            constraints:
+              nullable: false
+            name: kit_id
+            type: BIGINT
+        tableName: pedido
+- changeSet:
+    id: 1613508186571-6
+    author: gabri (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: rl_irmaoPK
+            name: id
+            type: BIGINT
+        tableName: rl_irmao
+- changeSet:
+    id: 1613508186571-7
+    author: gabri (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+            name: id_rl_irmao
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: id_foto
+            type: BIGINT
+        tableName: rl_irmao_fotos
+- changeSet:
+    id: 1613508186571-8
+    author: gabri (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+            name: id_pedido
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: id_extra
+            type: BIGINT
+        tableName: rl_pedido_extras
+- changeSet:
+    id: 1613508186571-9
+    author: gabri (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+            name: id_turma
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: id_foto
+            type: BIGINT
+        tableName: rl_turma_fotos
+- changeSet:
+    id: 1613508186571-10
+    author: gabri (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: turmaPK
+            name: id
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: nome
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: esc_id
+            type: BIGINT
+        tableName: turma
+- changeSet:
+    id: 1613508186571-11
+    author: gabri (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: usuarioPK
+            name: id
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: nome_usr
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: role
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: senha
+            type: VARCHAR(255)
+        tableName: usuario
+- changeSet:
+    id: 1613508186571-12
+    author: gabri (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: cod_ac
+        constraintName: UC_ALUNOCOD_AC_COL
+        tableName: aluno
+- changeSet:
+    id: 1613508186571-13
+    author: gabri (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: nome
+        constraintName: UC_ESCOLANOME_COL
+        tableName: escola
+- changeSet:
+    id: 1613508186571-14
+    author: gabri (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: nome_usr
+        constraintName: UC_USUARIONOME_USR_COL
+        tableName: usuario
+- changeSet:
+    id: 1613508186571-15
+    author: gabri (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: id_foto
+        constraintName: UK_IRMAO_FOTOS
+        tableName: rl_irmao_fotos
+- changeSet:
+    id: 1613508186571-16
+    author: gabri (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: id_extra
+        constraintName: UK_PEDIDO_EXTRAS
+        tableName: rl_pedido_extras
+- changeSet:
+    id: 1613508186571-17
+    author: gabri (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: id_foto
+        constraintName: UK_TURMA_FOTOS
+        tableName: rl_turma_fotos
+- changeSet:
+    id: 1613508186571-18
+    author: gabri (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: kit_id
+        constraintName: UK_PEDIDO
+        tableName: pedido
+- changeSet:
+    id: 1613508186571-19
+    author: gabri (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: id_extra
+        baseTableName: rl_pedido_extras
+        constraintName: FK_ITM_PEDIDO_RL_PEDIDO_EXTRAS
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: itm_pedido
+        validate: true
+- changeSet:
+    id: 1613508186571-20
+    author: gabri (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: id_foto
+        baseTableName: rl_irmao_fotos
+        constraintName: FK_FOTO_RL_IRMAO_FOTOS
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: foto
+        validate: true
+- changeSet:
+    id: 1613508186571-21
+    author: gabri (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: id_turma
+        baseTableName: rl_turma_fotos
+        constraintName: FK_TURMA_RL_TURMA_FOTOS
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: turma
+        validate: true
+- changeSet:
+    id: 1613508186571-22
+    author: gabri (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: kit_id
+        baseTableName: pedido
+        constraintName: FK_ITM_PEDIDO_PEDIDO
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: itm_pedido
+        validate: true
+- changeSet:
+    id: 1613508186571-23
+    author: gabri (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: id_pedido
+        baseTableName: rl_pedido_extras
+        constraintName: FK_PEDIDO_RL_PEDIDO_EXTRAS
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: pedido
+        validate: true
+- changeSet:
+    id: 1613508186571-24
+    author: gabri (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: esc_id
+        baseTableName: turma
+        constraintName: FK_ESCOLA_TURMA
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: escola
+        validate: true
+- changeSet:
+    id: 1613508186571-25
+    author: gabri (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: foto_id
+        baseTableName: aluno
+        constraintName: FK_FOTO_ALUNO
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: foto
+        validate: true
+- changeSet:
+    id: 1613508186571-26
+    author: gabri (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: id_foto
+        baseTableName: rl_turma_fotos
+        constraintName: FK_FOTO_RL_TURMA_FOTOS
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: foto
+        validate: true
+- changeSet:
+    id: 1613508186571-27
+    author: gabri (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: trm_id
+        baseTableName: aluno
+        constraintName: FK_TURMA_ALUNO
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: turma
+        validate: true
+- changeSet:
+    id: 1613508186571-28
+    author: gabri (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: id_rl_irmao
+        baseTableName: rl_irmao_fotos
+        constraintName: FK_RL_IRMAO_RL_IRMAO_FOTOS
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: rl_irmao
+        validate: true
+- changeSet:
+    id: 1613508186571-29
+    author: gabri (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: esc_id
+        baseTableName: aluno
+        constraintName: FK_ESCOLA_ALUNO
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: escola
+        validate: true
+- changeSet:
+    id: 1613508186571-30
+    author: gabri (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: rl_irmao_id
+        baseTableName: aluno
+        constraintName: FK_RL_IRMAO_ALUNO
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: rl_irmao
+        validate: true
+

@@ -1,0 +1,63 @@
+databaseChangeLog:
+- changeSet:
+    id: 1613511391000-1
+    author: gabri (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: anoPK
+            name: id
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: nome
+            type: VARCHAR(255)
+        tableName: ano
+- changeSet:
+    id: 1613511391000-2
+    author: gabri (generated)
+    changes:
+    - addColumn:
+        columns:
+        - column:
+            name: ano_id
+            type: bigint
+        tableName: foto
+- changeSet:
+    id: 1613511391000-3
+    author: gabri (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: ano_id
+        baseTableName: foto
+        constraintName: FK_ANO_FOTO
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: ano
+        validate: true
+- changeSet:
+    id:  insert-ano
+    author:  gabri
+    changes:
+    - sql:
+        dbms:  'all'
+        sql:  insert into ano values (1, '2020'), (2, '2021');
+    - sql:
+        dbms:  'all'
+        sql:  UPDATE foto SET foto.ano_id = (SELECT ano.id FROM ano WHERE ano.nome = '2020');
+- changeSet:
+    id: 1613517048516-1
+    author: gabri (generated)
+    changes:
+    - addNotNullConstraint:
+        columnDataType: bigint
+        columnName: ano_id
+        tableName: foto
+        validate: true

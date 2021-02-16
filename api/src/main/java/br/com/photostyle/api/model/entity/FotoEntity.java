@@ -7,7 +7,7 @@ import javax.persistence.*;
 public class FotoEntity {
 
     @Id
-    @GeneratedValue(generator = "foto_seq", strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
@@ -15,6 +15,10 @@ public class FotoEntity {
 
     @Column
     private String descricao = "";
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "ANO_ID", nullable = false)
+    private AnoEntity ano;
 
     public Long getId() {
         return id;
@@ -38,5 +42,13 @@ public class FotoEntity {
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
+    }
+
+    public AnoEntity getAno() {
+        return ano;
+    }
+
+    public void setAno(AnoEntity ano) {
+        this.ano = ano;
     }
 }

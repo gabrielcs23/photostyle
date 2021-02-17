@@ -31,23 +31,25 @@ public class AlunoController {
         return ResponseEntity.ok(alunoService.listar());
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<AlunoDto> getPorId(@PathVariable @NotNull Long id) {
-        AlunoDto dto = alunoService.getPorId(id);
+    @GetMapping("/{id}/{idAno}")
+    public ResponseEntity<AlunoDto> getPorId(@PathVariable @NotNull Long id,
+                                             @PathVariable @NotNull Long idAno) {
+        AlunoDto dto = alunoService.getPorId(id, idAno);
         if (dto == null) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(dto);
     }
 
-    @GetMapping("/por-turma/{idTurma}")
-    public ResponseEntity<List<AlunoDto>> getAlunosPorTurmaId(@PathVariable Long idTurma) {
-        List<AlunoDto> alunos = alunoService.getAlunosByTurmaId(idTurma);
+    @GetMapping("/por-turma/{idTurma}/{idAno}")
+    public ResponseEntity<List<AlunoDto>> getAlunosPorTurma(@PathVariable @NotNull Long idTurma,
+                                                              @PathVariable @NotNull Long idAno) {
+        List<AlunoDto> alunos = alunoService.getAlunosByTurma(idTurma, idAno);
         return ResponseEntity.ok(alunos);
     }
 
     @GetMapping("/nomes/por-turma/{idTurma}")
-    public ResponseEntity<List<AlunoDto>> getAlunosNomesPorTurmaId(@PathVariable Long idTurma) {
+    public ResponseEntity<List<AlunoDto>> getAlunosNomesPorTurma(@PathVariable Long idTurma) {
         List<AlunoDto> alunos = alunoService.getAlunosNomesByTurmaId(idTurma);
         return ResponseEntity.ok(alunos);
     }
@@ -94,22 +96,13 @@ public class AlunoController {
     }
 
     @PostMapping("/{idAluno}/mover/{idTurma}")
-    public ResponseEntity<AlunoDto> moverAlunoParaTurma(@PathVariable @NotNull Long idAluno, @PathVariable @NotNull Long idTurma) {
+    public ResponseEntity<AlunoDto> moverAlunoParaTurma(@PathVariable @NotNull Long idAluno,
+                                                        @PathVariable @NotNull Long idTurma) {
         AlunoDto aluno = alunoService.moverAlunoParaTurma(idAluno, idTurma);
         if (aluno == null) {
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok(aluno);
-    }
-
-    @PostMapping("/{idAluno}/irmaos")
-    public ResponseEntity<IrmaoRelDto> relacionarIrmaos(@PathVariable @NotNull Long idAluno, @RequestBody @NotEmpty List<Long> idsIrmaos) {
-        AlunoEntity aluno = alunoService.getEntityPorId(idAluno);
-        if (aluno == null) {
-            return ResponseEntity.notFound().build();
-        }
-        IrmaoRelDto relacionamento = alunoService.relacionarIrmaos(aluno, idsIrmaos);
-        return ResponseEntity.ok(relacionamento);
     }
 
     @PostMapping("/{idAluno}/foto-irmao/{idAno}")
@@ -125,7 +118,8 @@ public class AlunoController {
     }
 
     @DeleteMapping("/{idAluno}/foto-irmao/{idFoto}")
-    public ResponseEntity<FotoDto> removerFotoIrmao(@PathVariable @NotNull Long idAluno, @PathVariable @NotNull Long idFoto) {
+    public ResponseEntity<FotoDto> removerFotoIrmao(@PathVariable @NotNull Long idAluno,
+                                                    @PathVariable @NotNull Long idFoto) {
         AlunoEntity aluno = alunoService.getEntityPorId(idAluno);
         if (aluno == null || aluno.getIrmaoRel() == null) {
             return ResponseEntity.notFound().build();

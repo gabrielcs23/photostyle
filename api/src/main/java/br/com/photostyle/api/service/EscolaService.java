@@ -34,11 +34,6 @@ public class EscolaService extends BaseService<EscolaEntity, EscolaDto> {
         return turmaService.cadastrarTurmasEmEscola(escola, turmas);
     }
 
-    public List<TurmaDto> getTurmas(Long id) {
-        EscolaEntity escola = getEntityPorId(id);
-        return turmaService.entityListToDtoList(escola.getTurmas());
-    }
-
     public Workbook exportarCodigoAlunoPorTurma(EscolaEntity escola) {
         Workbook wb = new XSSFWorkbook();
         for(TurmaEntity turma : escola.getTurmas()) {

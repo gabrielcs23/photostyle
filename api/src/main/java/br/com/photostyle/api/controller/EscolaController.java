@@ -66,17 +66,9 @@ public class EscolaController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/{id}/turmas")
-    public ResponseEntity<List<TurmaDto>> getTurmas(@PathVariable Long id) {
-        List<TurmaDto> turmas = escolaService.getTurmas(id);
-        if (CollectionUtils.isEmpty(turmas)) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(turmas);
-    }
-
     @PostMapping("/{id}/turmas")
-    public ResponseEntity<List<TurmaDto>> cadastrarTurmas(@PathVariable Long id, @RequestBody @Valid List<TurmaDto> turmas) {
+    public ResponseEntity<List<TurmaDto>> cadastrarTurmas(@PathVariable Long id,
+                                                          @RequestBody @Valid List<TurmaDto> turmas) {
         List<TurmaDto> turmasSalvas = escolaService.cadastrarTurmas(id, turmas);
         if (CollectionUtils.isEmpty(turmasSalvas)) {
             return ResponseEntity.notFound().build();

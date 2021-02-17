@@ -31,18 +31,20 @@ public class TurmaController {
         return ResponseEntity.ok(turmaService.listar());
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<TurmaDto> getPorId(@PathVariable Long id) {
-        TurmaDto dto = turmaService.getPorId(id);
+    @GetMapping("/{id}/{idAno}")
+    public ResponseEntity<TurmaDto> getPorId(@PathVariable Long id,
+                                             @PathVariable Long idAno) {
+        TurmaDto dto = turmaService.getPorId(id, idAno);
         if (dto == null) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(dto);
     }
 
-    @GetMapping("/por-escola/{idEscola}")
-    public ResponseEntity<List<TurmaDto>> getTurmasPorEscolaId(@PathVariable Long idEscola) {
-        List<TurmaDto> turmas = turmaService.getTurmasPorEscolaId(idEscola);
+    @GetMapping("/por-escola/{idEscola}/{idAno}")
+    public ResponseEntity<List<TurmaDto>> getTurmasPorEscolaId(@PathVariable Long idEscola,
+                                                               @PathVariable Long idAno) {
+        List<TurmaDto> turmas = turmaService.getTurmasPorEscolaId(idEscola, idAno);
         return ResponseEntity.ok(turmas);
     }
 
@@ -93,9 +95,10 @@ public class TurmaController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/{id}/alunos")
-    public ResponseEntity<List<AlunoDto>> getAlunos(@PathVariable Long id) {
-        List<AlunoDto> alunos = turmaService.getAlunos(id);
+    @GetMapping("/{id}/alunos/{idAno}")
+    public ResponseEntity<List<AlunoDto>> getAlunos(@PathVariable @NotNull Long id,
+                                                    @PathVariable @NotNull Long idAno) {
+        List<AlunoDto> alunos = turmaService.getAlunos(id, idAno);
         if (CollectionUtils.isEmpty(alunos)) {
             return ResponseEntity.notFound().build();
         }

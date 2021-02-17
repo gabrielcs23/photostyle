@@ -14,7 +14,6 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -39,6 +38,12 @@ public class TurmaService extends BaseService<TurmaEntity, TurmaDto> {
 
     public TurmaService(TurmaRepository repository, TurmaAdapter adapter) {
         super(repository, adapter);
+    }
+
+    public TurmaDto getPorId(Long id, Long idAno) {
+        TurmaEntity entity = getEntityPorId(id);
+        filtraFotosPorAno(entity, idAno);
+        return adapter.entityToDto(entity);
     }
 
     @Transactional
@@ -78,9 +83,9 @@ public class TurmaService extends BaseService<TurmaEntity, TurmaDto> {
         return new ArrayList<>();
     }
 
-    public List<TurmaDto> getTurmasPorEscolaId(Long idEscola) {
+    public List<TurmaDto> getTurmasPorEscolaId(Long idEscola, Long idAno) {
         List<TurmaEntity> turmas = repository.getTurmaEntitiesByEscola_Id(idEscola);
-        return entityListToDtoList(turmas);
+        return entityListToDtoList(turmas, idAno);
     }
 
     public List<TurmaDto> getTurmasNomesPorEscolaId(Long idEscola) {
@@ -99,12 +104,25 @@ public class TurmaService extends BaseService<TurmaEntity, TurmaDto> {
         repository.delete(turma);
     }
 
-    public List<TurmaDto> entityListToDtoList(List<TurmaEntity> turmas) {
+    public List<TurmaDto> entityListToDtoList(List<TurmaEntity> turmas, Long idAno) {
+        if (!CollectionUtils.isEmpty(turmas)) {
+            turmas.forEach(turma -> filtraFotosPorAno(turma, idAno));
+        }
         return adapter.entityListToDtoList(turmas);
     }
 
-    public List<AlunoDto> getAlunos(Long id) {
-        return alunoService.getAlunosByTurmaId(id);
+    private void filtraFotosPorAno(TurmaEntity turma, Long idAno) {
+        List<FotoEntity> fotos = turma.getFotos();
+        if (!CollectionUtils.isEmpty(fotos)) {
+            List<FotoEntity> fotosDoAno = fotos.stream()
+                    .filter(foto -> foto.getAno().getId().equals(idAno))
+                    .collect(Collectors.toList());
+            turma.setFotos(fotosDoAno);
+        }
+    }
+
+    public List<AlunoDto> getAlunos(Long id, Long idAno) {
+        return alunoService.getAlunosByTurma(id, idAno);
     }
 
     public List<AlunoDto> cadastrarAlunos(Long id, List<AlunoDto> alunos) {

@@ -7,6 +7,7 @@ import br.com.photostyle.api.model.dto.FotoDto;
 import br.com.photostyle.api.model.dto.IrmaoRelDto;
 import br.com.photostyle.api.model.entity.AlunoEntity;
 import br.com.photostyle.api.model.entity.FotoEntity;
+import br.com.photostyle.api.model.entity.IrmaoRelEntity;
 import br.com.photostyle.api.model.entity.TurmaEntity;
 import br.com.photostyle.api.repository.AlunoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,7 +69,8 @@ public class AlunoService extends BaseService<AlunoEntity, AlunoDto> {
         AlunoEntity entitySaved = repository.save(alunoEntity);
 
         if (aluno.getIrmaoRel() != null && !CollectionUtils.isEmpty(aluno.getIrmaoRel().getIrmaos())) {
-            List<Long> idsIrmaos = aluno.getIrmaoRel().getIrmaos()
+            IrmaoRelDto irmaoRel = aluno.getIrmaoRel();
+            List<Long> idsIrmaos = irmaoRel.getIrmaos()
                     .stream()
                     .map(AlunoDto::getId)
                     .collect(Collectors.toList());
@@ -76,6 +78,12 @@ public class AlunoService extends BaseService<AlunoEntity, AlunoDto> {
         }
 
         return adapter.entityToDto(entitySaved);
+    }
+
+    public AlunoDto getPorId(Long id, Long idAno) {
+        AlunoEntity entity = getEntityPorId(id);
+        filtraFotos(entity, idAno);
+        return adapter.entityToDto(entity);
     }
 
     private void gerarCodigo(AlunoEntity aluno) {
@@ -103,8 +111,25 @@ public class AlunoService extends BaseService<AlunoEntity, AlunoDto> {
         repository.delete(aluno);
     }
 
-    public List<AlunoDto> getAlunosByTurmaId(Long idTurma) {
+    private void filtraFotos(AlunoEntity entity, Long idAno) {
+        if (entity.getIrmaoRel() != null) {
+            IrmaoRelEntity irmaoRel = entity.getIrmaoRel();
+            irmaoRel.setFotos(filtraFotosPorAno(irmaoRel.getFotos(), idAno));
+        }
+    }
+
+    private List<FotoEntity> filtraFotosPorAno(List<FotoEntity> fotos, Long idAno) {
+        if (!CollectionUtils.isEmpty(fotos)) {
+            return fotos.stream()
+                    .filter(foto -> foto.getAno().getId().equals(idAno))
+                    .collect(Collectors.toList());
+        }
+        return fotos;
+    }
+
+    public List<AlunoDto> getAlunosByTurma(Long idTurma, Long idAno) {
         List<AlunoEntity> alunos = repository.getAlunoEntitiesByTurma_Id(idTurma);
+        alunos.forEach(aluno -> filtraFotos(aluno, idAno));
         return adapter.entityListToDtoList(alunos);
     }
 
@@ -181,10 +206,6 @@ public class AlunoService extends BaseService<AlunoEntity, AlunoDto> {
         aluno.setTurma(turma);
         repository.save(aluno);
         return adapter.entityToDto(aluno);
-    }
-
-    public IrmaoRelDto relacionarIrmaos(AlunoEntity aluno, List<Long> idsIrmaos) {
-        return irmaoService.relacionaIrmaos(aluno, idsIrmaos);
     }
 
     public FotoDto adicionarFotoIrmao(AlunoEntity aluno, MultipartFile foto, Long idAno) {

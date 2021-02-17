@@ -4,6 +4,7 @@ import br.com.photostyle.api.infra.service.ImageNameManager;
 import br.com.photostyle.api.infra.service.ImageService;
 import br.com.photostyle.api.model.adapter.FotoAdapter;
 import br.com.photostyle.api.model.dto.FotoDto;
+import br.com.photostyle.api.model.entity.AnoEntity;
 import br.com.photostyle.api.model.entity.FotoEntity;
 import br.com.photostyle.api.repository.FotoRepository;
 import org.springframework.beans.BeanUtils;
@@ -28,6 +29,9 @@ public class FotoService {
     private FotoAdapter adapter;
 
     @Autowired
+    private AnoService anoService;
+
+    @Autowired
     private ImageService imgService;
 
     @Autowired
@@ -43,13 +47,15 @@ public class FotoService {
     }
 
     @Transactional
-    public FotoEntity upload(MultipartFile foto) {
+    public FotoEntity upload(MultipartFile foto, Long idAno) {
+        AnoEntity anoEntity = anoService.getEntityPorId(idAno);
         String orgFileName = Objects.requireNonNull(foto.getOriginalFilename());
         String imgName = buildFotoName(orgFileName);
         imgService.saveImage(foto, imgName);
         try {
             FotoEntity entity = new FotoEntity();
             entity.setFileName(imgName);
+            entity.setAno(anoEntity);
 
             String desc = StringUtils.stripFilenameExtension(orgFileName);
             entity.setDescricao(desc);

@@ -95,8 +95,8 @@ public class IrmaoService {
     }
 
     @Transactional
-    public FotoDto adicionarFotoIrmao(IrmaoRelEntity irmaoRel, MultipartFile foto) {
-        FotoEntity fotoEntity = fotoService.upload(foto);
+    public FotoDto adicionarFotoIrmao(IrmaoRelEntity irmaoRel, MultipartFile foto, Long idAno) {
+        FotoEntity fotoEntity = fotoService.upload(foto, idAno);
         irmaoRel.getFotos().add(fotoEntity);
         repository.save(irmaoRel);
 

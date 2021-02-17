@@ -11,6 +11,13 @@ public class AnoEntity extends BaseEntity {
     @Column(name = "NOME", nullable = false, unique = true)
     private String nome;
 
+    public AnoEntity() {
+    }
+
+    public AnoEntity(String nome) {
+        this.nome = nome;
+    }
+
     public String getNome() {
         return nome;
     }

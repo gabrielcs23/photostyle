@@ -8,7 +8,7 @@ import javax.persistence.Table;
 @Table(name = "ANO")
 public class AnoEntity extends BaseEntity {
 
-    @Column(name = "NOME", nullable = false)
+    @Column(name = "NOME", nullable = false, unique = true)
     private String nome;
 
     public String getNome() {

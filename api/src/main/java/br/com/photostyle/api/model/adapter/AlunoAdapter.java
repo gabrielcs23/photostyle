@@ -48,8 +48,9 @@ public class AlunoAdapter extends BaseAdapter<AlunoEntity, AlunoDto> {
             dto.setIrmaoRel(irmaoRelDto);
         }
 
-        if (entity.getFoto() != null) {
-            FotoDto fotoDto = fotoAdapter.entityToDto(entity.getFoto());
+        if (entity.getFotos() != null) {
+            // FIXME
+            FotoDto fotoDto = fotoAdapter.entityToDto(entity.getFotos().get(0));
             dto.setFoto(fotoDto);
         }
 
@@ -83,8 +84,9 @@ public class AlunoAdapter extends BaseAdapter<AlunoEntity, AlunoDto> {
         dto.setEscola(escolaDto);
         dto.setTurma(turmaDto);
 
-        if (entity.getFoto() != null) {
-            FotoDto fotoDto = fotoAdapter.entityToDto(entity.getFoto());
+        if (entity.getFotos() != null) {
+            // FIXME
+            FotoDto fotoDto = fotoAdapter.entityToDto(entity.getFotos().get(0));
             dto.setFoto(fotoDto);
         }
 

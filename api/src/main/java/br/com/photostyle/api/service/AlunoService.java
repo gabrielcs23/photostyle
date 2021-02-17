@@ -58,8 +58,8 @@ public class AlunoService extends BaseService<AlunoEntity, AlunoDto> {
 
         if (aluno.getId() != null) {
             AlunoEntity entityAnterior = getEntityPorId(aluno.getId());
-            if (entityAnterior.getFoto() != null) {
-                alunoEntity.setFoto(entityAnterior.getFoto());
+            if (!CollectionUtils.isEmpty(entityAnterior.getFotos())) {
+                alunoEntity.setFotos(entityAnterior.getFotos());
             }
             alunoEntity.setCodigoAcesso(entityAnterior.getCodigoAcesso());
         } else {
@@ -102,11 +102,11 @@ public class AlunoService extends BaseService<AlunoEntity, AlunoDto> {
             irmaoService.removeRelacionamento(aluno.getIrmaoRel(), aluno);
         }
 
-        if (aluno.getFoto() != null) {
-            FotoEntity fotoCopia = fotoService.copiaFoto(aluno.getFoto());
-            aluno.setFoto(null);
-            fotoService.remover(fotoCopia);
-        }
+//        if (!CollectionUtils.isEmpty(aluno.getFotos())) {
+//            List<FotoEntity> fotos = aluno.getFotos();
+//            aluno.setFotos(null);
+//            fotos.forEach(foto -> fotoService.remover(foto));
+//        }
 
         repository.delete(aluno);
     }
@@ -141,27 +141,22 @@ public class AlunoService extends BaseService<AlunoEntity, AlunoDto> {
     @Transactional
     public FotoDto uploadFoto(AlunoEntity aluno, MultipartFile foto, Long idAno) {
         FotoEntity fotoEntity = fotoService.upload(foto, idAno);
-
-        FotoEntity fotoAntiga = null;
-        if (aluno.getFoto() != null) {
-            fotoAntiga = fotoService.copiaFoto(aluno.getFoto());
-        }
-
-        aluno.setFoto(fotoEntity);
+        aluno.getFotos().add(fotoEntity);
         repository.save(aluno);
-
-        if (fotoAntiga != null) {
-            fotoService.remover(fotoAntiga);
-        }
         return fotoService.entityToDto(fotoEntity);
     }
 
     @Transactional
-    public void removeFoto(AlunoEntity aluno) {
-        FotoEntity foto = fotoService.copiaFoto(aluno.getFoto());
-        aluno.setFoto(null);
-        repository.save(aluno);
-        fotoService.remover(foto);
+    public void removeFoto(AlunoEntity aluno, Long idFoto) {
+        List<FotoEntity> fotos = aluno.getFotos();
+        if (!CollectionUtils.isEmpty(fotos)) {
+            List<FotoEntity> fotosFiltradas = fotos.stream()
+                    .filter(foto -> !foto.getId().equals(idFoto))
+                    .collect(Collectors.toList());
+            aluno.setFotos(fotosFiltradas);
+            repository.save(aluno);
+            fotoService.remover(idFoto);
+        }
     }
 
     @Transactional

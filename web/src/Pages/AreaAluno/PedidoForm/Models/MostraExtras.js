@@ -3,40 +3,40 @@ export default class MostraExtras {
         const BASE_URL = `${process.env.PUBLIC_URL}/assets/images/extras/`;
         return [
             {
-                url: BASE_URL + 'Diagramado Aluno.jpg',
+                url: BASE_URL + 'Mostra Diagramado Aluno.jpg',
                 descricao: 'Diagramado Aluno'
             },
             {
-                url: BASE_URL + 'Diagramado Turma.jpg',
+                url: BASE_URL + 'Mostra turma.jpg',
                 descricao: 'Diagramado Turma'
             },
             {
-                url: BASE_URL + 'Id Mochila.jpg',
-                descricao: 'Identificador de mochila'
+                url: BASE_URL + 'Mostra Tag Lagoa.jpg',
+                descricao: 'Tag Lagoa'
             },
             {
-                url: BASE_URL + 'Scrap kids.jpg',
+                url: BASE_URL + 'Mostra Tag Leblon.jpg',
+                descricao: 'Tag Leblon'
+            },
+            {
+                url: BASE_URL + 'Mostra kids.jpg',
                 descricao: 'Scrap kids'
             },
             {
-                url: BASE_URL + 'Scrap frases.jpg',
+                url: BASE_URL + 'Mostra Frases.jpg',
                 descricao: 'Scrap frases'
             },
             {
-                url: BASE_URL + 'Scrap teen1.jpg',
+                url: BASE_URL + 'Mostra Teen 1.jpg',
                 descricao: 'Scrap teen1'
             },
             {
-                url: BASE_URL + 'Scrap teen2.jpg',
+                url: BASE_URL + 'Mostra Teen 2.jpg',
                 descricao: 'Scrap teen2'
             },
             {
-                url: BASE_URL + 'Scrap foto+ano.jpg',
+                url: BASE_URL + 'Mostra foto+ano.jpg',
                 descricao: 'Scrap foto+ano'
-            },
-            {
-                url: BASE_URL + 'Tabuada.jpg',
-                descricao: 'Tabuada Divertida'
             },
         ]
     }

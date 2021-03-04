@@ -5,7 +5,6 @@ import java.util.List;
 
 @Entity
 @Table(name = "ESCOLA")
-@SequenceGenerator(name = "sequence_gen", sequenceName = "escola_seq", initialValue = 1, allocationSize = 1)
 public class EscolaEntity extends BaseEntity {
 
     @Column(name = "NOME", nullable = false, unique = true)

@@ -10,19 +10,21 @@
 	</parent>
 	<groupId>br.com.photostyle</groupId>
 	<artifactId>api</artifactId>
-	<version>1.0</version>
+	<version>1.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>api</name>
-	<description></description>
 
 	<properties>
 		<java.version>1.8</java.version>
+		<timestamp>${maven.build.timestamp}</timestamp>
+		<maven.build.timestamp.format>yyyy-MM-dd</maven.build.timestamp.format>
 	</properties>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
+			<version>2.2.7.RELEASE</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -79,6 +81,12 @@
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>org.liquibase</groupId>
+			<artifactId>liquibase-core</artifactId>
+			<version>4.3.0</version>
+		</dependency>
+
 		<!--	JwtAuth 	-->
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
@@ -91,6 +99,19 @@
 			<version>2.3.0</version>
 		</dependency>
 		<!--	JwtAuth 	-->
+
+		<!--	Excel	-->
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>3.15</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>3.15</version>
+		</dependency>
+		<!--	Excel	-->
 
 		<dependency>
 			<groupId>org.apache.commons</groupId>
@@ -109,6 +130,39 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
+			</plugin>
+
+			<plugin>
+				<groupId>org.liquibase</groupId>
+				<artifactId>liquibase-maven-plugin</artifactId>
+				<version>4.3.0</version>
+				<configuration>
+					<url>${env.SPRING_DATASOURCE_URL}?createDatabaseIfNotExist=true</url>
+					<username>${env.SPRING_DATASOURCE_USERNAME}</username>
+					<password>${env.SPRING_DATASOURCE_PASSWORD}</password>
+					<propertyFile>src/main/resources/liquibase.properties</propertyFile>
+					<changeLogFile>src/main/resources/db/master.yaml</changeLogFile>
+					<diffChangeLogFile>src/main/resources/db/changelog/${timestamp}_changelog.yaml</diffChangeLogFile>
+				</configuration>
+
+				<dependencies>
+					<dependency>
+						<groupId>org.liquibase.ext</groupId>
+						<artifactId>liquibase-hibernate5</artifactId>
+						<version>4.3.0</version>
+					</dependency>
+					<dependency>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-starter-data-jpa</artifactId>
+						<version>2.2.7.RELEASE</version>
+					</dependency>
+					<dependency>
+						<groupId>javax.validation</groupId>
+						<artifactId>validation-api</artifactId>
+						<version>2.0.1.Final</version>
+					</dependency>
+
+				</dependencies>
 			</plugin>
 
 			<!--	Para lidar com conf da AWS Beanstalk	-->

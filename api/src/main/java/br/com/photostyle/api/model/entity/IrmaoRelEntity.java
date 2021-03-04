@@ -5,7 +5,6 @@ import java.util.List;
 
 @Entity
 @Table(name = "RL_IRMAO")
-@SequenceGenerator(name = "irmao_seq", sequenceName = "irmao_seq", initialValue = 1, allocationSize = 1)
 public class IrmaoRelEntity {
 
     @Id

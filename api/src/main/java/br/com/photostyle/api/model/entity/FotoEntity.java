@@ -4,7 +4,6 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "FOTO")
-@SequenceGenerator(name = "foto_seq", sequenceName = "foto_seq", initialValue = 1, allocationSize = 1)
 public class FotoEntity {
 
     @Id

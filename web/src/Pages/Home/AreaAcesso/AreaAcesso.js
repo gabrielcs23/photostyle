@@ -46,6 +46,7 @@ class AreaAcesso extends Component {
                                 <form className={`col s12 m8 l12 xl6 ${styles.inputChave}`} style={{marginLeft: "unset"}}>
                                     <InputChaveAcesso
                                         onChange={(value, rawValue) => this.onChange(value, rawValue)}
+                                        onEnterKeyDown={() => this.submit()}
                                     />
                                 </form>
                             </div>

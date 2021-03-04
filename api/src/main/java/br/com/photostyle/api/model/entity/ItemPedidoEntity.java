@@ -5,11 +5,10 @@ import java.math.BigDecimal;
 
 @Entity
 @Table(name = "ITM_PEDIDO")
-@SequenceGenerator(name = "itm_pedido_seq", sequenceName = "itm_pedido_seq", initialValue = 1, allocationSize = 1)
 public class ItemPedidoEntity {
 
     @Id
-    @GeneratedValue(generator = "itm_pedido_seq", strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)

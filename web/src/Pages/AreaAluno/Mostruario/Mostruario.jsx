@@ -11,6 +11,7 @@ function Mostruario({ styles, kit, mostraExtras }) {
     fotoIndividual,
     fotosIrmaos,
     fotosTurma,
+    fotosMostruarioEscola,
   } = kit;
 
   function temFotosIrmaos(kit) {
@@ -26,6 +27,13 @@ function Mostruario({ styles, kit, mostraExtras }) {
       fotos = [...fotos, ...ftsIrmaos];
     }
     return fotos;
+  }
+
+  function getFotosMostruario(fotosMostruarioEscola, mostraExtras) {
+    if (fotosMostruarioEscola && fotosMostruarioEscola.length > 0) {
+      return fotosMostruarioEscola;
+    }
+    return mostraExtras;
   }
 
   return (
@@ -113,7 +121,7 @@ function Mostruario({ styles, kit, mostraExtras }) {
 
       <div className="row mb-5">
         <div className="col s12 mt-2">
-          <DisplayFotos fotos={mostraExtras} />
+          <DisplayFotos fotos={getFotosMostruario(fotosMostruarioEscola, mostraExtras)} />
         </div>
       </div>
 

@@ -1,6 +1,7 @@
 package br.com.photostyle.api.controller;
 
 import br.com.photostyle.api.model.dto.EscolaDto;
+import br.com.photostyle.api.model.dto.FotoDto;
 import br.com.photostyle.api.model.dto.MostruarioDto;
 import br.com.photostyle.api.model.dto.TurmaDto;
 import br.com.photostyle.api.model.entity.EscolaEntity;
@@ -12,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -70,6 +72,28 @@ public class EscolaController {
         }
         escolaService.remover(id);
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/mostruario/{idMostruario}/foto")
+    public ResponseEntity<List<FotoDto>> adicionarFotosMostruario(@PathVariable @NotNull Long idMostruario,
+                                                                  @RequestParam("file") List<MultipartFile> files) {
+        try {
+            List<FotoDto> fotoDtos = escolaService.adicionaFotosMostruario(idMostruario, files);
+            return ResponseEntity.ok(fotoDtos);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @DeleteMapping("/mostruario/{idMostruario}/foto/{idFoto}")
+    public ResponseEntity<?> removerFotoMostruario(@PathVariable @NotNull Long idMostruario,
+                                                   @PathVariable @NotNull Long idFoto) {
+        try {
+            escolaService.removerFotoMostruario(idMostruario, idFoto);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @GetMapping("/{id}/turmas")

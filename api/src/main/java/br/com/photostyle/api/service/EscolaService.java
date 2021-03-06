@@ -2,6 +2,7 @@ package br.com.photostyle.api.service;
 
 import br.com.photostyle.api.model.adapter.EscolaAdapter;
 import br.com.photostyle.api.model.dto.EscolaDto;
+import br.com.photostyle.api.model.dto.MostruarioDto;
 import br.com.photostyle.api.model.dto.TurmaDto;
 import br.com.photostyle.api.model.entity.AlunoEntity;
 import br.com.photostyle.api.model.entity.EscolaEntity;
@@ -13,7 +14,6 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -24,8 +24,26 @@ public class EscolaService extends BaseService<EscolaEntity, EscolaDto> {
     @Autowired
     private TurmaService turmaService;
 
+    @Autowired
+    private MostruarioService mostruarioService;
+
     public EscolaService(EscolaRepository repository, EscolaAdapter adapter) {
         super(repository, adapter);
+    }
+
+    @Override
+    @Transactional
+    public EscolaDto criar(EscolaDto dtoNovo) {
+        EscolaEntity nova = adapter.dtoToEntity(dtoNovo);
+        EscolaEntity salva = repository.save(nova);
+
+        mostruarioService.criar(salva);
+
+        return adapter.entityToDto(salva);
+    }
+
+    public MostruarioDto getMostruario(Long id) {
+        return mostruarioService.getPorEscola(id);
     }
 
     @Transactional

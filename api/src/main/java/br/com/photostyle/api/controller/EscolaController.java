@@ -1,13 +1,11 @@
 package br.com.photostyle.api.controller;
 
 import br.com.photostyle.api.model.dto.EscolaDto;
+import br.com.photostyle.api.model.dto.MostruarioDto;
 import br.com.photostyle.api.model.dto.TurmaDto;
 import br.com.photostyle.api.model.entity.EscolaEntity;
 import br.com.photostyle.api.service.EscolaService;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -19,7 +17,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.io.File;
 import java.net.URI;
 import java.util.List;
 
@@ -45,6 +42,15 @@ public class EscolaController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(dto);
+    }
+
+    @GetMapping("/{id}/mostruario")
+    public ResponseEntity<MostruarioDto> getMostruario(@PathVariable Long id) {
+        MostruarioDto mostruario = escolaService.getMostruario(id);
+        if (mostruario == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(mostruario);
     }
 
     @PostMapping

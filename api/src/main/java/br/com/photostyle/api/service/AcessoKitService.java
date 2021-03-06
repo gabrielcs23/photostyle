@@ -3,10 +3,7 @@ package br.com.photostyle.api.service;
 import br.com.photostyle.api.email.service.EmailService;
 import br.com.photostyle.api.model.adapter.FotoAdapter;
 import br.com.photostyle.api.model.adapter.PedidoAdapter;
-import br.com.photostyle.api.model.dto.FotoDto;
-import br.com.photostyle.api.model.dto.KitDto;
-import br.com.photostyle.api.model.dto.PedidoDto;
-import br.com.photostyle.api.model.dto.RetornoPedidoDto;
+import br.com.photostyle.api.model.dto.*;
 import br.com.photostyle.api.model.entity.*;
 import br.com.photostyle.api.repository.PedidoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +20,9 @@ public class AcessoKitService {
 
     @Autowired
     private AlunoService alunoService;
+
+    @Autowired
+    private EscolaService escolaService;
 
     @Autowired
     private FotoAdapter fotoAdapter;
@@ -50,7 +50,8 @@ public class AcessoKitService {
             kit.setFotoIndividual(fotoIndDto);
         }
 
-        kit.setEscola(aluno.getEscola().getNome());
+        EscolaEntity escola = aluno.getEscola();
+        kit.setEscola(escola.getNome());
 
         TurmaEntity turma = aluno.getTurma();
         kit.setTurma(turma.getNome());
@@ -65,6 +66,11 @@ public class AcessoKitService {
             List<FotoEntity> fotosIrmaosEntities = irmaoRel.getFotos();
             List<FotoDto> fotosIrmaosDtos = fotoAdapter.entityListToDtoList(fotosIrmaosEntities);
             kit.setFotosIrmaos(fotosIrmaosDtos);
+        }
+
+        MostruarioDto mostruario = escolaService.getMostruario(escola.getId());
+        if (mostruario != null && !CollectionUtils.isEmpty(mostruario.getFotos())) {
+            kit.setFotosMostruarioEscola(mostruario.getFotos());
         }
 
         return kit;

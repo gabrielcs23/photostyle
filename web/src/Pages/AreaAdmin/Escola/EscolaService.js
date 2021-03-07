@@ -61,5 +61,13 @@ class EscolaService extends BaseApiService {
         }
     }
 
+    async downloadCodigoAlunos(id) {
+        try {
+            return await this.axiosInstance.get(`${BASE_URL}/${id}/exportar-codigos`, { responseType: 'blob' })    
+        } catch (error) {
+            throw this.parseError(error);
+        }
+    }
+
 }
 export default new EscolaService();

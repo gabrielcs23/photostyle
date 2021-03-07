@@ -19,6 +19,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -75,7 +77,7 @@ public class EscolaService extends BaseService<EscolaEntity, EscolaDto> {
         return turmaService.entityListToDtoList(escola.getTurmas());
     }
 
-    public Workbook exportarCodigoAlunoPorTurma(EscolaEntity escola) {
+    public ByteArrayOutputStream exportarCodigoAlunoPorTurma(EscolaEntity escola) throws IOException {
         Workbook wb = new XSSFWorkbook();
         for(TurmaEntity turma : escola.getTurmas()) {
             Sheet sheet = wb.createSheet(turma.getNome());
@@ -87,6 +89,9 @@ public class EscolaService extends BaseService<EscolaEntity, EscolaDto> {
                 row.createCell(1).setCellValue(aluno.getCodigoAcesso());
             }
         }
-        return wb;
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        wb.write(stream);
+        wb.close();
+        return stream;
     }
 }

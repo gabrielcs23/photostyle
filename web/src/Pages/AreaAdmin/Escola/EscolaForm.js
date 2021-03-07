@@ -154,6 +154,19 @@ class EscolaForm extends Component {
             });
     }
 
+    downloadCodigoAlunos(id) {
+        EscolaService.downloadCodigoAlunos(id)
+            .then(response => {
+                const url = window.URL.createObjectURL(new Blob([response.data]));
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'listagem_codigos.xlsx';
+                a.click();
+            })
+            .catch(error => this.props.handleUnauthorized(error))
+            .catch(() => PopUp.erro('Erro'));
+    }
+
     render() {
         const { nome, apelido } = this.state;
         return (
@@ -168,6 +181,21 @@ class EscolaForm extends Component {
                             </button>
                         </NavLink>
                     </div>
+                    {this.state.id ?
+                        <div className="col left">
+                            <button
+                                className="btn btn-small waves-effect waves-light green"
+                                onClick={() => this.downloadCodigoAlunos(this.state.id)}
+                                type="button"
+                                >
+                                <span className="d-inline-flex">
+                                    <i className="material-icons">download</i>
+                                    <span className="pl-2">Código Alunos</span>
+                                </span>
+                            </button>
+                        </div>
+                        : null
+                    }
                     <div className="col right">
                         <button
                             className="btn btn-small waves-effect waves-light blue"

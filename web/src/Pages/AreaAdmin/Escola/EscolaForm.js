@@ -57,6 +57,9 @@ class EscolaForm extends Component {
                 .catch(() => PopUp.erro('Erro no cadastro de turma'));
             EscolaService.getMostruario(this.state.id)
                 .then(mostruario => {
+                    if (mostruario.fotos == null) {
+                        mostruario.fotos = [];
+                    }
                     this.setState({ mostruario });
                     M.updateTextFields();
                 })

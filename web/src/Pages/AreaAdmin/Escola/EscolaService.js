@@ -13,10 +13,49 @@ class EscolaService extends BaseApiService {
         }
     }
 
+    async getPorId(id) {
+        try {
+            const res = await this.axiosInstance.get(`${BASE_URL}/${id}`)
+            return res.data;
+        } catch (error) {
+            throw this.parseError(error);
+        }
+    }
+
     async postEscola(escola) {
         try {
             const res = await this.axiosInstance.post(BASE_URL, escola);
             return res.data;
+        } catch (error) {
+            throw this.parseError(error);
+        }
+    }
+
+    async getMostruario(idEscola) {
+        try {
+            const res = await this.axiosInstance.get(`${BASE_URL}/${idEscola}/mostruario`);
+            return res.data;
+        } catch (error) {
+            throw this.parseError(error);
+        }
+    }
+
+    async adicionarFotosMostruario(idMostruario, fotos) {
+        try {
+            const config = {
+                headers: {
+                    'content-type': 'multipart/form-data'
+                }
+            }
+            return await this.axiosInstance.post(`${BASE_URL}/mostruario/${idMostruario}/fotos`, fotos, config);
+        } catch (error) {
+            throw this.parseError(error);
+        }
+    }
+
+    async removerFotoMostruario(idMostruario, idFoto) {
+        try {
+            await this.axiosInstance.delete(`${BASE_URL}/mostruario/${idMostruario}/foto/${idFoto}`)    
         } catch (error) {
             throw this.parseError(error);
         }

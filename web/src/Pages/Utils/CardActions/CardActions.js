@@ -6,6 +6,10 @@ class CardActions extends Component {
     constructor(props) {
         super(props);
         this.idModal = this.props.idModal;
+        this.podeDeletar = this.props.podeDeletar
+        if (this.podeDeletar == null) {
+            this.podeDeletar = true;
+        }
     }
 
     componentDidMount() {
@@ -36,7 +40,9 @@ class CardActions extends Component {
                         >
                             <i className="large material-icons">mode_edit</i>
                         </button>
-                        <button className="left-fab btn-floating halfway-fab waves-effect waves-light red modal-trigger"
+                        <button className={
+                            `left-fab btn-floating halfway-fab waves-effect waves-light red modal-trigger ${!this.podeDeletar ? 'disabled' : ''}`
+                            }
                             data-target={this.idModal}
                         >
                             <i className="material-icons">delete_forever</i>

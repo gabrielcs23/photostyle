@@ -24,7 +24,10 @@ class ListaEscola extends Component {
     render() {
         const lista = this.state.listaEscolas.slice();
         const listaCards = lista.map((escola, idx) => {
-            return <EscolaCard key={idx} escola={escola} selecionar={() => this.props.selecionar(escola)} />
+            return <EscolaCard key={idx} escola={escola}
+                        selecionar={() => this.props.selecionar(escola)}
+                        editar={() => this.props.editar(escola.id)}
+                    />
         });
 
         return (

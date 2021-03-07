@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import CardActions from '../../../Utils/CardActions/CardActions';
 
 const EscolaCard = (props) => {
     const [hovered, setHovered] = useState(false);
@@ -11,9 +12,13 @@ const EscolaCard = (props) => {
             <div className={`card blue-grey lighten-1 ${hovered ? 'z-depth-5' : 'z-depth-2'}`}
                 onMouseEnter={toggleHover}
                 onMouseLeave={toggleHover}
-                onClick={props.selecionar}
             >
-                <div className="card-content white-text">
+                
+                <CardActions podeDeletar={false} editar={props.editar} />
+                
+                <div className="card-content white-text" 
+                    onClick={props.selecionar}
+                >
                     <div className="card-title center-align">
                         <span>{escola.nome}</span>
                     </div>

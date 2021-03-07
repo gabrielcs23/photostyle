@@ -39,6 +39,10 @@ class AreaAdmin extends BasePage {
         this.props.history.push(Rotas.ALUNO_LISTA);
     }
 
+    editarEscola = (id) => {
+        this.props.history.push(Rotas.ESCOLA_EDICAO.replace(':id', id));
+    }
+
     editarTurma = (id) => {
         this.props.history.push(Rotas.TURMA_EDICAO.replace(':id', id));
     }
@@ -127,6 +131,12 @@ class AreaAdmin extends BasePage {
                                     <ListaEscola {...routeProps}
                                         handleUnauthorized={this.handleUnauthorized}
                                         selecionar={this.selecionarEscola}
+                                        editar={this.editarEscola}
+                                    />
+                                )} />
+                                <Route path={Rotas.ESCOLA_EDICAO} exact={true} render={routeProps => (
+                                    <EscolaForm {...routeProps}
+                                        handleUnauthorized={this.handleUnauthorized}
                                     />
                                 )} />
                                 <Route path={Rotas.ESCOLA_NOVO} exact={true} render={routeProps => (

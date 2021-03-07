@@ -39,7 +39,7 @@ public class EscolaController {
 
     @GetMapping("/{id}")
     public ResponseEntity<EscolaDto> getPorId(@PathVariable Long id) {
-        EscolaDto dto = escolaService.getPorId(id);
+        EscolaDto dto = escolaService.getBasicPorId(id);
         if (dto == null) {
             return ResponseEntity.notFound().build();
         }
@@ -74,9 +74,9 @@ public class EscolaController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/mostruario/{idMostruario}/foto")
+    @PostMapping("/mostruario/{idMostruario}/fotos")
     public ResponseEntity<List<FotoDto>> adicionarFotosMostruario(@PathVariable @NotNull Long idMostruario,
-                                                                  @RequestParam("file") List<MultipartFile> files) {
+                                                                  @RequestParam("files") List<MultipartFile> files) {
         try {
             List<FotoDto> fotoDtos = escolaService.adicionaFotosMostruario(idMostruario, files);
             return ResponseEntity.ok(fotoDtos);

@@ -34,6 +34,12 @@ public class EscolaService extends BaseService<EscolaEntity, EscolaDto> {
         super(repository, adapter);
     }
 
+
+    public EscolaDto getBasicPorId(Long id) {
+        EscolaEntity entity = getEntityPorId(id);
+        return ((EscolaAdapter)adapter).createBasicDto(entity);
+    }
+
     @Override
     @Transactional
     public EscolaDto criar(EscolaDto dtoNovo) {

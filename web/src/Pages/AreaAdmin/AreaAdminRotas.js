@@ -3,6 +3,7 @@ const AreaAdminRotas = {
 
     ESCOLA_LISTA: '/admin/escola',
     ESCOLA_NOVO: '/admin/escola/novo',
+    ESCOLA_EDICAO: '/admin/escola/:id/editar',
 
     TURMA_LISTA: '/admin/turma',
     TURMA_NOVO: '/admin/turma/novo',

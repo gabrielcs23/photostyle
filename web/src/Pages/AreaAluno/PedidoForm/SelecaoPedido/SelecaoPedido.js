@@ -99,6 +99,9 @@ export default class SelecaoPedido extends Component {
     }
 
     selecionaQtdOpcao(idxExtra, nome, qtd) {
+        if (!qtd) {
+            qtd = 0;
+        }
         const extras = this.state.extrasSel.slice();
         const extra = extras[idxExtra];
         extra.opcao.set(nome, qtd);

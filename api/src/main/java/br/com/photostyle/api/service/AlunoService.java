@@ -140,7 +140,33 @@ public class AlunoService extends BaseService<AlunoEntity, AlunoDto> {
     }
 
     @Transactional
-    public List<AlunoDto> cadastrasAlunosEmTurma(TurmaEntity turma, List<AlunoDto> alunos) {
+    public List<FotoDto> uploadFotosOpcionais(AlunoEntity aluno, List<MultipartFile> fotos) {
+        List<FotoEntity> fotosOpcionais = aluno.getFotosOpcionais();
+        fotos.forEach(foto -> {
+            FotoEntity uploaded = fotoService.upload(foto);
+            fotosOpcionais.add(uploaded);
+        });
+        aluno.setFotosOpcionais(fotosOpcionais);
+        repository.save(aluno);
+
+        return fotoService.entityListToDtoList(fotosOpcionais);
+    }
+
+    @Transactional
+    public void removerFotoOpcional(AlunoEntity aluno, Long idFoto) {
+        List<FotoEntity> fotos = aluno.getFotosOpcionais();
+        if (!CollectionUtils.isEmpty(fotos)) {
+            List<FotoEntity> fotosFiltradas = fotos.stream()
+                    .filter(foto -> !foto.getId().equals(idFoto))
+                    .collect(Collectors.toList());
+            aluno.setFotosOpcionais(fotosFiltradas);
+            repository.save(aluno);
+            fotoService.remover(idFoto);
+        }
+    }
+
+    @Transactional
+    public List<AlunoDto> cadastrarAlunosEmTurma(TurmaEntity turma, List<AlunoDto> alunos) {
         if (!CollectionUtils.isEmpty(alunos)) {
             return alunos.stream()
                     .map(alunoDto -> {

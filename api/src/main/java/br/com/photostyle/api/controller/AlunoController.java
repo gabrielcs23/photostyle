@@ -91,6 +91,27 @@ public class AlunoController {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("/{id}/opcionais")
+    public ResponseEntity<List<FotoDto>> uploadFotosOpcionais(@PathVariable @NotNull Long id,
+                                                              @RequestParam("files") List<MultipartFile> files) {
+        AlunoEntity entity = alunoService.getEntityPorId(id);
+        if (entity == null) {
+            return ResponseEntity.notFound().build();
+        }
+        List<FotoDto> fotoDtos = alunoService.uploadFotosOpcionais(entity, files);
+        return ResponseEntity.ok(fotoDtos);
+    }
+
+    @DeleteMapping("/{id}/opcionais/{idFoto}")
+    public ResponseEntity<?> removerFotoOpcional(@PathVariable @NotNull Long id, @PathVariable @NotNull Long idFoto) {
+        AlunoEntity entity = alunoService.getEntityPorId(id);
+        if (entity == null) {
+            return ResponseEntity.notFound().build();
+        }
+        alunoService.removerFotoOpcional(entity, idFoto);
+        return ResponseEntity.ok().build();
+    }
+
     @PostMapping("/{idAluno}/mover/{idTurma}")
     public ResponseEntity<AlunoDto> moverAlunoParaTurma(@PathVariable @NotNull Long idAluno, @PathVariable @NotNull Long idTurma) {
         AlunoDto aluno = alunoService.moverAlunoParaTurma(idAluno, idTurma);

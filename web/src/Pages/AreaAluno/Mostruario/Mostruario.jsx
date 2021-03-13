@@ -11,6 +11,7 @@ function Mostruario({ styles, kit, mostraExtras }) {
     fotoIndividual,
     fotosIrmaos,
     fotosTurma,
+    fotosOpcionais,
     fotosMostruarioEscola,
   } = kit;
 
@@ -107,10 +108,25 @@ function Mostruario({ styles, kit, mostraExtras }) {
         </>
       ) : null}
 
+      {fotosOpcionais?.length ? (
+        <>
+          <hr />
+          <div className={`${styles.title} center`}>
+            <h4>Fotos Opcionais</h4>
+          </div>
+
+          <div className="row mb-5">
+            <div className="col s12 mt-2">
+              <DisplayFotos fotos={fotosOpcionais} />
+            </div>
+          </div>
+        </>
+      ) : null}
+
       <hr />
 
       <div className={`${styles.title} center`}>
-        <h4>Extras</h4>
+        <h4>Modelos</h4>
       </div>
 
       <div className={styles.explicacaoCenter}>

@@ -190,6 +190,7 @@ export default class PedidoForm extends Component {
                         seleciona={opcoes => this.selecionaPedido(opcoes)}
                         opcoesTurma={this.props.opcoes?.turma}
                         opcoesIrmaos={this.props.opcoes?.irmaos}
+                        opcoesAdicionais={this.props.opcoes?.adicionais}
                     />
 
                     <div className="row">

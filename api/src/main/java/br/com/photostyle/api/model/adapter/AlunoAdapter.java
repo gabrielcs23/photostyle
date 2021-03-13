@@ -31,6 +31,11 @@ public class AlunoAdapter extends BaseAdapter<AlunoEntity, AlunoDto> {
     public AlunoDto entityToDto(AlunoEntity entity) {
         AlunoDto dto = createBasicDto(entity);
 
+        if (entity.getFotosOpcionais() != null) {
+            List<FotoDto> fotoDtos = fotoAdapter.entityListToDtoList(entity.getFotosOpcionais());
+            dto.setFotosOpcionais(fotoDtos);
+        }
+
         if (entity.getIrmaoRel() != null) {
             IrmaoRelEntity irmaoRelEntity = entity.getIrmaoRel();
             List<AlunoEntity> irmaosEntities = irmaoRelEntity.getIrmaos();

@@ -41,6 +41,7 @@ class AlunoForm extends Component {
                 escola: turma ? turma.escola : '',
                 turma: turma,
                 foto: null,
+                fotosOpcionais: [],
                 irmaoRel: null,
                 codigoAcesso: '',
                 validacao: this.validador.valido(),
@@ -54,6 +55,7 @@ class AlunoForm extends Component {
                 escola: turma ? turma.escola : '',
                 turma: turma,
                 foto: null,
+                fotosOpcionais: [],
                 irmaoRel: null,
                 codigoAcesso: '',
                 validacao: this.validador.valido(),
@@ -73,6 +75,7 @@ class AlunoForm extends Component {
                         escola: aluno.escola,
                         turma: aluno.turma,
                         foto: aluno.foto,
+                        fotosOpcionais: aluno.fotosOpcionais,
                         irmaoRel: aluno.irmaoRel,
                         codigoAcesso: aluno.codigoAcesso
                     });
@@ -121,6 +124,9 @@ class AlunoForm extends Component {
                             return PopUp.erro('Erro no envio da foto');
                         }
                     }
+                    if(this.state.fotosOpcionais?.length > 0) {
+                        return this.uploadFotosOpcionais(aluno.id);
+                    }
                 })
                 .then(() => {
                     if (this.state.irmaoRel?.fotos.length > 0) {
@@ -164,6 +170,13 @@ class AlunoForm extends Component {
         this.setState({foto: foto, canSubmit: true});
     }
 
+    onFotoOpcionalDrop(arq) {
+        const foto = new Foto(arq);
+        const fotos = this.state.fotosOpcionais.slice();
+        fotos.push(foto);
+        this.setState({fotosOpcionais: fotos, canSubmit: true});
+    }
+
     removerFoto() {
         const foto = this.state.foto;
         if (foto.id) {
@@ -173,6 +186,45 @@ class AlunoForm extends Component {
                 .catch(error => PopUp.erro(error));
         }
         this.setState({foto: null});
+    }
+
+    uploadFotosOpcionais(idAluno) {
+        debugger;
+        const fotos = this.state.fotosOpcionais;
+        const formData = new FormData();
+        fotos.forEach(foto => {
+            if (foto.id == null) {
+                const file = foto.formData.get('file');
+                formData.append('files', file, file.name);
+            }
+        });
+
+        AlunoService.uploadFotosOpcionais(idAluno, formData)
+            .then(fotos => {
+                PopUp.sucesso('Foto(s) enviada(s) com sucesso');
+                this.setState({fotosOpcionais: fotos});
+            })
+            .catch(error => this.props.handleUnauthorized(error))
+            .catch(() => {
+                PopUp.erro('Erro no envio de alguma foto');
+            });
+    }
+
+    removerFotoOpcional = (idx) => {
+        const fotos = this.state.mostruario.fotos.slice();
+        if (fotos[idx].id) {
+            const bk = fotos[idx];
+            AlunoService.removerFotoOpcional(this.state.id, fotos[idx].id)
+                .then(() => PopUp.sucesso('Foto removida com sucesso'))
+                .catch(error => this.props.handleUnauthorized(error))
+                .catch(() => {
+                    PopUp.erro('Erro na remoção da foto');
+                    fotos.push(bk);
+                    this.setState({fotosOpcionais: fotos});
+                })
+        }
+        fotos.splice(idx, 1);
+        this.setState({fotosOpcionais: fotos});
     }
 
     relacionarIrmao(irmaoRel) {
@@ -264,11 +316,20 @@ class AlunoForm extends Component {
                     }
                 </div>
 
+                <h4>Foto individual</h4>
                 <FotoDropzone
                     fotos={this.state.foto ? [this.state.foto] : null}
                     multiple={false}
                     onFotoDrop={foto => this.onFotoDrop(foto)}
                     removerFoto={() => this.removerFoto()} 
+                />
+
+                <h4>Fotos opcionais</h4>
+                <FotoDropzone
+                    fotos={this.state.fotosOpcionais.slice()}
+                    onFotoDrop={foto => this.onFotoOpcionalDrop(foto)}
+                    removerFoto={() => this.removerFotoOpcional()}
+                    multiple={true}
                 />
 
                 {this.state.escola ? 

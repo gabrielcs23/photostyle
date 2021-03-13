@@ -68,6 +68,12 @@ public class AcessoKitService {
             kit.setFotosIrmaos(fotosIrmaosDtos);
         }
 
+        List<FotoEntity> fotosOpcionais = aluno.getFotosOpcionais();
+        if (!CollectionUtils.isEmpty(fotosOpcionais)) {
+            List<FotoDto> fotosOpcionaisDtos = fotoAdapter.entityListToDtoList(fotosOpcionais);
+            kit.setFotosOpcionais(fotosOpcionaisDtos);
+        }
+
         MostruarioDto mostruario = escolaService.getMostruario(escola.getId());
         if (mostruario != null && !CollectionUtils.isEmpty(mostruario.getFotos())) {
             kit.setFotosMostruarioEscola(mostruario.getFotos());

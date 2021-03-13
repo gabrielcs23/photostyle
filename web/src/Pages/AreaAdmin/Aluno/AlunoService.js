@@ -69,6 +69,27 @@ class AlunoService extends BaseApiService {
         }
     }
 
+    async uploadFotosOpcionais(id, fotos) {
+        try {
+            const config = {
+                headers: {
+                    'content-type': 'multipart/form-data'
+                }
+            }
+            return await this.axiosInstance.post(`${BASE_URL}/${id}/opcionais`, fotos, config);
+        } catch (error) {
+            throw this.parseError(error);
+        }
+    }
+
+    async removerFotoOpcional(id, idFoto) {
+        try {
+            await this.axiosInstance.delete(`${BASE_URL}/${id}/opcionais/${idFoto}`)    
+        } catch (error) {
+            throw this.parseError(error);
+        }
+    }
+
     async adicionarFotoIrmao(id, foto) {
         try {
             const config = {

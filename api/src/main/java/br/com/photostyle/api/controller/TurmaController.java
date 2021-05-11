@@ -71,15 +71,13 @@ public class TurmaController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/{idTurma}/foto/{idAno}")
-    public ResponseEntity<FotoDto> adicionarFoto(@PathVariable @NotNull Long idTurma,
-                                                 @PathVariable @NotNull Long idAno,
-                                                 @RequestParam("file") MultipartFile foto) {
+    @PostMapping("/{idTurma}/foto")
+    public ResponseEntity<FotoDto> adicionarFoto(@PathVariable @NotNull Long idTurma, @RequestParam("file") MultipartFile foto) {
         TurmaEntity turma = turmaService.getEntityPorId(idTurma);
         if (turma == null) {
             return ResponseEntity.notFound().build();
         }
-        FotoDto dto = turmaService.adicionarFoto(turma, foto, idAno);
+        FotoDto dto = turmaService.adicionarFoto(turma, foto);
         return ResponseEntity.ok(dto);
     }
 

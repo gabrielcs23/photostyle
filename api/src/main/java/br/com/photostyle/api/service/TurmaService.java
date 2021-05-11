@@ -126,8 +126,8 @@ public class TurmaService extends BaseService<TurmaEntity, TurmaDto> {
     }
 
     @Transactional
-    public FotoDto adicionarFoto(TurmaEntity turma, MultipartFile foto, Long idAno) {
-        FotoEntity fotoEntity = fotoService.upload(foto, idAno);
+    public FotoDto adicionarFoto(TurmaEntity turma, MultipartFile foto) {
+        FotoEntity fotoEntity = fotoService.upload(foto);
         turma.getFotos().add(fotoEntity);
         repository.save(turma);
 

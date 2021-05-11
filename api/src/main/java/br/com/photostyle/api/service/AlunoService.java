@@ -114,8 +114,8 @@ public class AlunoService extends BaseService<AlunoEntity, AlunoDto> {
     }
 
     @Transactional
-    public FotoDto uploadFoto(AlunoEntity aluno, MultipartFile foto, Long idAno) {
-        FotoEntity fotoEntity = fotoService.upload(foto, idAno);
+    public FotoDto uploadFoto(AlunoEntity aluno, MultipartFile foto) {
+        FotoEntity fotoEntity = fotoService.upload(foto);
 
         FotoEntity fotoAntiga = null;
         if (aluno.getFoto() != null) {
@@ -187,8 +187,8 @@ public class AlunoService extends BaseService<AlunoEntity, AlunoDto> {
         return irmaoService.relacionaIrmaos(aluno, idsIrmaos);
     }
 
-    public FotoDto adicionarFotoIrmao(AlunoEntity aluno, MultipartFile foto, Long idAno) {
-        return irmaoService.adicionarFotoIrmao(aluno.getIrmaoRel(), foto, idAno);
+    public FotoDto adicionarFotoIrmao(AlunoEntity aluno, MultipartFile foto) {
+        return irmaoService.adicionarFotoIrmao(aluno.getIrmaoRel(), foto);
     }
 
     public void removerFotoIrmao(AlunoEntity aluno, Long idFoto) {

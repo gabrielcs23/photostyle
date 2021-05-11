@@ -71,15 +71,13 @@ public class AlunoController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/{id}/foto/{idAno}")
-    public ResponseEntity<FotoDto> uploadFoto(@PathVariable @NotNull Long id,
-                                              @PathVariable @NotNull Long idAno,
-                                              @RequestParam("file") MultipartFile foto) {
+    @PostMapping("/{id}/foto")
+    public ResponseEntity<FotoDto> uploadFoto(@PathVariable @NotNull Long id, @RequestParam("file") MultipartFile foto) {
         AlunoEntity entity = alunoService.getEntityPorId(id);
         if (entity == null) {
             return ResponseEntity.notFound().build();
         }
-        FotoDto fotoSalva = alunoService.uploadFoto(entity, foto, idAno);
+        FotoDto fotoSalva = alunoService.uploadFoto(entity, foto);
         return ResponseEntity.ok(fotoSalva);
     }
 
@@ -112,15 +110,13 @@ public class AlunoController {
         return ResponseEntity.ok(relacionamento);
     }
 
-    @PostMapping("/{idAluno}/foto-irmao/{idAno}")
-    public ResponseEntity<FotoDto> adicionarFotoIrmao(@PathVariable @NotNull Long idAluno,
-                                                      @PathVariable @NotNull Long idAno,
-                                                      @RequestParam("file") MultipartFile foto) {
+    @PostMapping("/{idAluno}/foto-irmao")
+    public ResponseEntity<FotoDto> adicionarFotoIrmao(@PathVariable @NotNull Long idAluno, @RequestParam("file") MultipartFile foto) {
         AlunoEntity aluno = alunoService.getEntityPorId(idAluno);
         if (aluno == null || aluno.getIrmaoRel() == null) {
             return ResponseEntity.notFound().build();
         }
-        FotoDto fotoDto = alunoService.adicionarFotoIrmao(aluno, foto, idAno);
+        FotoDto fotoDto = alunoService.adicionarFotoIrmao(aluno, foto);
         return ResponseEntity.ok(fotoDto);
     }
 

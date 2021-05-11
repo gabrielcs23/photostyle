@@ -5,6 +5,7 @@ import br.com.photostyle.api.model.adapter.FotoAdapter;
 import br.com.photostyle.api.model.adapter.PedidoAdapter;
 import br.com.photostyle.api.model.dto.*;
 import br.com.photostyle.api.model.entity.*;
+import br.com.photostyle.api.model.entity.pedido.PedidoEntity;
 import br.com.photostyle.api.repository.PedidoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

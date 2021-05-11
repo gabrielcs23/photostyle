@@ -12,7 +12,10 @@ public class MostruarioEntity extends BaseEntity {
     private EscolaEntity escola;
 
     @OneToMany(cascade = CascadeType.REMOVE)
-    @JoinTable(name="RL_MOSTRUARIO_FOTOS", joinColumns=@JoinColumn(name="ID_MOSTRUARIO"), inverseJoinColumns=@JoinColumn(name="ID_FOTO"))
+    @JoinTable(
+            name = "RL_MOSTRUARIO_FOTOS",
+            joinColumns = @JoinColumn(name = "ID_MOSTRUARIO"),
+            inverseJoinColumns = @JoinColumn(name = "ID_FOTO"))
     private List<FotoEntity> fotos;
 
     public EscolaEntity getEscola() {

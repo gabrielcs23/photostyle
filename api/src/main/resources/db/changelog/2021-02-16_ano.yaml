@@ -43,14 +43,6 @@ databaseChangeLog:
         referencedTableName: ano
         validate: true
 - changeSet:
-    id: 1613511391000-4
-    author: gabri (generated)
-    changes:
-    - addUniqueConstraint:
-        columnNames: nome
-        constraintName: UC_ANONOME_COL
-        tableName: ano
-- changeSet:
     id:  insert-ano
     author:  gabri
     changes:
@@ -61,7 +53,7 @@ databaseChangeLog:
         dbms:  'all'
         sql:  UPDATE foto SET foto.ano_id = (SELECT ano.id FROM ano WHERE ano.nome = '2020');
 - changeSet:
-    id: 1613511391000-5
+    id: 1613517048516-1
     author: gabri (generated)
     changes:
     - addNotNullConstraint:

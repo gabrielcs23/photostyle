@@ -2,6 +2,3 @@ databaseChangeLog:
 - include:
     file: changelog/2021-02-16_initial.yaml
     relativeToChangelogFile: true
-- include:
-    file: changelog/2021-02-16_ano.yaml
-    relativeToChangelogFile: true

@@ -517,11 +517,4 @@ databaseChangeLog:
         referencedColumnNames: id
         referencedTableName: rl_irmao
         validate: true
-- changeSet:
-    id: populate-initial
-    author: gabri
-    changes:
-    - sqlFile:
-        dbms: 'all'
-        path: db/sql/16-02-2021.sql
-        stripComments: true
+

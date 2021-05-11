@@ -44,8 +44,7 @@ public class AcessoKitService {
         KitDto kit = new KitDto();
         kit.setCodigoAcesso(aluno.getCodigoAcesso());
         kit.setNomeAluno(aluno.getNome());
-        // FIXME
-        FotoEntity fotoIndividual = aluno.getFotos().get(0);
+        FotoEntity fotoIndividual = aluno.getFoto();
         if (fotoIndividual != null) {
             FotoDto fotoIndDto = fotoAdapter.entityToDto(fotoIndividual);
             kit.setFotoIndividual(fotoIndDto);

@@ -85,14 +85,13 @@ public class AlunoController {
         return ResponseEntity.ok(fotoSalva);
     }
 
-    @DeleteMapping("/{idAluno}/foto/{idFoto}")
-    public ResponseEntity<?> removerFoto(@PathVariable @NotNull Long idAluno,
-                                         @PathVariable @NotNull Long idFoto) {
-        AlunoEntity entity = alunoService.getEntityPorId(idAluno);
-        if (entity == null) {
+    @DeleteMapping("/{id}/foto")
+    public ResponseEntity<?> removerFoto(@PathVariable @NotNull Long id) {
+        AlunoEntity entity = alunoService.getEntityPorId(id);
+        if (entity == null || entity.getFoto() == null) {
             return ResponseEntity.notFound().build();
         }
-        alunoService.removeFoto(entity, idFoto);
+        alunoService.removeFoto(entity);
         return ResponseEntity.ok().build();
     }
 

@@ -1,7 +1,6 @@
 package br.com.photostyle.api.model.entity;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Table(name = "ALUNO")
@@ -28,9 +27,8 @@ public class AlunoEntity extends BaseEntity {
     @JoinColumn(name = "RL_IRMAO_ID")
     private IrmaoRelEntity irmaoRel;
 
-    @OneToMany(cascade = CascadeType.REMOVE)
-    @JoinTable(name="RL_ALUNO_FOTOS", joinColumns=@JoinColumn(name="ID_ALUNO"), inverseJoinColumns=@JoinColumn(name="ID_FOTO"))
-    private List<FotoEntity> fotos;
+    @OneToOne
+    private FotoEntity foto;
 
     public String getNome() {
         return nome;
@@ -80,12 +78,12 @@ public class AlunoEntity extends BaseEntity {
         this.irmaoRel = irmaoRel;
     }
 
-    public List<FotoEntity> getFotos() {
-        return fotos;
+    public FotoEntity getFoto() {
+        return foto;
     }
 
-    public void setFotos(List<FotoEntity> fotos) {
-        this.fotos = fotos;
+    public void setFoto(FotoEntity foto) {
+        this.foto = foto;
     }
 
     @Override

@@ -70,6 +70,8 @@ export default class SelecaoPedido extends Component {
                 return this.props.opcoesTurma?.slice();
             case 'I':
                 return this.props.opcoesIrmaos?.slice();
+            case 'O':
+                return this.props.opcoesAdicionais?.slice();
             default:
                 return [];
         }
@@ -77,6 +79,10 @@ export default class SelecaoPedido extends Component {
 
     possuiFotosIrmaos() {
         return this.props.opcoesIrmaos?.length > 0;
+    }
+
+    possuiFotoAdicional() {
+        return this.props.opcoesAdicionais?.length > 0;
     }
 
     inicializaOpcao(extra, opcao) {
@@ -99,6 +105,9 @@ export default class SelecaoPedido extends Component {
     }
 
     selecionaQtdOpcao(idxExtra, nome, qtd) {
+        if (!qtd) {
+            qtd = 0;
+        }
         const extras = this.state.extrasSel.slice();
         const extra = extras[idxExtra];
         extra.opcao.set(nome, qtd);
@@ -179,6 +188,9 @@ export default class SelecaoPedido extends Component {
         });
         const checkBoxExtras = this.state.extrasSel.map((extra, idx) => {
             if (extra.modeloOpcao === 'I' && !this.possuiFotosIrmaos()) {
+                return null;
+            }
+            if (extra.modeloOpcao === 'O' && !this.possuiFotoAdicional()) {
                 return null;
             }
             return (

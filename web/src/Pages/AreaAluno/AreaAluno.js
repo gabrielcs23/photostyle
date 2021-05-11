@@ -57,7 +57,7 @@ export default class AreaAluno extends BasePage {
     return fts;
   }
 
-  getOpcoesFotos(ftsTurma, ftsIrmaos) {
+  getOpcoesFotos(ftsTurma, ftsIrmaos, ftsOpcionais) {
     let fotos = {};
     if (ftsTurma && ftsTurma.length > 0) {
       fotos.turma = ftsTurma.map((ft) => {
@@ -67,6 +67,11 @@ export default class AreaAluno extends BasePage {
     if (ftsIrmaos && ftsIrmaos.length > 0) {
       fotos.irmaos = ftsIrmaos.map((ft) => {
         return { nome: ft.descricao };
+      });
+    }
+    if (ftsOpcionais && ftsOpcionais.length > 0) {
+      fotos.adicionais = ftsOpcionais.map(ft => { 
+        return { nome: ft.descricao }
       });
     }
     return fotos;
@@ -82,7 +87,7 @@ export default class AreaAluno extends BasePage {
       return <Loading />;
     }
     if (!this.state.nPedido) {
-      const opcoes = this.getOpcoesFotos(kit.fotosTurma, kit.fotosIrmaos);
+      const opcoes = this.getOpcoesFotos(kit.fotosTurma, kit.fotosIrmaos, kit.fotosOpcionais);
       return (
         <>
           <div className={`${styles.title} center`}>

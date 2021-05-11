@@ -4,6 +4,8 @@ package br.com.photostyle.api.model.dto;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
+import java.util.List;
+
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", scope = AlunoDto.class)
 public class AlunoDto {
 
@@ -22,6 +24,8 @@ public class AlunoDto {
     private IrmaoRelDto irmaoRel;
 
     private FotoDto foto;
+
+    private List<FotoDto> fotosOpcionais;
 
     public Long getId() {
         return id;
@@ -85,5 +89,13 @@ public class AlunoDto {
 
     public void setFoto(FotoDto foto) {
         this.foto = foto;
+    }
+
+    public List<FotoDto> getFotosOpcionais() {
+        return fotosOpcionais;
+    }
+
+    public void setFotosOpcionais(List<FotoDto> fotosOpcionais) {
+        this.fotosOpcionais = fotosOpcionais;
     }
 }

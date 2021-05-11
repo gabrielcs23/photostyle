@@ -24,13 +24,7 @@ public class EscolaAdapter extends BaseAdapter<EscolaEntity, EscolaDto>{
 
     @Override
     public EscolaDto entityToDto(EscolaEntity entity) {
-        if (entity == null) {
-            return null;
-        }
-        EscolaDto dto = new EscolaDto();
-        dto.setId(entity.getId());
-        dto.setNome(entity.getNome());
-        dto.setApelido(entity.getApelido());
+        EscolaDto dto = createBasicDto(entity);
         if (!CollectionUtils.isEmpty(entity.getTurmas())){
             List<TurmaDto> turmasDto = entity.getTurmas().stream()
                     .map(turmaEntity -> {
@@ -44,6 +38,17 @@ public class EscolaAdapter extends BaseAdapter<EscolaEntity, EscolaDto>{
         } else {
             dto.setTurmas(new ArrayList<>());
         }
+        return dto;
+    }
+
+    public EscolaDto createBasicDto(EscolaEntity entity) {
+        if (entity == null) {
+            return null;
+        }
+        EscolaDto dto = new EscolaDto();
+        dto.setId(entity.getId());
+        dto.setNome(entity.getNome());
+        dto.setApelido(entity.getApelido());
         return dto;
     }
 

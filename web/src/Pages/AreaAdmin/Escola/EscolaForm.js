@@ -5,6 +5,9 @@ import EscolaService from './EscolaService';
 import Escola from '../../../Model/Escola';
 import FormValidator from '../form-utils/FormValidator';
 import PopUp from '../../Utils/pop-up/PopUp'
+import M from 'materialize-css';
+import FotoDropzone from '../../Utils/FotoDropzone/FotoDropzone';
+import Foto from '../../../Model/Foto';
 
 class EscolaForm extends Component {
     
@@ -20,15 +23,49 @@ class EscolaForm extends Component {
             },
         ]);
 
-        this.stateInicial = {
+        const { match: { params } } = this.props;
+
+        this.state = {
+            id: '',
             nome: '',
             apelido: '',
+            mostruario: {
+                id: '',
+                fotos: []
+            },
             validacao: this.validador.valido(),
             canSubmit: false
+        };
+
+        if (params.id) {
+            this.state.id = params.id;
         }
+    }
 
-        this.state = this.stateInicial;
-
+    componentDidMount() {
+        if(this.state.id) {
+            EscolaService.getPorId(this.state.id)
+                .then(escola => {
+                    this.setState({
+                        id: escola.id,
+                        nome: escola.nome,
+                        apelido: escola.apelido
+                    });
+                    M.updateTextFields();
+                })
+                .catch(error => this.props.handleUnauthorized(error))
+                .catch(() => PopUp.erro('Erro no cadastro de turma'));
+            EscolaService.getMostruario(this.state.id)
+                .then(mostruario => {
+                    if (mostruario.fotos == null) {
+                        mostruario.fotos = [];
+                    }
+                    this.setState({ mostruario });
+                    M.updateTextFields();
+                })
+                .catch(error => this.props.handleUnauthorized(error))
+                .catch(() => PopUp.erro('Erro'));
+        }
     }
 
     inputChangeHandler = (event) => {
@@ -40,10 +77,41 @@ class EscolaForm extends Component {
         });
     }
 
+    onFotoDrop = (arq) => {
+        const foto = new Foto(arq);
+        const mostruario = this.state.mostruario;
+        mostruario.fotos.push(foto);
+        this.setState({mostruario: mostruario, canSubmit: true});
+    }
+
+    removerFoto = (idx) => {
+        const fotos = this.state.mostruario.fotos.slice();
+        const mostruario = this.state.mostruario;
+        if (fotos[idx].id) {
+            const bk = fotos[idx];
+            EscolaService.removerFotoMostruario(mostruario.id, fotos[idx].id)
+                .then(() => PopUp.sucesso('Foto removida com sucesso'))
+                .catch(error => this.props.handleUnauthorized(error))
+                .catch(() => {
+                    PopUp.erro('Erro na remoção da foto');
+                    fotos.push(bk);
+                    mostruario.fotos = fotos;
+                    this.setState({mostruario: mostruario});
+                })
+        }
+        fotos.splice(idx, 1);
+        mostruario.fotos = fotos
+        this.setState({mostruario: mostruario});
+    }
+
     submitForm = () => {
         this.setState({canSubmit: false});
         const validacao = this.validador.valida(this.state);
 
+        if (this.state.id) {
+            return this.uploadFotos();
+        }
+        
         if (validacao.isValid) {
             const escola = new Escola(this.state.nome);
             escola.apelido = this.state.apelido;
@@ -66,6 +134,42 @@ class EscolaForm extends Component {
         }
     }
 
+    uploadFotos() {
+        const { fotos } = this.state.mostruario;
+        const formData = new FormData();
+        fotos.forEach(foto => {
+            if (foto.id == null) {
+                const file = foto.formData.get('file');
+                formData.append('files', file, file.name);
+            }
+        });
+        const voltar = () => this.props.history.push(Rotas.ESCOLA_LISTA);
+
+        EscolaService.adicionarFotosMostruario(this.state.mostruario.id, formData)
+            .then(() => {
+                PopUp.sucesso('Foto(s) enviada(s) com sucesso');
+                voltar();
+            })
+            .catch(error => this.props.handleUnauthorized(error))
+            .catch(() => {
+                PopUp.erro('Erro no envio de alguma foto');
+                voltar();
+            });
+    }
+
+    downloadCodigoAlunos(id) {
+        EscolaService.downloadCodigoAlunos(id)
+            .then(response => {
+                const url = window.URL.createObjectURL(new Blob([response.data]));
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'listagem_codigos.xlsx';
+                a.click();
+            })
+            .catch(error => this.props.handleUnauthorized(error))
+            .catch(() => PopUp.erro('Erro'));
+    }
+
     render() {
         const { nome, apelido } = this.state;
         return (
@@ -80,6 +184,21 @@ class EscolaForm extends Component {
                             </button>
                         </NavLink>
                     </div>
+                    {this.state.id ?
+                        <div className="col left">
+                            <button
+                                className="btn btn-small waves-effect waves-light green"
+                                onClick={() => this.downloadCodigoAlunos(this.state.id)}
+                                type="button"
+                                >
+                                <span className="d-inline-flex">
+                                    <i className="material-icons">download</i>
+                                    <span className="pl-2">Código Alunos</span>
+                                </span>
+                            </button>
+                        </div>
+                        : null
+                    }
                     <div className="col right">
                         <button
                             className="btn btn-small waves-effect waves-light blue"
@@ -105,6 +224,7 @@ class EscolaForm extends Component {
                             name="nome"
                             value={nome}
                             onChange={this.inputChangeHandler}
+                            disabled={this.state.id}
                         />
                     </div>
                 </div>
@@ -117,9 +237,24 @@ class EscolaForm extends Component {
                             name="apelido"
                             value={apelido}
                             onChange={this.inputChangeHandler}
+                            disabled={this.state.id}
                         />
                     </div>
                 </div>
+
+                {this.state.id ? 
+                    <>
+                        <h5 className="mb-4">Fotos Mostruário</h5>
+                        <FotoDropzone
+                            fotos={this.state.mostruario.fotos.slice()}
+                            onFotoDrop={this.onFotoDrop}
+                            removerFoto={this.removerFoto}
+                            multiple={true}
+                        />
+                    </>
+                    : null
+                }
+
             </form>
         )
     }

@@ -2,3 +2,9 @@ databaseChangeLog:
 - include:
     file: changelog/2021-02-16_initial.yaml
     relativeToChangelogFile: true
+- include:
+      file: changelog/2021-03-06_mostruario.yaml
+      relativeToChangelogFile: true
+- include:
+    file: changelog/2021-03-13_aluno_opcionais.yaml
+    relativeToChangelogFile: true

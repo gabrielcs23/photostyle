@@ -1,0 +1,53 @@
+databaseChangeLog:
+- changeSet:
+    id: 1615660548762-1
+    author: gabri (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+            name: id_aluno
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: id_foto
+            type: BIGINT
+        tableName: rl_aluno_opcionais
+- changeSet:
+    id: 1615660548762-2
+    author: gabri (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: id_foto
+        constraintName: UK_ALUNO_OPCIONAIS
+        tableName: rl_aluno_opcionais
+- changeSet:
+    id: 1615660548762-3
+    author: gabri (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: id_foto
+        baseTableName: rl_aluno_opcionais
+        constraintName: FK_FOTO_RL_ALUNO_OPCIONAIS
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: foto
+        validate: true
+- changeSet:
+    id: 1615660548762-4
+    author: gabri (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: id_aluno
+        baseTableName: rl_aluno_opcionais
+        constraintName: FK_ALUNO_RL_ALUNO_OPCIONAIS
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: aluno
+        validate: true
+

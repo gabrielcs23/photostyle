@@ -14,7 +14,6 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -109,7 +108,7 @@ public class TurmaService extends BaseService<TurmaEntity, TurmaDto> {
 
     public List<AlunoDto> cadastrarAlunos(Long id, List<AlunoDto> alunos) {
         TurmaEntity turma = getEntityPorId(id);
-        return alunoService.cadastrasAlunosEmTurma(turma, alunos);
+        return alunoService.cadastrarAlunosEmTurma(turma, alunos);
     }
 
     @Transactional

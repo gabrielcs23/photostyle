@@ -11,6 +11,8 @@ public class KitDto {
     private FotoDto fotoIndividual;
     private List<FotoDto> fotosTurma;
     private List<FotoDto> fotosIrmaos;
+    private List<FotoDto> fotosOpcionais;
+    private List<FotoDto> fotosMostruarioEscola;
 
     public String getCodigoAcesso() {
         return codigoAcesso;
@@ -66,5 +68,21 @@ public class KitDto {
 
     public void setFotosIrmaos(List<FotoDto> fotosIrmaos) {
         this.fotosIrmaos = fotosIrmaos;
+    }
+
+    public List<FotoDto> getFotosOpcionais() {
+        return fotosOpcionais;
+    }
+
+    public void setFotosOpcionais(List<FotoDto> fotosOpcionais) {
+        this.fotosOpcionais = fotosOpcionais;
+    }
+
+    public List<FotoDto> getFotosMostruarioEscola() {
+        return fotosMostruarioEscola;
+    }
+
+    public void setFotosMostruarioEscola(List<FotoDto> fotosMostruarioEscola) {
+        this.fotosMostruarioEscola = fotosMostruarioEscola;
     }
 }

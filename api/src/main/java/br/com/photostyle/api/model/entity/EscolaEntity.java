@@ -13,6 +13,9 @@ public class EscolaEntity extends BaseEntity {
     @Column(name = "APELIDO")
     private String apelido;
 
+    @OneToOne(mappedBy = "escola", fetch = FetchType.LAZY)
+    private MostruarioEntity mostruario;
+
     @OneToMany(mappedBy = "escola", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<TurmaEntity> turmas;
 

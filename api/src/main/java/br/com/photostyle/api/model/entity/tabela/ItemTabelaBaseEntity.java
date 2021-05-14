@@ -1,4 +1,4 @@
-package br.com.photostyle.api.model.entity.pedido;
+package br.com.photostyle.api.model.entity.tabela;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -11,9 +11,11 @@ public abstract class ItemTabelaBaseEntity {
     @Column(name = "ID")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "TAB_ID", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private TabelaDePrecoEntity tabela;
+
+    @Column(name="TAB_ID", updatable=false, insertable=false)
+    public Long tabelaId;
 
     @Column(name = "NOME", nullable = false)
     private String nome;
@@ -35,6 +37,14 @@ public abstract class ItemTabelaBaseEntity {
 
     public void setTabela(TabelaDePrecoEntity tabela) {
         this.tabela = tabela;
+    }
+
+    public Long getTabelaId() {
+        return tabelaId;
+    }
+
+    public void setTabelaId(Long tabelaId) {
+        this.tabelaId = tabelaId;
     }
 
     public String getNome() {

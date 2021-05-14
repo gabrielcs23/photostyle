@@ -1,20 +1,20 @@
-package br.com.photostyle.api.model.entity.pedido;
+package br.com.photostyle.api.model.entity.tabela;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "OpcaoExtra")
+@Table(name = "OPCAO_EXTRA")
 public class OpcaoExtraEntity extends ItemTabelaBaseEntity {
 
-    @Column(name = "isIrmao", nullable = false)
+    @Column(name = "IS_IRMAO", nullable = false)
     private boolean isIrmao;
 
-    @Column(name = "isDigital", nullable = false)
+    @Column(name = "IS_DIGITAL", nullable = false)
     private boolean isDigital;
 
-    @Column(name = "isOpcional", nullable = false)
+    @Column(name = "IS_OPCIONAL", nullable = false)
     private boolean isOpcional;
 
     public boolean isIrmao() {

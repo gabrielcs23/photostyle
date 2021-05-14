@@ -1,4 +1,4 @@
-package br.com.photostyle.api.model.dto;
+package br.com.photostyle.api.model.dto.pedido;
 
 public class RetornoPedidoDto {
 

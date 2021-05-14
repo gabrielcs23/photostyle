@@ -1,4 +1,4 @@
-package br.com.photostyle.api.model.entity.pedido;
+package br.com.photostyle.api.model.entity.tabela;
 
 import br.com.photostyle.api.model.entity.BaseEntity;
 import br.com.photostyle.api.model.entity.EscolaEntity;
@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "TabelaPreco")
+@Table(name = "TABELA_PRECO")
 public class TabelaDePrecoEntity extends BaseEntity {
 
     @OneToOne(fetch = FetchType.LAZY)

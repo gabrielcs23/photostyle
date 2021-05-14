@@ -1,14 +1,12 @@
 package br.com.photostyle.api.controller;
 
-import br.com.photostyle.api.model.dto.KitDto;
-import br.com.photostyle.api.model.dto.PedidoDto;
-import br.com.photostyle.api.model.dto.RetornoPedidoDto;
+import br.com.photostyle.api.model.dto.kit.KitDto;
+import br.com.photostyle.api.model.dto.pedido.PedidoDto;
+import br.com.photostyle.api.model.dto.pedido.RetornoPedidoDto;
 import br.com.photostyle.api.service.AcessoKitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.xml.ws.Response;
 
 @RestController
 @RequestMapping("/api/kit")

@@ -1,14 +1,14 @@
-package br.com.photostyle.api.model.entity.pedido;
+package br.com.photostyle.api.model.entity.tabela;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "OpcaoKit")
+@Table(name = "OPCAO_KIT")
 public class OpcaoKitEntity extends ItemTabelaBaseEntity {
 
-    @Column(name = "isIrmao", nullable = false)
+    @Column(name = "IS_IRMAO", nullable = false)
     private boolean isIrmao;
 
     public boolean isIrmao() {

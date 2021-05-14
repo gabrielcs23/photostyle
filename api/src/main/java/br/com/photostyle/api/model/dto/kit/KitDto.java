@@ -1,4 +1,6 @@
-package br.com.photostyle.api.model.dto;
+package br.com.photostyle.api.model.dto.kit;
+
+import br.com.photostyle.api.model.dto.FotoDto;
 
 import java.util.List;
 

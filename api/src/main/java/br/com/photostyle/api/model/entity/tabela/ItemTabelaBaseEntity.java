@@ -43,10 +43,6 @@ public abstract class ItemTabelaBaseEntity {
         return tabelaId;
     }
 
-    public void setTabelaId(Long tabelaId) {
-        this.tabelaId = tabelaId;
-    }
-
     public String getNome() {
         return nome;
     }

@@ -1,6 +1,6 @@
 databaseChangeLog:
 - changeSet:
-    id: 1620751528788-1
+    id: 1621012795303-1
     author: gabri (generated)
     changes:
     - createTable:
@@ -18,6 +18,11 @@ databaseChangeLog:
               nullable: false
             name: nome
             type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: tab_id
+            type: BIGINT
         - column:
             constraints:
               nullable: false
@@ -41,14 +46,9 @@ databaseChangeLog:
             name: is_opcional
             defaultValueBoolean: false
             type: BIT
-        - column:
-            constraints:
-              nullable: false
-            name: tab_id
-            type: BIGINT
         tableName: opcao_extra
 - changeSet:
-    id: 1620751528788-2
+    id: 1621012795303-2
     author: gabri (generated)
     changes:
     - createTable:
@@ -69,6 +69,11 @@ databaseChangeLog:
         - column:
             constraints:
               nullable: false
+            name: tab_id
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
             name: valor
             type: DECIMAL(19, 2)
         - column:
@@ -77,14 +82,9 @@ databaseChangeLog:
             name: is_irmao
             defaultValueBoolean: false
             type: BIT
-        - column:
-            constraints:
-              nullable: false
-            name: tab_id
-            type: BIGINT
         tableName: opcao_kit
 - changeSet:
-    id: 1620751528788-3
+    id: 1621012795303-3
     author: gabri (generated)
     changes:
     - createTable:
@@ -104,7 +104,7 @@ databaseChangeLog:
             type: BIGINT
         tableName: tabela_preco
 - changeSet:
-    id: 1620751528788-4
+    id: 1621012795303-4
     author: gabri (generated)
     changes:
     - addForeignKeyConstraint:
@@ -117,7 +117,7 @@ databaseChangeLog:
         referencedTableName: tabela_preco
         validate: true
 - changeSet:
-    id: 1620751528788-5
+    id: 1621012795303-5
     author: gabri (generated)
     changes:
     - addForeignKeyConstraint:
@@ -130,7 +130,7 @@ databaseChangeLog:
         referencedTableName: escola
         validate: true
 - changeSet:
-    id: 1620751528788-6
+    id: 1621012795303-6
     author: gabri (generated)
     changes:
     - addForeignKeyConstraint:

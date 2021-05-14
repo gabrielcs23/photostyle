@@ -1,20 +1,18 @@
 package br.com.photostyle.api.model.entity.tabela;
 
+import br.com.photostyle.api.model.entity.BaseEntity;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 
 @MappedSuperclass
-public abstract class ItemTabelaBaseEntity {
+public abstract class ItemTabelaBaseEntity extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
-    private Long id;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "TAB_ID", nullable = false)
     private TabelaDePrecoEntity tabela;
 
-    @Column(name="TAB_ID", updatable=false, insertable=false)
+    @Column(name="TAB_ID", nullable = false, updatable=false, insertable=false)
     public Long tabelaId;
 
     @Column(name = "NOME", nullable = false)
@@ -22,14 +20,6 @@ public abstract class ItemTabelaBaseEntity {
 
     @Column(nullable = false)
     private BigDecimal valor;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public TabelaDePrecoEntity getTabela() {
         return tabela;

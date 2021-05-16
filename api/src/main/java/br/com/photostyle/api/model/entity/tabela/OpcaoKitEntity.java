@@ -9,7 +9,7 @@ import javax.persistence.Table;
 public class OpcaoKitEntity extends ItemTabelaBaseEntity {
 
     @Column(name = "IS_IRMAO", nullable = false)
-    private boolean isIrmao;
+    private boolean isIrmao = false;
 
     public boolean isIrmao() {
         return isIrmao;

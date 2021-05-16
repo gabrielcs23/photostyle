@@ -46,6 +46,12 @@ databaseChangeLog:
             name: is_opcional
             defaultValueBoolean: false
             type: BIT
+        - column:
+            constraints:
+              nullable: false
+            name: is_turma
+            defaultValueBoolean: false
+            type: BIT
         tableName: opcao_extra
 - changeSet:
     id: 1621012795303-2

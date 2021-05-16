@@ -9,6 +9,7 @@ public class OpcaoExtraDto {
     private String nome;
     private BigDecimal valor;
     private boolean isIrmao;
+    private boolean isTurma;
     private boolean isDigital;
     private boolean isOpcional;
 
@@ -50,6 +51,14 @@ public class OpcaoExtraDto {
 
     public void setIrmao(boolean irmao) {
         isIrmao = irmao;
+    }
+
+    public boolean isTurma() {
+        return isTurma;
+    }
+
+    public void setTurma(boolean turma) {
+        isTurma = turma;
     }
 
     public boolean isDigital() {

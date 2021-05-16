@@ -9,13 +9,16 @@ import javax.persistence.Table;
 public class OpcaoExtraEntity extends ItemTabelaBaseEntity {
 
     @Column(name = "IS_IRMAO", nullable = false)
-    private boolean isIrmao;
+    private boolean isIrmao = false;
 
     @Column(name = "IS_DIGITAL", nullable = false)
-    private boolean isDigital;
+    private boolean isDigital = false;
 
     @Column(name = "IS_OPCIONAL", nullable = false)
-    private boolean isOpcional;
+    private boolean isOpcional = false;
+
+    @Column(name = "IS_TURMA", nullable = false)
+    private boolean isTurma = false;
 
     public boolean isIrmao() {
         return isIrmao;
@@ -39,5 +42,13 @@ public class OpcaoExtraEntity extends ItemTabelaBaseEntity {
 
     public void setOpcional(boolean opcional) {
         isOpcional = opcional;
+    }
+
+    public boolean isTurma() {
+        return isTurma;
+    }
+
+    public void setTurma(boolean turma) {
+        isTurma = turma;
     }
 }

@@ -16,10 +16,10 @@ public class OpcaoExtraAdapter extends BaseAdapter<OpcaoExtraEntity, OpcaoExtraD
         entity.setId(dto.getId());
         entity.setNome(dto.getNome());
         entity.setValor(dto.getValor());
-        entity.setIrmao(dto.isIrmao());
-        entity.setDigital(dto.isDigital());
-        entity.setOpcional(dto.isOpcional());
-        entity.setTurma(dto.isTurma());
+        entity.setIrmao(dto.getIsIrmao());
+        entity.setDigital(dto.getIsDigital());
+        entity.setOpcional(dto.getIsOpcional());
+        entity.setTurma(dto.getIsTurma());
         return entity;
     }
 
@@ -30,10 +30,10 @@ public class OpcaoExtraAdapter extends BaseAdapter<OpcaoExtraEntity, OpcaoExtraD
         dto.setTabela(entity.getTabelaId());
         dto.setNome(entity.getNome());
         dto.setValor(entity.getValor());
-        dto.setIrmao(entity.isIrmao());
-        dto.setDigital(entity.isDigital());
-        dto.setOpcional(entity.isOpcional());
-        dto.setTurma(entity.isTurma());
+        dto.setIsIrmao(entity.isIrmao());
+        dto.setIsDigital(entity.isDigital());
+        dto.setIsOpcional(entity.isOpcional());
+        dto.setIsTurma(entity.isTurma());
         return dto;
     }
 

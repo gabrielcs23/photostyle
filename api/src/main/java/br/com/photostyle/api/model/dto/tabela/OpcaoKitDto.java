@@ -42,11 +42,11 @@ public class OpcaoKitDto {
         this.valor = valor;
     }
 
-    public boolean isIrmao() {
+    public boolean getIsIrmao() {
         return isIrmao;
     }
 
-    public void setIrmao(boolean irmao) {
+    public void setIsIrmao(boolean irmao) {
         isIrmao = irmao;
     }
 }

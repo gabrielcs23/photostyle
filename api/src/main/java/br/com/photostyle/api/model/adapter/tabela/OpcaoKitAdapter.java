@@ -17,7 +17,7 @@ public class OpcaoKitAdapter extends BaseAdapter<OpcaoKitEntity, OpcaoKitDto> {
         entity.setId(dto.getId());
         entity.setNome(dto.getNome());
         entity.setValor(dto.getValor());
-        entity.setIrmao(dto.isIrmao());
+        entity.setIrmao(dto.getIsIrmao());
         return entity;
     }
 
@@ -28,7 +28,7 @@ public class OpcaoKitAdapter extends BaseAdapter<OpcaoKitEntity, OpcaoKitDto> {
         dto.setTabela(entity.getTabelaId());
         dto.setNome(entity.getNome());
         dto.setValor(entity.getValor());
-        dto.setIrmao(entity.isIrmao());
+        dto.setIsIrmao(entity.isIrmao());
         return dto;
     }
 

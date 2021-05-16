@@ -45,35 +45,35 @@ public class OpcaoExtraDto {
         this.valor = valor;
     }
 
-    public boolean isIrmao() {
+    public boolean getIsIrmao() {
         return isIrmao;
     }
 
-    public void setIrmao(boolean irmao) {
+    public void setIsIrmao(boolean irmao) {
         isIrmao = irmao;
     }
 
-    public boolean isTurma() {
+    public boolean getIsTurma() {
         return isTurma;
     }
 
-    public void setTurma(boolean turma) {
+    public void setIsTurma(boolean turma) {
         isTurma = turma;
     }
 
-    public boolean isDigital() {
+    public boolean getIsDigital() {
         return isDigital;
     }
 
-    public void setDigital(boolean digital) {
+    public void setIsDigital(boolean digital) {
         isDigital = digital;
     }
 
-    public boolean isOpcional() {
+    public boolean getIsOpcional() {
         return isOpcional;
     }
 
-    public void setOpcional(boolean opcional) {
+    public void setIsOpcional(boolean opcional) {
         isOpcional = opcional;
     }
 }

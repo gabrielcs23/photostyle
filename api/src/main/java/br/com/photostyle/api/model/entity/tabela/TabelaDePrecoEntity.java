@@ -39,7 +39,15 @@ public class TabelaDePrecoEntity extends BaseEntity {
         return opcoesKit;
     }
 
+    public void setOpcoesKit(List<OpcaoKitEntity> opcoesKit) {
+        this.opcoesKit = opcoesKit;
+    }
+
     public List<OpcaoExtraEntity> getOpcoesExtra() {
         return opcoesExtra;
+    }
+
+    public void setOpcoesExtra(List<OpcaoExtraEntity> opcoesExtra) {
+        this.opcoesExtra = opcoesExtra;
     }
 }

@@ -4,8 +4,10 @@ import br.com.photostyle.api.model.dto.EscolaDto;
 import br.com.photostyle.api.model.dto.FotoDto;
 import br.com.photostyle.api.model.dto.MostruarioDto;
 import br.com.photostyle.api.model.dto.TurmaDto;
+import br.com.photostyle.api.model.dto.tabela.TabelaPrecoDto;
 import br.com.photostyle.api.model.entity.EscolaEntity;
 import br.com.photostyle.api.service.EscolaService;
+import br.com.photostyle.api.service.TabelaPrecoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
@@ -33,6 +35,9 @@ public class EscolaController {
 
     @Autowired
     private EscolaService escolaService;
+
+    @Autowired
+    private TabelaPrecoService tabelaPrecoService;
 
     @GetMapping
     public ResponseEntity<List<EscolaDto>> getLista() {
@@ -108,7 +113,8 @@ public class EscolaController {
     }
 
     @PostMapping("/{id}/turmas")
-    public ResponseEntity<List<TurmaDto>> cadastrarTurmas(@PathVariable Long id, @RequestBody @Valid List<TurmaDto> turmas) {
+    public ResponseEntity<List<TurmaDto>> cadastrarTurmas(@PathVariable Long id,
+                                                          @RequestBody @Valid List<TurmaDto> turmas) {
         List<TurmaDto> turmasSalvas = escolaService.cadastrarTurmas(id, turmas);
         if (CollectionUtils.isEmpty(turmasSalvas)) {
             return ResponseEntity.notFound().build();
@@ -139,6 +145,15 @@ public class EscolaController {
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+    }
+
+    @PostMapping("/tabela")
+    public ResponseEntity<TabelaPrecoDto> cadastrarTabelaPreco(@RequestBody @Valid TabelaPrecoDto tabela) {
+        TabelaPrecoDto dto = tabelaPrecoService.criar(tabela);
+        if (dto == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(dto);
     }
 
 }

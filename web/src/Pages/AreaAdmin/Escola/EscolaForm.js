@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
 import Rotas from '../AreaAdminRotas';
 import EscolaService from './EscolaService';
+import TabelaPreco from './tabela/TabelaPreco';
 import Escola from '../../../Model/Escola';
 import FormValidator from '../form-utils/FormValidator';
 import PopUp from '../../Utils/pop-up/PopUp'
@@ -173,89 +174,98 @@ class EscolaForm extends Component {
     render() {
         const { nome, apelido } = this.state;
         return (
-            <form>
-                <div className="row">
-                    <div className="col left">
-                        <NavLink to={Rotas.ESCOLA_LISTA}>
-                            <button 
-                                className="btn btn-small waves-effect waves-light grey darken-1"
-                                >
-                                Cancelar
-                            </button>
-                        </NavLink>
-                    </div>
-                    {this.state.id ?
+            <>
+                <form>
+                    <div className="row">
                         <div className="col left">
+                            <NavLink to={Rotas.ESCOLA_LISTA}>
+                                <button 
+                                    className="btn btn-small waves-effect waves-light grey darken-1"
+                                    >
+                                    Cancelar
+                                </button>
+                            </NavLink>
+                        </div>
+                        {this.state.id ?
+                            <div className="col left">
+                                <button
+                                    className="btn btn-small waves-effect waves-light green"
+                                    onClick={() => this.downloadCodigoAlunos(this.state.id)}
+                                    type="button"
+                                    >
+                                    <span className="d-inline-flex">
+                                        <i className="material-icons">download</i>
+                                        <span className="pl-2">Código Alunos</span>
+                                    </span>
+                                </button>
+                            </div>
+                            : null
+                        }
+                        <div className="col right">
                             <button
-                                className="btn btn-small waves-effect waves-light green"
-                                onClick={() => this.downloadCodigoAlunos(this.state.id)}
+                                className="btn btn-small waves-effect waves-light blue"
+                                disabled={!this.state.canSubmit}
+                                onClick={this.submitForm}
                                 type="button"
                                 >
                                 <span className="d-inline-flex">
-                                    <i className="material-icons">download</i>
-                                    <span className="pl-2">Código Alunos</span>
+                                    <i className="material-icons">save</i>
+                                    <span className="pl-2">Salvar</span>
                                 </span>
                             </button>
                         </div>
+                    </div>
+                    
+                    <div className="row">
+                        <div className="input-field col s12">
+                            <label htmlFor="nome">Nome da Escola</label>
+                            <input 
+                                className="validate"
+                                id="nome"
+                                type="text"
+                                name="nome"
+                                value={nome}
+                                onChange={this.inputChangeHandler}
+                                disabled={this.state.id}
+                            />
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="input-field col s6">
+                            <label htmlFor="apelido">Apelido</label>
+                            <input 
+                                id="nome"
+                                type="text"
+                                name="apelido"
+                                value={apelido}
+                                onChange={this.inputChangeHandler}
+                                disabled={this.state.id}
+                            />
+                        </div>
+                    </div>
+
+                    {this.state.id ? 
+                        <>
+                            <h5 className="mb-4">Fotos Mostruário</h5>
+                            <FotoDropzone
+                                fotos={this.state.mostruario.fotos.slice()}
+                                onFotoDrop={this.onFotoDrop}
+                                removerFoto={this.removerFoto}
+                                multiple={true}
+                            />
+                        </>
                         : null
                     }
-                    <div className="col right">
-                        <button
-                            className="btn btn-small waves-effect waves-light blue"
-                            disabled={!this.state.canSubmit}
-                            onClick={this.submitForm}
-                            type="button"
-                            >
-                            <span className="d-inline-flex">
-                                <i className="material-icons">save</i>
-                                <span className="pl-2">Salvar</span>
-                            </span>
-                        </button>
-                    </div>
-                </div>
-                
-                <div className="row">
-                    <div className="input-field col s12">
-                        <label htmlFor="nome">Nome da Escola</label>
-                        <input 
-                            className="validate"
-                            id="nome"
-                            type="text"
-                            name="nome"
-                            value={nome}
-                            onChange={this.inputChangeHandler}
-                            disabled={this.state.id}
-                        />
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="input-field col s6">
-                        <label htmlFor="apelido">Apelido</label>
-                        <input 
-                            id="nome"
-                            type="text"
-                            name="apelido"
-                            value={apelido}
-                            onChange={this.inputChangeHandler}
-                            disabled={this.state.id}
-                        />
-                    </div>
-                </div>
 
-                {this.state.id ? 
-                    <>
-                        <h5 className="mb-4">Fotos Mostruário</h5>
-                        <FotoDropzone
-                            fotos={this.state.mostruario.fotos.slice()}
-                            onFotoDrop={this.onFotoDrop}
-                            removerFoto={this.removerFoto}
-                            multiple={true}
-                        />
-                    </>
+                </form>
+
+                {this.state.id ?
+                    <div style={{marginTop: "2.5rem"}}>
+                        <TabelaPreco idEscola={this.state.id} />
+                    </div>                    
                     : null
                 }
-
-            </form>
+            </>
         )
     }
 

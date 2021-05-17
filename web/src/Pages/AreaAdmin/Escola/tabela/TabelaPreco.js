@@ -1,0 +1,142 @@
+import React, { Component } from 'react';
+import EscolaService from '../EscolaService';
+import OpcaoKit from './OpcaoKit';
+import OpcaoExtra from './OpcaoExtra';
+
+class TabelaPreco extends Component {
+
+    constructor(props) {
+        super(props);
+
+        this.divisoria = {
+            display: 'flex',
+            flexWrap: 'nowrap',
+            flexGrow: 1,
+            width: '100%',
+            borderTop: '1px solid grey'
+        }
+
+        this.state = {
+            opcoesKit: [],
+            opcoesExtra: []
+        }
+    }
+
+    inputChangeHandler = (event) => {
+        const { name, value } = event.target;
+    
+        this.setState({
+            [name]: value
+        });
+    }
+
+    salvar() {
+
+    }
+
+    addKit = () => {
+        const kit = {
+            nome: '',
+            valor: 0,
+            isIrmao: false,
+            isTurma: false,
+        }
+        const opcoes = this.state.opcoesKit.slice();
+        opcoes.push(kit);
+        this.setState({opcoesKit: opcoes})
+    }
+
+    onChangeKit() {
+
+    }
+
+    addExtra = () => {
+        const extra = {
+            nome: '',
+            valor: 0,
+            isIrmao: false,
+            isTurma: false,
+            isDigital: false,
+            isOpcional: false
+        }
+        const opcoes = this.state.opcoesExtra.slice();
+        opcoes.push(extra);
+        this.setState({opcoesExtra: opcoes})
+    }
+
+    onChangeExtra() {
+
+    }
+
+    render() {
+        const opKit = this.state.opcoesKit.slice()
+        return (
+            <form>
+                <div className="row">
+                    <div className="col left">
+                        <h5>Tabela de Preços</h5>        
+                    </div>
+                    <div className="col right">
+                        <button
+                            className="btn btn-small waves-effect waves-light blue"
+                            //disabled={!this.state.canSubmit}
+                            onClick={this.salvar}
+                            type="button"
+                            >
+                            <span className="d-inline-flex">
+                                <i className="material-icons">save</i>
+                                <span className="pl-2">Salvar</span>
+                            </span>
+                        </button>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col">
+                        <button 
+                            className="btn btn-small waves-effect waves-light blue"
+                            onClick={() => this.addKit()}
+                            type="button"
+                            >
+                            <span className="d-inline-flex">
+                                <i className="material-icons">add</i>
+                                <span className="pl-2">Kit</span>
+                            </span>
+                        </button>
+                    </div>
+                </div>
+
+                {opKit.map((opKit, idx) => (
+                    <div className="mb-3" key={`kit-${idx}`}>
+                        {console.log('lado de fora')}
+                        <OpcaoKit kit={opKit} id={idx} onChange={this.onChangeKit} />
+                    </div>
+                ))}
+
+                {/* <div className="row" style={this.divisoria} /> */}
+
+                <div className="row">
+                    <div className="col">
+                        <button 
+                            className="btn btn-small waves-effect waves-light blue"
+                            onClick={() => this.addExtra()}
+                            type="button"
+                            >
+                            <span className="d-inline-flex">
+                                <i className="material-icons">add</i>
+                                <span className="pl-2">Extra</span>
+                            </span>
+                        </button>
+                    </div>
+                </div>
+                
+                {/* {opExtra.forEach((opExtra) => (
+                    <OpcaoExtra kit={opExtra} onChange={this.onChangeExtra} />
+                ))} */}
+                
+            </form>
+        );
+    }
+
+}
+
+export default TabelaPreco;

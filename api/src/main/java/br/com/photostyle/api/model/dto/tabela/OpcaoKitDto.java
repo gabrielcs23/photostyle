@@ -8,6 +8,7 @@ public class OpcaoKitDto {
     private Long tabela;
     private String nome;
     private BigDecimal valor;
+    private boolean isTurma;
     private boolean isIrmao;
 
     public Long getId() {
@@ -40,6 +41,14 @@ public class OpcaoKitDto {
 
     public void setValor(BigDecimal valor) {
         this.valor = valor;
+    }
+
+    public boolean getIsTurma() {
+        return isTurma;
+    }
+
+    public void setIsTurma(boolean turma) {
+        isTurma = turma;
     }
 
     public boolean getIsIrmao() {

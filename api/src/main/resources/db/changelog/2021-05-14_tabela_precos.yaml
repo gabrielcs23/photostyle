@@ -88,6 +88,12 @@ databaseChangeLog:
             name: is_irmao
             defaultValueBoolean: false
             type: BIT
+        - column:
+            constraints:
+              nullable: false
+            name: is_turma
+            defaultValueBoolean: false
+            type: BIT
         tableName: opcao_kit
 - changeSet:
     id: 1621012795303-3

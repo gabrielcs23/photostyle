@@ -21,6 +21,12 @@ public abstract class ItemTabelaBaseEntity extends BaseEntity {
     @Column(nullable = false)
     private BigDecimal valor;
 
+    @Column(name = "IS_IRMAO", nullable = false)
+    private boolean isIrmao = false;
+
+    @Column(name = "IS_TURMA", nullable = false)
+    private boolean isTurma = false;
+
     public TabelaDePrecoEntity getTabela() {
         return tabela;
     }
@@ -47,5 +53,21 @@ public abstract class ItemTabelaBaseEntity extends BaseEntity {
 
     public void setValor(BigDecimal valorIndividual) {
         this.valor = valorIndividual;
+    }
+
+    public boolean isIrmao() {
+        return isIrmao;
+    }
+
+    public void setIrmao(boolean irmao) {
+        isIrmao = irmao;
+    }
+
+    public boolean isTurma() {
+        return isTurma;
+    }
+
+    public void setTurma(boolean turma) {
+        isTurma = turma;
     }
 }

@@ -64,12 +64,17 @@ class TabelaPreco extends Component {
         this.setState({opcoesExtra: opcoes})
     }
 
-    onChangeExtra() {
-
+    onChangeExtra(event, idx) {
+        const ops = this.state.opcoesExtra.slice();
+        const extra = ops[idx];        
+        debugger
+        this.inputChangeHandler(event, extra);
+        this.setState({opcoesExtra: ops})
     }
 
     render() {
         const opKit = this.state.opcoesKit.slice()
+        const opExtra = this.state.opcoesExtra.slice()
         return (
             <form>
                 <div className="row">
@@ -129,9 +134,11 @@ class TabelaPreco extends Component {
                     </div>
                 </div>
                 
-                {/* {opExtra.forEach((opExtra) => (
-                    <OpcaoExtra kit={opExtra} onChange={this.onChangeExtra} />
-                ))} */}
+                {opExtra.map((opExtra, idx) => (
+                    <div className="mb-3" key={`extra-${idx}`}>
+                        <OpcaoExtra extra={opExtra} id={idx} onChange={ e => this.onChangeExtra(e, idx)} />
+                    </div>
+                ))}
                 
             </form>
         );

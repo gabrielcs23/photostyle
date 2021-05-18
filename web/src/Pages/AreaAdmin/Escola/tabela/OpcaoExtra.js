@@ -21,8 +21,8 @@ const opcoes = [
     }
 ]
 
-const OpcaoKit = ({kit, id, onChange}) => {
-    const { nome, valor, isIrmao, isTurma } = kit;
+const OpcaoExtra = ({extra, id, onChange}) => {
+    const { nome, valor, isIrmao, isTurma, isDigital, isOpcional } = extra;
     
     const selecionar = (op, name) =>
         onChange({
@@ -38,10 +38,10 @@ const OpcaoKit = ({kit, id, onChange}) => {
 
             <div className="row">
                 <div className="input-field col s12">
-                    <label htmlFor={`kit-nome-${id}`}>Nome</label>
+                    <label htmlFor={`extra-nome-${id}`}>Nome</label>
                     <input 
                         className="validate"
-                        id={`kit-nome-${id}`}
+                        id={`extra-nome-${id}`}
                         name={`nome`}
                         type="text"
                         value={nome}
@@ -53,7 +53,7 @@ const OpcaoKit = ({kit, id, onChange}) => {
                 <div className="input-field col s12 m4">
                     <Cleave
                         className="validate"
-                        id={`kit-valor-${id}`}
+                        id={`extra-valor-${id}`}
                         name={`valor`}
                         type="text"
                         value={valor}
@@ -63,7 +63,7 @@ const OpcaoKit = ({kit, id, onChange}) => {
                 </div>
                 <div className="input-field col s12 m4 mb-3">
                     <Select
-                        composedKey={`kit-turma-${id}`}
+                        composedKey={`extra-turma-${id}`}
                         label={'Turma'}
                         options={opcoes}
                         selecionar={sel => selecionar(sel, "isTurma")}
@@ -72,10 +72,30 @@ const OpcaoKit = ({kit, id, onChange}) => {
                 </div>
                 <div className="input-field col s12 m4 mb-3">
                     <Select
-                        composedKey={`kit-irmao-${id}`}
+                        composedKey={`extra-irmao-${id}`}
                         label={'Irmão'}
                         options={opcoes}
                         selecionar={sel => selecionar(sel, "isIrmao")}
+                        autoSelect
+                    />
+                </div>
+            </div>
+            <div className="row">
+                <div className="input-field col s12 m4 mb-3">
+                    <Select
+                        composedKey={`extra-digital-${id}`}
+                        label={'Digital'}
+                        options={opcoes}
+                        selecionar={sel => selecionar(sel, "isDigital")}
+                        autoSelect
+                    />
+                </div>
+                <div className="input-field col s12 m4 mb-3">
+                    <Select
+                        composedKey={`extra-opcional-${id}`}
+                        label={'Opcional'}
+                        options={opcoes}
+                        selecionar={sel => selecionar(sel, "isOpcional")}
                         autoSelect
                     />
                 </div>
@@ -86,4 +106,4 @@ const OpcaoKit = ({kit, id, onChange}) => {
     );
 }
 
-export default OpcaoKit;
+export default OpcaoExtra;

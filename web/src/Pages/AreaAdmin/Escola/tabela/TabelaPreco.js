@@ -22,12 +22,9 @@ class TabelaPreco extends Component {
         }
     }
 
-    inputChangeHandler = (event) => {
+    inputChangeHandler = (event, op) => {
         const { name, value } = event.target;
-    
-        this.setState({
-            [name]: value
-        });
+        op[name] = value;
     }
 
     salvar() {
@@ -46,8 +43,11 @@ class TabelaPreco extends Component {
         this.setState({opcoesKit: opcoes})
     }
 
-    onChangeKit() {
-
+    onChangeKit(event, idx) {
+        const ops = this.state.opcoesKit.slice();
+        const kit = ops[idx];
+        this.inputChangeHandler(event, kit);
+        this.setState({opcoesKit: ops})
     }
 
     addExtra = () => {
@@ -108,7 +108,7 @@ class TabelaPreco extends Component {
                 {opKit.map((opKit, idx) => (
                     <div className="mb-3" key={`kit-${idx}`}>
                         {console.log('lado de fora')}
-                        <OpcaoKit kit={opKit} id={idx} onChange={this.onChangeKit} />
+                        <OpcaoKit kit={opKit} id={idx} onChange={e => this.onChangeKit(e, idx)} />
                     </div>
                 ))}
 

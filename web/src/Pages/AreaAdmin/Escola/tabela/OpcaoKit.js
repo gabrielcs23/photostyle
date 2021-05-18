@@ -23,14 +23,17 @@ const opcoes = [
 
 const OpcaoKit = ({kit, id, onChange}) => {
     const { nome, valor, isIrmao, isTurma } = kit;
-
-    console.log(kit)
     
-    const selecionar = (op) => onChange(op.value)
+    const selecionar = (op, name) =>
+        onChange({
+            target: {
+                name: name,
+                value: opcoes[op].value,
+            },
+    });
 
     return (
         <>
-            {console.log(kit)}
             <span style={divisoria} />
 
             <div className="row">
@@ -39,7 +42,7 @@ const OpcaoKit = ({kit, id, onChange}) => {
                     <input 
                         className="validate"
                         id={`kit-nome-${id}`}
-                        name={`kit-nome-${id}`}
+                        name={`nome`}
                         type="text"
                         value={nome}
                         onChange={onChange}
@@ -51,7 +54,7 @@ const OpcaoKit = ({kit, id, onChange}) => {
                     <Cleave
                         className="validate"
                         id={`kit-valor-${id}`}
-                        name={`kit-valor-${id}`}
+                        name={`valor`}
                         type="text"
                         value={valor}
                         options={{numeral: true}}
@@ -63,7 +66,8 @@ const OpcaoKit = ({kit, id, onChange}) => {
                         composedKey={`kit-turma-${id}`}
                         label={'Turma'}
                         options={opcoes}
-                        selecionar={selecionar}
+                        selecionar={sel => selecionar(sel, "isTurma")}
+                        autoSelect
                     />
                 </div>
                 <div className="input-field col s12 m4 mb-3">
@@ -71,7 +75,8 @@ const OpcaoKit = ({kit, id, onChange}) => {
                         composedKey={`kit-irmao-${id}`}
                         label={'Irmão'}
                         options={opcoes}
-                        selecionar={selecionar}
+                        selecionar={sel => selecionar(sel, "isIrmao")}
+                        autoSelect
                     />
                 </div>
             </div>

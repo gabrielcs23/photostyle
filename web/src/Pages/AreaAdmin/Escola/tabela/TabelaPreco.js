@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import EscolaService from '../EscolaService';
 import OpcaoKit from './OpcaoKit';
 import OpcaoExtra from './OpcaoExtra';
+import PopUp from '../../../Utils/pop-up/PopUp'
 
 class TabelaPreco extends Component {
 
@@ -17,6 +18,7 @@ class TabelaPreco extends Component {
         }
 
         this.state = {
+            id: '',
             opcoesKit: [],
             opcoesExtra: []
         }
@@ -28,7 +30,22 @@ class TabelaPreco extends Component {
     }
 
     salvar() {
-
+        const tabela = {
+            escola: this.props.idEscola,
+            opcoesKit: this.state.opcoesKit,
+            opcoesExtra: this.state.opcoesExtra
+        }
+        if (!this.state.id) {
+            EscolaService.postTabelaPreco(tabela)
+                .then(tabela => {
+                    this.setState({...tabela});
+                    PopUp.sucesso('Tabela cadastrada com sucesso');
+                })
+                .catch(error => this.props.handleUnauthorized(error))
+                .catch(() => {
+                    PopUp.erro('Erro no cadastro da tabela de preço');
+                });
+        }
     }
 
     addKit = () => {
@@ -66,8 +83,7 @@ class TabelaPreco extends Component {
 
     onChangeExtra(event, idx) {
         const ops = this.state.opcoesExtra.slice();
-        const extra = ops[idx];        
-        debugger
+        const extra = ops[idx];
         this.inputChangeHandler(event, extra);
         this.setState({opcoesExtra: ops})
     }
@@ -85,7 +101,7 @@ class TabelaPreco extends Component {
                         <button
                             className="btn btn-small waves-effect waves-light blue"
                             //disabled={!this.state.canSubmit}
-                            onClick={this.salvar}
+                            onClick={() => this.salvar()}
                             type="button"
                             >
                             <span className="d-inline-flex">

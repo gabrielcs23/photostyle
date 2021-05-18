@@ -53,7 +53,9 @@ public class TabelaPrecoService extends BaseService<TabelaDePrecoEntity, TabelaP
         criarItensTabela(entity, dto);
 
         entity = repository.save(entity);
-        return adapter.entityToDto(entity);
+        TabelaPrecoDto dtoRetorno = adapter.entityToDto(entity);
+        dtoRetorno.setEscola(escola.getId());
+        return dtoRetorno;
     }
 
     private void criarItensTabela(TabelaDePrecoEntity entity, TabelaPrecoDto dto) {

@@ -37,16 +37,12 @@ public class TabelaPrecoAdapter extends BaseAdapter<TabelaDePrecoEntity, TabelaP
         dto.setEscola(entity.getEscolaId());
 
         List<OpcaoKitEntity> opcoesKit = entity.getOpcoesKit();
-        if (CollectionUtils.isNotEmpty(opcoesKit)) {
-            List<OpcaoKitDto> opcaoKitDtos = opcaoKitAdapter.entityListToDtoList(opcoesKit);
-            dto.setOpcoesKit(opcaoKitDtos);
-        }
+        List<OpcaoKitDto> opcaoKitDtos = opcaoKitAdapter.entityListToDtoList(opcoesKit);
+        dto.setOpcoesKit(opcaoKitDtos);
 
         List<OpcaoExtraEntity> opcoesExtra = entity.getOpcoesExtra();
-        if (CollectionUtils.isNotEmpty(opcoesExtra)) {
-            List<OpcaoExtraDto> opcaoExtraDtos = opcaoExtraAdapter.entityListToDtoList(opcoesExtra);
-            dto.setOpcoesExtra(opcaoExtraDtos);
-        }
+        List<OpcaoExtraDto> opcaoExtraDtos = opcaoExtraAdapter.entityListToDtoList(opcoesExtra);
+        dto.setOpcoesExtra(opcaoExtraDtos);
 
         return dto;
     }

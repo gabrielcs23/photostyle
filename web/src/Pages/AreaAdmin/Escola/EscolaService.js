@@ -31,6 +31,15 @@ class EscolaService extends BaseApiService {
         }
     }
 
+    async postTabelaPreco(tabela) {
+        try {
+            const res = await this.axiosInstance.post(`${BASE_URL}/tabela`, tabela);
+            return res.data;
+        } catch (error) {
+            throw this.parseError(error);
+        }
+    }
+
     async getMostruario(idEscola) {
         try {
             const res = await this.axiosInstance.get(`${BASE_URL}/${idEscola}/mostruario`);

@@ -40,6 +40,14 @@ public class TabelaPrecoService extends BaseService<TabelaDePrecoEntity, TabelaP
         super(repository, adapter);
     }
 
+    public TabelaPrecoDto recuperarPorEscola(Long idEscola) {
+        TabelaDePrecoEntity tabela = repository.getByEscolaId(idEscola);
+        if (tabela == null) {
+            return null;
+        }
+        return adapter.entityToDto(tabela);
+    }
+
     @Transactional
     @Override
     public TabelaPrecoDto criar(TabelaPrecoDto dto) {

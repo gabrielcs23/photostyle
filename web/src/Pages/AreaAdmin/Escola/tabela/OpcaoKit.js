@@ -21,6 +21,10 @@ const opcoes = [
     }
 ]
 
+const getOpcaoSelecionada = (valorCampo) => {
+    return opcoes.findIndex(op => op.value === valorCampo)
+}
+
 const OpcaoKit = ({kit, id, onChange}) => {
     const { nome, valor, isIrmao, isTurma } = kit;
     
@@ -67,6 +71,7 @@ const OpcaoKit = ({kit, id, onChange}) => {
                         label={'Turma'}
                         options={opcoes}
                         selecionar={sel => selecionar(sel, "isTurma")}
+                        valorInicial={getOpcaoSelecionada(isTurma)}
                         autoSelect
                     />
                 </div>
@@ -76,6 +81,7 @@ const OpcaoKit = ({kit, id, onChange}) => {
                         label={'Irmão'}
                         options={opcoes}
                         selecionar={sel => selecionar(sel, "isIrmao")}
+                        valorInicial={getOpcaoSelecionada(isIrmao)}
                         autoSelect
                     />
                 </div>

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import M from 'materialize-css';
 import EscolaService from '../EscolaService';
 import OpcaoKit from './OpcaoKit';
 import OpcaoExtra from './OpcaoExtra';
@@ -29,6 +30,22 @@ class TabelaPreco extends Component {
         op[name] = value;
     }
 
+    componentDidMount() {
+        EscolaService.getTabelaPreco(this.props.idEscola)
+            .then(tabela => {
+                if (tabela) {
+                    this.setState({
+                        id: tabela.id,
+                        opcoesKit: tabela.opcoesKit,
+                        opcoesExtra: tabela.opcoesExtra
+                    });
+                    M.updateTextFields();
+                }
+            })
+            .catch(error => this.props.handleUnauthorized(error))
+            .catch(() => PopUp.erro('Erro'));
+    }
+
     salvar() {
         const tabela = {
             escola: this.props.idEscola,
@@ -36,7 +53,7 @@ class TabelaPreco extends Component {
             opcoesExtra: this.state.opcoesExtra
         }
         if (!this.state.id) {
-            EscolaService.postTabelaPreco(tabela)
+            EscolaService.postTabelaPreco(this.props.idEscola, tabela)
                 .then(tabela => {
                     this.setState({...tabela});
                     PopUp.sucesso('Tabela cadastrada com sucesso');

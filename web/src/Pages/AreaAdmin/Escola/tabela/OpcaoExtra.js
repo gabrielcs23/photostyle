@@ -21,6 +21,10 @@ const opcoes = [
     }
 ]
 
+const getOpcaoSelecionada = (valorCampo) => {
+    return opcoes.findIndex(op => op.value === valorCampo)
+}
+
 const OpcaoExtra = ({extra, id, onChange}) => {
     const { nome, valor, isIrmao, isTurma, isDigital, isOpcional } = extra;
     
@@ -67,6 +71,7 @@ const OpcaoExtra = ({extra, id, onChange}) => {
                         label={'Turma'}
                         options={opcoes}
                         selecionar={sel => selecionar(sel, "isTurma")}
+                        valorInicial={getOpcaoSelecionada(isTurma)}
                         autoSelect
                     />
                 </div>
@@ -76,6 +81,7 @@ const OpcaoExtra = ({extra, id, onChange}) => {
                         label={'Irmão'}
                         options={opcoes}
                         selecionar={sel => selecionar(sel, "isIrmao")}
+                        valorInicial={getOpcaoSelecionada(isIrmao)}
                         autoSelect
                     />
                 </div>
@@ -87,6 +93,7 @@ const OpcaoExtra = ({extra, id, onChange}) => {
                         label={'Digital'}
                         options={opcoes}
                         selecionar={sel => selecionar(sel, "isDigital")}
+                        valorInicial={getOpcaoSelecionada(isDigital)}
                         autoSelect
                     />
                 </div>
@@ -96,6 +103,7 @@ const OpcaoExtra = ({extra, id, onChange}) => {
                         label={'Opcional'}
                         options={opcoes}
                         selecionar={sel => selecionar(sel, "isOpcional")}
+                        valorInicial={getOpcaoSelecionada(isOpcional)}
                         autoSelect
                     />
                 </div>

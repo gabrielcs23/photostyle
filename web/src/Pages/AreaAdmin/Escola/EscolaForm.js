@@ -261,7 +261,7 @@ class EscolaForm extends Component {
 
                 {this.state.id ?
                     <div style={{marginTop: "2.5rem"}}>
-                        <TabelaPreco idEscola={this.state.id} />
+                        <TabelaPreco idEscola={this.state.id} handleUnauthorized={this.props.handleUnauthorized} />
                     </div>                    
                     : null
                 }

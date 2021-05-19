@@ -161,7 +161,7 @@ public class EscolaController {
     public ResponseEntity<TabelaPrecoDto> recuperarTabelaPreco(@PathVariable Long id) {
         TabelaPrecoDto dto = tabelaPrecoService.recuperarPorEscola(id);
         if (dto == null) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.ok().build();
         }
         return ResponseEntity.ok(dto);
     }

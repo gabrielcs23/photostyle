@@ -49,9 +49,8 @@ public class TabelaPrecoService extends BaseService<TabelaDePrecoEntity, TabelaP
     }
 
     @Transactional
-    @Override
-    public TabelaPrecoDto criar(TabelaPrecoDto dto) {
-        EscolaEntity escola = escolaService.getEntityPorId(dto.getEscola());
+    public TabelaPrecoDto criar(Long idEscola, TabelaPrecoDto dto) {
+        EscolaEntity escola = escolaService.getEntityPorId(idEscola);
         if (escola == null) {
             return null;
         }

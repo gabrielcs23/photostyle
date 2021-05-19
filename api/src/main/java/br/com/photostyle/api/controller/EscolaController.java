@@ -147,9 +147,10 @@ public class EscolaController {
         }
     }
 
-    @PostMapping("/tabela")
-    public ResponseEntity<TabelaPrecoDto> cadastrarTabelaPreco(@RequestBody @Valid TabelaPrecoDto tabela) {
-        TabelaPrecoDto dto = tabelaPrecoService.criar(tabela);
+    @PostMapping("{id}/tabela")
+    public ResponseEntity<TabelaPrecoDto> cadastrarTabelaPreco(@PathVariable Long id,
+                                                               @RequestBody @Valid TabelaPrecoDto tabela) {
+        TabelaPrecoDto dto = tabelaPrecoService.criar(id, tabela);
         if (dto == null) {
             return ResponseEntity.notFound().build();
         }

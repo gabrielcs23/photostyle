@@ -34,6 +34,7 @@ export default class PedidoForm extends Component {
         this.aluno = props.aluno;
         this.turma = props.turma;
         this.escola = props.escola;
+        this.tabela = props.tabela
 
         this.state = {
             aluno: props.aluno,
@@ -188,6 +189,7 @@ export default class PedidoForm extends Component {
 
                     <SelecaoPedido
                         seleciona={opcoes => this.selecionaPedido(opcoes)}
+                        tabela={this.tabela}
                         opcoesTurma={this.props.opcoes?.turma}
                         opcoesIrmaos={this.props.opcoes?.irmaos}
                         opcoesAdicionais={this.props.opcoes?.adicionais}

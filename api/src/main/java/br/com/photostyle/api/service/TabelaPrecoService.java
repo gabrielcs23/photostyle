@@ -57,15 +57,14 @@ public class TabelaPrecoService extends BaseService<TabelaDePrecoEntity, TabelaP
     }
 
     @Transactional
-    public TabelaPrecoDto criar(Long idEscola, TabelaPrecoDto dto) {
+    public TabelaPrecoDto criarComEscola(Long idEscola, TabelaPrecoDto dto) {
         EscolaEntity escola = escolaService.getEntityPorId(idEscola);
         if (escola == null) {
             return null;
         }
-        TabelaDePrecoEntity entity = adapter.dtoToEntity(dto);
-        entity.setEscola(escola);
+        TabelaDePrecoEntity entity = construir(dto);
 
-        criarItensTabela(entity, dto);
+        entity.setEscola(escola);
 
         entity = repository.save(entity);
         TabelaPrecoDto dtoRetorno = adapter.entityToDto(entity);
@@ -73,25 +72,38 @@ public class TabelaPrecoService extends BaseService<TabelaDePrecoEntity, TabelaP
         return dtoRetorno;
     }
 
-    private void criarItensTabela(TabelaDePrecoEntity entity, TabelaPrecoDto dto) {
+    @Transactional
+    public TabelaPrecoDto criarSemEscola(TabelaPrecoDto dto) {
+        TabelaDePrecoEntity entity = construir(dto);
+        entity = repository.save(entity);
+        return adapter.entityToDto(entity);
+    }
+
+    private TabelaDePrecoEntity construir(TabelaPrecoDto dto) {
+        TabelaDePrecoEntity entity = adapter.dtoToEntity(dto);
+        construirItensTabela(entity, dto);
+        return entity;
+    }
+
+    private void construirItensTabela(TabelaDePrecoEntity entity, TabelaPrecoDto dto) {
         List<OpcaoKitEntity> opsKit = dto.getOpcoesKit().stream()
-                .map(op -> this.criarOpcaoKit(entity, op))
+                .map(op -> this.construirOpcaoKit(entity, op))
                 .collect(Collectors.toList());
         entity.setOpcoesKit(opsKit);
 
         List<OpcaoExtraEntity> opsExtra = dto.getOpcoesExtra().stream()
-                .map(op -> this.criarOpcaoExtra(entity, op))
+                .map(op -> this.construirOpcaoExtra(entity, op))
                 .collect(Collectors.toList());
         entity.setOpcoesExtra(opsExtra);
     }
 
-    private OpcaoKitEntity criarOpcaoKit(TabelaDePrecoEntity tabela, OpcaoKitDto dto) {
+    private OpcaoKitEntity construirOpcaoKit(TabelaDePrecoEntity tabela, OpcaoKitDto dto) {
         OpcaoKitEntity entity = opKitAdapter.dtoToEntity(dto);
         entity.setTabela(tabela);
         return entity;
     }
 
-    private OpcaoExtraEntity criarOpcaoExtra(TabelaDePrecoEntity tabela, OpcaoExtraDto dto) {
+    private OpcaoExtraEntity construirOpcaoExtra(TabelaDePrecoEntity tabela, OpcaoExtraDto dto) {
         OpcaoExtraEntity entity = opExtraAdapter.dtoToEntity(dto);
         entity.setTabela(tabela);
         return entity;

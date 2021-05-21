@@ -110,8 +110,6 @@ databaseChangeLog:
             name: id
             type: BIGINT
         - column:
-            constraints:
-              nullable: false
             name: esc_id
             type: BIGINT
         tableName: tabela_preco

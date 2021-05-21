@@ -11,10 +11,10 @@ import java.util.List;
 public class TabelaDePrecoEntity extends BaseEntity {
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ESC_ID", nullable = false)
+    @JoinColumn(name = "ESC_ID")
     private EscolaEntity escola;
 
-    @Column(name="ESC_ID", nullable = false, updatable=false, insertable=false)
+    @Column(name="ESC_ID", updatable=false, insertable=false)
     public Long escolaId;
 
     @OneToMany(mappedBy = "tabela", cascade = {CascadeType.REMOVE, CascadeType.PERSIST}, orphanRemoval = true)

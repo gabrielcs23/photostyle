@@ -8,3 +8,6 @@ databaseChangeLog:
 - include:
     file: changelog/2021-03-13_aluno_opcionais.yaml
     relativeToChangelogFile: true
+- include:
+    file: changelog/2021-05-14_tabela_precos.yaml
+    relativeToChangelogFile: true

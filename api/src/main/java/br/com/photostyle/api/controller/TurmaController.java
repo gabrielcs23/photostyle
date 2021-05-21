@@ -72,7 +72,8 @@ public class TurmaController {
     }
 
     @PostMapping("/{idTurma}/foto")
-    public ResponseEntity<FotoDto> adicionarFoto(@PathVariable @NotNull Long idTurma, @RequestParam("file") MultipartFile foto) {
+    public ResponseEntity<FotoDto> adicionarFoto(@PathVariable @NotNull Long idTurma,
+                                                 @RequestParam("file") MultipartFile foto) {
         TurmaEntity turma = turmaService.getEntityPorId(idTurma);
         if (turma == null) {
             return ResponseEntity.notFound().build();
@@ -101,12 +102,12 @@ public class TurmaController {
     }
 
     @PostMapping("/{id}/alunos")
-    public ResponseEntity<List<AlunoDto>> cadastrarAlunos(@PathVariable Long id, @RequestBody @Valid List<AlunoDto> alunos) {
+    public ResponseEntity<List<AlunoDto>> cadastrarAlunos(@PathVariable Long id,
+                                                          @RequestBody @Valid List<AlunoDto> alunos) {
         List<AlunoDto> alunosSalvos = turmaService.cadastrarAlunos(id, alunos);
         if (CollectionUtils.isEmpty(alunosSalvos)) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(alunosSalvos);
     }
-
 }

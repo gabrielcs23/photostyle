@@ -189,7 +189,6 @@ class AlunoForm extends Component {
     }
 
     uploadFotosOpcionais(idAluno) {
-        debugger;
         const fotos = this.state.fotosOpcionais;
         const formData = new FormData();
         fotos.forEach(foto => {

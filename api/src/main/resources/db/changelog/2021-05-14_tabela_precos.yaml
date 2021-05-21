@@ -1,0 +1,155 @@
+databaseChangeLog:
+- changeSet:
+    id: 1621012795303-1
+    author: gabri (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: opcao_extraPK
+            name: id
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: nome
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: tab_id
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: valor
+            type: DECIMAL(19, 2)
+        - column:
+            constraints:
+              nullable: false
+            name: is_digital
+            defaultValueBoolean: false
+            type: BIT
+        - column:
+            constraints:
+              nullable: false
+            name: is_irmao
+            defaultValueBoolean: false
+            type: BIT
+        - column:
+            constraints:
+              nullable: false
+            name: is_opcional
+            defaultValueBoolean: false
+            type: BIT
+        - column:
+            constraints:
+              nullable: false
+            name: is_turma
+            defaultValueBoolean: false
+            type: BIT
+        tableName: opcao_extra
+- changeSet:
+    id: 1621012795303-2
+    author: gabri (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: opcao_kitPK
+            name: id
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: nome
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: tab_id
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: valor
+            type: DECIMAL(19, 2)
+        - column:
+            constraints:
+              nullable: false
+            name: is_irmao
+            defaultValueBoolean: false
+            type: BIT
+        - column:
+            constraints:
+              nullable: false
+            name: is_turma
+            defaultValueBoolean: false
+            type: BIT
+        tableName: opcao_kit
+- changeSet:
+    id: 1621012795303-3
+    author: gabri (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: tabela_precoPK
+            name: id
+            type: BIGINT
+        - column:
+            name: esc_id
+            type: BIGINT
+        tableName: tabela_preco
+- changeSet:
+    id: 1621012795303-4
+    author: gabri (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: tab_id
+        baseTableName: opcao_kit
+        constraintName: FK_TABELA_PRECO_OPCAO_KIT
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: tabela_preco
+        validate: true
+- changeSet:
+    id: 1621012795303-5
+    author: gabri (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: esc_id
+        baseTableName: tabela_preco
+        constraintName: FK_ESCOLA_TABELA_PRECO
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: escola
+        validate: true
+- changeSet:
+    id: 1621012795303-6
+    author: gabri (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: tab_id
+        baseTableName: opcao_extra
+        constraintName: FK_TABELA_PRECO_OPCAO_EXTRA
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: tabela_preco
+        validate: true
+

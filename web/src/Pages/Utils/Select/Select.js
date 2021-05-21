@@ -13,6 +13,10 @@ class Select extends Component {
             this.state = {
                 selecionado: this.props.options[0]
             }
+        } else if(this.props.valorInicial) {
+            this.state = {
+                selecionado: this.props.valorInicial
+            }
         } else {
             this.state = {
                 selecionado: ''

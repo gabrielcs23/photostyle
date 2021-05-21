@@ -1,0 +1,112 @@
+package br.com.photostyle.api.service;
+
+import br.com.photostyle.api.model.adapter.tabela.OpcaoExtraAdapter;
+import br.com.photostyle.api.model.adapter.tabela.OpcaoKitAdapter;
+import br.com.photostyle.api.model.adapter.tabela.TabelaPrecoAdapter;
+import br.com.photostyle.api.model.dto.tabela.OpcaoExtraDto;
+import br.com.photostyle.api.model.dto.tabela.OpcaoKitDto;
+import br.com.photostyle.api.model.dto.tabela.TabelaPrecoDto;
+import br.com.photostyle.api.model.entity.EscolaEntity;
+import br.com.photostyle.api.model.entity.tabela.OpcaoExtraEntity;
+import br.com.photostyle.api.model.entity.tabela.OpcaoKitEntity;
+import br.com.photostyle.api.model.entity.tabela.TabelaDePrecoEntity;
+import br.com.photostyle.api.repository.tabela.TabelaPrecoRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+public class TabelaPrecoService extends BaseService<TabelaDePrecoEntity, TabelaPrecoDto> {
+
+    @Autowired
+    private TabelaPrecoRepository repository;
+
+    @Autowired
+    private TabelaPrecoAdapter adapter;
+
+    @Autowired
+    private EscolaService escolaService;
+
+    @Autowired
+    private OpcaoKitAdapter opKitAdapter;
+
+    @Autowired
+    private OpcaoExtraAdapter opExtraAdapter;
+
+    public TabelaPrecoService(TabelaPrecoRepository repository, TabelaPrecoAdapter adapter) {
+        super(repository, adapter);
+    }
+
+    public TabelaPrecoDto recuperarPorEscola(Long idEscola) {
+        TabelaDePrecoEntity tabela = repository.getByEscolaId(idEscola);
+        if (tabela == null) {
+            return null;
+        }
+        return adapter.entityToDto(tabela);
+    }
+
+    public TabelaDePrecoEntity getPorEscolaOuDefault(Long idEscola) {
+        TabelaDePrecoEntity tabela = repository.getByEscolaId(idEscola);
+        if (tabela == null) {
+            return repository.getOne(1L);
+        }
+        return tabela;
+    }
+
+    @Transactional
+    public TabelaPrecoDto criarComEscola(Long idEscola, TabelaPrecoDto dto) {
+        EscolaEntity escola = escolaService.getEntityPorId(idEscola);
+        if (escola == null) {
+            return null;
+        }
+        TabelaDePrecoEntity entity = construir(dto);
+
+        entity.setEscola(escola);
+
+        entity = repository.save(entity);
+        TabelaPrecoDto dtoRetorno = adapter.entityToDto(entity);
+        dtoRetorno.setEscola(escola.getId());
+        return dtoRetorno;
+    }
+
+    @Transactional
+    public TabelaPrecoDto criarSemEscola(TabelaPrecoDto dto) {
+        TabelaDePrecoEntity entity = construir(dto);
+        entity = repository.save(entity);
+        return adapter.entityToDto(entity);
+    }
+
+    private TabelaDePrecoEntity construir(TabelaPrecoDto dto) {
+        TabelaDePrecoEntity entity = adapter.dtoToEntity(dto);
+        construirItensTabela(entity, dto);
+        return entity;
+    }
+
+    private void construirItensTabela(TabelaDePrecoEntity entity, TabelaPrecoDto dto) {
+        List<OpcaoKitEntity> opsKit = dto.getOpcoesKit().stream()
+                .map(op -> this.construirOpcaoKit(entity, op))
+                .collect(Collectors.toList());
+        entity.setOpcoesKit(opsKit);
+
+        List<OpcaoExtraEntity> opsExtra = dto.getOpcoesExtra().stream()
+                .map(op -> this.construirOpcaoExtra(entity, op))
+                .collect(Collectors.toList());
+        entity.setOpcoesExtra(opsExtra);
+    }
+
+    private OpcaoKitEntity construirOpcaoKit(TabelaDePrecoEntity tabela, OpcaoKitDto dto) {
+        OpcaoKitEntity entity = opKitAdapter.dtoToEntity(dto);
+        entity.setTabela(tabela);
+        return entity;
+    }
+
+    private OpcaoExtraEntity construirOpcaoExtra(TabelaDePrecoEntity tabela, OpcaoExtraDto dto) {
+        OpcaoExtraEntity entity = opExtraAdapter.dtoToEntity(dto);
+        entity.setTabela(tabela);
+        return entity;
+    }
+
+}

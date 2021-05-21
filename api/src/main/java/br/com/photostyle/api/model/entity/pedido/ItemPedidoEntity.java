@@ -1,4 +1,4 @@
-package br.com.photostyle.api.model.entity;
+package br.com.photostyle.api.model.entity.pedido;
 
 import javax.persistence.*;
 import java.math.BigDecimal;

@@ -10,6 +10,8 @@ import br.com.photostyle.api.model.entity.EscolaEntity;
 import br.com.photostyle.api.model.entity.tabela.OpcaoExtraEntity;
 import br.com.photostyle.api.model.entity.tabela.OpcaoKitEntity;
 import br.com.photostyle.api.model.entity.tabela.TabelaDePrecoEntity;
+import br.com.photostyle.api.repository.tabela.OpcaoExtraRepository;
+import br.com.photostyle.api.repository.tabela.OpcaoKitRepository;
 import br.com.photostyle.api.repository.tabela.TabelaPrecoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +31,12 @@ public class TabelaPrecoService extends BaseService<TabelaDePrecoEntity, TabelaP
 
     @Autowired
     private EscolaService escolaService;
+
+    @Autowired
+    private OpcaoKitRepository opKitRepository;
+
+    @Autowired
+    private OpcaoExtraRepository opExtraRepository;
 
     @Autowired
     private OpcaoKitAdapter opKitAdapter;
@@ -77,6 +85,49 @@ public class TabelaPrecoService extends BaseService<TabelaDePrecoEntity, TabelaP
         TabelaDePrecoEntity entity = construir(dto);
         entity = repository.save(entity);
         return adapter.entityToDto(entity);
+    }
+
+    @Transactional
+    public TabelaPrecoDto atualizarTabela(Long id, TabelaPrecoDto tabelaDto) {
+        TabelaDePrecoEntity tabelaEntity = getEntityPorId(id);
+        if (tabelaEntity == null) {
+            return null;
+        }
+
+        List<OpcaoKitDto> kitDtos = tabelaDto.getOpcoesKit();
+        for (OpcaoKitDto dto : kitDtos) {
+            OpcaoKitEntity entity;
+            if (dto.getId() != null) {
+                entity = opKitRepository.getByTabelaId(id);
+                entity.setValor(dto.getValor());
+                entity.setNome(dto.getNome());
+                entity.setIrmao(dto.getIsIrmao());
+                entity.setTurma(dto.getIsTurma());
+            } else {
+                entity = construirOpcaoKit(tabelaEntity, dto);
+            }
+            opKitRepository.save(entity);
+        }
+
+        List<OpcaoExtraDto> extraDtos = tabelaDto.getOpcoesExtra();
+        for (OpcaoExtraDto dto : extraDtos) {
+            OpcaoExtraEntity entity;
+            if (dto.getId() != null) {
+                entity = opExtraRepository.getByTabelaId(id);
+                entity.setValor(dto.getValor());
+                entity.setNome(dto.getNome());
+                entity.setIrmao(dto.getIsIrmao());
+                entity.setTurma(dto.getIsTurma());
+                entity.setOpcional(dto.getIsOpcional());
+                entity.setDigital(dto.getIsDigital());
+            } else {
+                entity = construirOpcaoExtra(tabelaEntity, dto);
+            }
+            opExtraRepository.save(entity);
+        }
+
+        tabelaEntity = getEntityPorId(id);
+        return adapter.entityToDto(tabelaEntity);
     }
 
     private TabelaDePrecoEntity construir(TabelaPrecoDto dto) {

@@ -62,6 +62,14 @@ class TabelaPreco extends Component {
                 .catch(() => {
                     PopUp.erro('Erro no cadastro da tabela de preço');
                 });
+        } else {
+            EscolaService.patchTabelaPreco(this.state.id, tabela)
+                .then(tabela => {
+                    this.setState({...tabela});
+                    PopUp.sucesso('Tabela atualizada com sucesso');
+                })
+                .catch(error => this.props.handleUnauthorized(error))
+                .catch(() => PopUp.erro('Erro na atualizacação da tabela de preço'));
         }
     }
 
@@ -145,7 +153,6 @@ class TabelaPreco extends Component {
 
                 {opKit.map((opKit, idx) => (
                     <div className="mb-3" key={`kit-${idx}`}>
-                        {console.log('lado de fora')}
                         <OpcaoKit kit={opKit} id={idx} onChange={e => this.onChangeKit(e, idx)} />
                     </div>
                 ))}

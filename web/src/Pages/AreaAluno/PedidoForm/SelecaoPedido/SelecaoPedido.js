@@ -24,6 +24,12 @@ export default class SelecaoPedido extends Component {
 
     }
 
+    componentDidMount() {
+        if (this.itens.length === 1) {
+            this.selectItem(0);
+        }
+    }
+
     selectItem(idx) {
         const item = this.itens[idx];
         this.setState({itemSel: item});
@@ -296,9 +302,11 @@ export default class SelecaoPedido extends Component {
                         Kit &nbsp;
                         <span style={{color: 'red'}}>*</span>
                     </h6>
-                    <blockquote style={{fontStyle: 'italic'}}>
-                        Selecione uma opção de kit. Campo obrigatório
-                    </blockquote>
+                    {this.itens.length > 1 ? (
+                        <blockquote style={{ fontStyle: "italic" }}>
+                            Selecione uma opção de kit. Campo obrigatório
+                        </blockquote>
+                    ) : null}
                 </div>
 
                 <div className="row input-field mb-2">

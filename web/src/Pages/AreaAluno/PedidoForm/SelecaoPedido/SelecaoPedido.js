@@ -1,24 +1,33 @@
 import React, { Component, Fragment } from 'react';
 import Select from '../../../Utils/Select/Select';
-import PedidoItens from '../Models/PedidoItens';
-import PedidoExtras from '../Models/PedidoExtras';
 import Cleave from 'cleave.js/react';
 import './SelecaoPedido.scss'
+import ModeloPedido from '../Models/ModeloPedido';
+
+const parseOpcoes = (ops) => {
+    return ops.map(op => new ModeloPedido(op.nome, op.valor, op.turma, op.irmao, op.opcional, op.digital))
+}
 
 export default class SelecaoPedido extends Component {
 
     constructor(props) {
         super(props);
 
-        this.itens = PedidoItens.get();
+        this.itens = parseOpcoes(props.tabela.opcaoKits);
 
         this.state = {
             itemSel: undefined,
-            extrasSel: PedidoExtras.get()
+            extrasSel: parseOpcoes(props.tabela.opcaoExtras)
         };
 
         this.cleaveRefs = new Array(this.state.extrasSel.length);
 
+    }
+
+    componentDidMount() {
+        if (this.itens.length === 1) {
+            this.selectItem(0);
+        }
     }
 
     selectItem(idx) {
@@ -64,17 +73,21 @@ export default class SelecaoPedido extends Component {
         this.montaSelecao(this.state.itemSel, extras);
     }
 
-    getOpcoes(modeloOpcao) {
-        switch (modeloOpcao) {
-            case 'T':
-                return this.props.opcoesTurma?.slice();
-            case 'I':
-                return this.props.opcoesIrmaos?.slice();
-            case 'O':
-                return this.props.opcoesAdicionais?.slice();
-            default:
-                return [];
+    getOpcoes(turma, irmao, opcional) {
+        if (turma) {
+            return this.props.opcoesTurma?.slice();
         }
+        if (irmao) {
+            return this.props.opcoesIrmaos?.slice();
+        }
+        if (opcional) {
+            return this.props.opcoesAdicionais?.slice();
+        }
+        return [];
+    }
+
+    possuiFotoTurma() {
+        return this.props.opcoesTurma?.length > 0;
     }
 
     possuiFotosIrmaos() {
@@ -128,11 +141,58 @@ export default class SelecaoPedido extends Component {
 
     render() {
         const radioItens = this.itens.map((item, idx) => {
-            if (item.modeloOpcao === 'I' && !this.possuiFotosIrmaos()) {
+            if (item.isIrmao && !this.possuiFotosIrmaos()) {
                 return null;
             }
-            const opcoesTurma = this.getOpcoes('T');
-            const opcoesIrmaos = this.getOpcoes('I');
+            const opcoesTurma = this.getOpcoes(true);
+            const opcoesIrmaos = this.getOpcoes(false, true);
+
+            const renderOpcaoKit = () => {
+                let opcaoTurma;
+                let opcaoIrmao;
+                if (item.qtd > 0 && this.state.itemSel?.nome === item.nome) {
+                    if(this.possuiFotoTurma()) {
+                        opcaoTurma = (
+                            <div
+                                className="input-field col s12 m6 select-opcoes select-opcoes-fotos"
+                                style={{paddingLeft: "3.5rem"}}
+                            >
+                                <Select
+                                    composedKey={`item${idx}.opcao`}
+                                    label={'Foto Turma'}
+                                    options={opcoesTurma}
+                                    disabled={false}
+                                    selecionar={idxFoto => this.selecionarFotoTurma(idx, idxFoto)}
+                                />
+                            </div>
+                        )
+                    }
+                    // Se ft de turma selecionada e é kit c irmão então escolhe irmão
+                    if (this.state.itemSel.opcao && item.isIrmao) {
+                        opcaoIrmao = (
+                            <div
+                                className="input-field col s12 m6 select-opcoes select-opcoes-fotos"
+                                style={{paddingLeft: "3.5rem"}}
+                            >
+                                <Select
+                                    composedKey={`item${idx}.opcao`}
+                                    label={'Foto Irmãos'}
+                                    options={opcoesIrmaos}
+                                    disabled={false}
+                                    selecionar={idxFoto => this.selecionarFotoIrmao(idxFoto)}
+                                />
+                            </div>
+                        )
+                    }
+                }
+                return (
+                    <>
+                    {opcaoTurma}
+                    {opcaoIrmao}
+                    </>
+                )
+            }
+
             return (
                 <div className="row" key={`item${idx}`}>
                     <div className="col s12 mb-2">
@@ -149,48 +209,15 @@ export default class SelecaoPedido extends Component {
                         </label>
                     </div>
 
-                    { item.qtd > 0 && this.state.itemSel?.nome === item.nome ?    
-                        <>
-                            <div
-                                className="input-field col s12 m6 select-opcoes select-opcoes-fotos"
-                                style={{paddingLeft: "3.5rem"}}
-                            >
-                                <Select
-                                    composedKey={`item${idx}.opcao`}
-                                    label={'Foto Turma'}
-                                    options={opcoesTurma}
-                                    disabled={false}
-                                    selecionar={idxFoto => this.selecionarFotoTurma(idx, idxFoto)}
-                                />
-                            </div>
-                            {
-                                // Se ft de turma selecionada e é kit c irmão então escolhe irmão
-                                this.state.itemSel.opcao && item.modeloOpcao === 'I' ?
-                                    <div
-                                        className="input-field col s12 m6 select-opcoes select-opcoes-fotos"
-                                        style={{paddingLeft: "3.5rem"}}
-                                    >
-                                        <Select
-                                            composedKey={`item${idx}.opcao`}
-                                            label={'Foto Irmãos'}
-                                            options={opcoesIrmaos}
-                                            disabled={false}
-                                            selecionar={idxFoto => this.selecionarFotoIrmao(idxFoto)}
-                                        />
-                                    </div>
-                                : null
-                            }
-                        </>
-                        : null
-                    }
+                    {renderOpcaoKit()}
                 </div>
             );
         });
         const checkBoxExtras = this.state.extrasSel.map((extra, idx) => {
-            if (extra.modeloOpcao === 'I' && !this.possuiFotosIrmaos()) {
+            if (extra.isIrmao && !this.possuiFotosIrmaos()) {
                 return null;
             }
-            if (extra.modeloOpcao === 'O' && !this.possuiFotoAdicional()) {
+            if (extra.isOpcional && !this.possuiFotoAdicional()) {
                 return null;
             }
             return (
@@ -210,7 +237,7 @@ export default class SelecaoPedido extends Component {
                             <span>{extra.nome} <b>+R${extra.val}</b></span>
                         </label>
                     </div>
-                    { extra.qtd > 0 && extra.modeloOpcao == null ?    
+                    { extra.qtd > 0 && !extra.temEscolha() ?    
                         <div
                             className="col s6 m4 l3 xl2 mb-3"
                             style={{paddingLeft: "3.5rem"}}
@@ -229,8 +256,8 @@ export default class SelecaoPedido extends Component {
                         </div>
                         : null
                     }
-                    { extra.qtd > 0 && extra.modeloOpcao != null ?
-                        this.getOpcoes(extra.modeloOpcao).map((opcao, idxOpcao) => {
+                    { extra.qtd > 0 && extra.temEscolha() ?
+                        this.getOpcoes(extra.isTurma, extra.isIrmao, extra.isOpcional).map((opcao, idxOpcao) => {
                             this.inicializaOpcao(extra, opcao);
                             return (
                                 <div className="row" key={`extra${idx}.opcao${idxOpcao}`}>
@@ -275,9 +302,11 @@ export default class SelecaoPedido extends Component {
                         Kit &nbsp;
                         <span style={{color: 'red'}}>*</span>
                     </h6>
-                    <blockquote style={{fontStyle: 'italic'}}>
-                        Selecione uma opção de kit. Campo obrigatório
-                    </blockquote>
+                    {this.itens.length > 1 ? (
+                        <blockquote style={{ fontStyle: "italic" }}>
+                            Selecione uma opção de kit. Campo obrigatório
+                        </blockquote>
+                    ) : null}
                 </div>
 
                 <div className="row input-field mb-2">

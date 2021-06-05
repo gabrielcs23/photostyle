@@ -3,8 +3,18 @@ package br.com.photostyle.api.service;
 import br.com.photostyle.api.email.service.EmailService;
 import br.com.photostyle.api.model.adapter.FotoAdapter;
 import br.com.photostyle.api.model.adapter.PedidoAdapter;
-import br.com.photostyle.api.model.dto.*;
+import br.com.photostyle.api.model.dto.FotoDto;
+import br.com.photostyle.api.model.dto.MostruarioDto;
+import br.com.photostyle.api.model.dto.kit.KitDto;
+import br.com.photostyle.api.model.dto.kit.OpcaoExtra;
+import br.com.photostyle.api.model.dto.kit.OpcaoKit;
+import br.com.photostyle.api.model.dto.pedido.PedidoDto;
+import br.com.photostyle.api.model.dto.pedido.RetornoPedidoDto;
 import br.com.photostyle.api.model.entity.*;
+import br.com.photostyle.api.model.entity.pedido.PedidoEntity;
+import br.com.photostyle.api.model.entity.tabela.OpcaoExtraEntity;
+import br.com.photostyle.api.model.entity.tabela.OpcaoKitEntity;
+import br.com.photostyle.api.model.entity.tabela.TabelaDePrecoEntity;
 import br.com.photostyle.api.repository.PedidoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +24,7 @@ import javax.transaction.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class AcessoKitService {
@@ -23,6 +34,9 @@ public class AcessoKitService {
 
     @Autowired
     private EscolaService escolaService;
+
+    @Autowired
+    private TabelaPrecoService tabelaPrecoService;
 
     @Autowired
     private FotoAdapter fotoAdapter;
@@ -53,6 +67,14 @@ public class AcessoKitService {
         EscolaEntity escola = aluno.getEscola();
         kit.setEscola(escola.getNome());
 
+        TabelaDePrecoEntity tabelaPreco = tabelaPrecoService.getPorEscolaOuDefault(escola.getId());
+        List<OpcaoKit> opKits = tabelaPreco.getOpcoesKit().stream()
+                .map(this::montarOpcaoKit).collect(Collectors.toList());
+        List<OpcaoExtra> opExtras = tabelaPreco.getOpcoesExtra().stream()
+                .map(this::montarOpcaoExtra).collect(Collectors.toList());
+        kit.setOpcaoKits(opKits);
+        kit.setOpcaoExtras(opExtras);
+
         TurmaEntity turma = aluno.getTurma();
         kit.setTurma(turma.getNome());
         List<FotoEntity> fotosTurma = turma.getFotos();
@@ -82,6 +104,26 @@ public class AcessoKitService {
         return kit;
     }
 
+    private OpcaoKit montarOpcaoKit(OpcaoKitEntity entity) {
+        OpcaoKit dto = new OpcaoKit();
+        dto.setNome(entity.getNome());
+        dto.setValor(entity.getValor());
+        dto.setIrmao(entity.isIrmao());
+        dto.setTurma(entity.isTurma());
+        return dto;
+    }
+
+    private OpcaoExtra montarOpcaoExtra(OpcaoExtraEntity entity) {
+        OpcaoExtra dto = new OpcaoExtra();
+        dto.setNome(entity.getNome());
+        dto.setValor(entity.getValor());
+        dto.setIrmao(entity.isIrmao());
+        dto.setTurma(entity.isTurma());
+        dto.setDigital(entity.isDigital());
+        dto.setOpcional(entity.isOpcional());
+        return dto;
+    }
+
     @Transactional
     public RetornoPedidoDto realizarPedido(PedidoDto dto) {
         PedidoEntity pedidoEntity = pedidoAdapter.dtoToEntity(dto);
@@ -108,7 +150,7 @@ public class AcessoKitService {
     private String geraNumeroPedido(Long id) {
         StringBuilder idString = new StringBuilder(id.toString());
         // preenche numero pedido com zeros
-        while(idString.length() < 7) {
+        while (idString.length() < 7) {
             idString.insert(0, '0');
         }
         return '#' + idString.toString();

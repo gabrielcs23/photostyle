@@ -28,7 +28,7 @@ public class ApiApplication {
 			public void addCorsMappings(CorsRegistry registry) {
 				registry.addMapping("/**")
 						.allowedOrigins("*")
-						.allowedMethods("GET", "POST", "DELETE")
+						.allowedMethods("GET", "POST", "PATCH", "DELETE")
 						.allowedHeaders("*")
 						.allowCredentials(true)
 						.maxAge(MAX_AGE_MILLI/1000);

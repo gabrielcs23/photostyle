@@ -1,6 +1,6 @@
 {
   "name": "photostyle",
-  "version": "1.2.3",
+  "version": "1.2.5",
   "private": true,
   "dependencies": {
     "@brainhubeu/react-carousel": "^1.19.26",

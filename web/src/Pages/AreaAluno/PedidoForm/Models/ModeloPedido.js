@@ -4,16 +4,22 @@ export default class ModeloPedido {
     qtd = 0;
     total = 0;
     isDigital = false;
-    modeloOpcao = undefined;
+    isTurma = false;
+    isIrmao = false;
+    isOpcional = false;
     opcao = undefined;
 
-    constructor(nome, val, isDigital, possuiOpcao) {
+    constructor(nome, val, isTurma, isIrmao, isOpcional, isDigital) {
         this.nome = nome;
         this.val = val;
-        this.isDigital = isDigital;
-        if (possuiOpcao != null) {
-            this.modeloOpcao = possuiOpcao;
-        }
+        this.isTurma = isTurma != null ? isTurma : false;
+        this.isIrmao = isIrmao != null ? isIrmao : false;
+        this.isOpcional = isOpcional != null ? isOpcional : false;
+        this.isDigital = isDigital != null ? isDigital : false;
+    }
+
+    temEscolha() {
+        return this.isDigital || this.isTurma || this.isIrmao || this.isOpcional;
     }
 
 }

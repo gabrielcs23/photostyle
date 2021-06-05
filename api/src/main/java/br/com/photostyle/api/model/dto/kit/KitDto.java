@@ -1,4 +1,6 @@
-package br.com.photostyle.api.model.dto;
+package br.com.photostyle.api.model.dto.kit;
+
+import br.com.photostyle.api.model.dto.FotoDto;
 
 import java.util.List;
 
@@ -9,6 +11,8 @@ public class KitDto {
     private String escola;
     private String turma;
     private FotoDto fotoIndividual;
+    private List<OpcaoKit> opcaoKits;
+    private List<OpcaoExtra> opcaoExtras;
     private List<FotoDto> fotosTurma;
     private List<FotoDto> fotosIrmaos;
     private List<FotoDto> fotosOpcionais;
@@ -84,5 +88,21 @@ public class KitDto {
 
     public void setFotosMostruarioEscola(List<FotoDto> fotosMostruarioEscola) {
         this.fotosMostruarioEscola = fotosMostruarioEscola;
+    }
+
+    public List<OpcaoKit> getOpcaoKits() {
+        return opcaoKits;
+    }
+
+    public void setOpcaoKits(List<OpcaoKit> opcaoKits) {
+        this.opcaoKits = opcaoKits;
+    }
+
+    public List<OpcaoExtra> getOpcaoExtras() {
+        return opcaoExtras;
+    }
+
+    public void setOpcaoExtras(List<OpcaoExtra> opcaoExtras) {
+        this.opcaoExtras = opcaoExtras;
     }
 }

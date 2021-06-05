@@ -88,6 +88,7 @@ export default class AreaAluno extends BasePage {
     }
     if (!this.state.nPedido) {
       const opcoes = this.getOpcoesFotos(kit.fotosTurma, kit.fotosIrmaos, kit.fotosOpcionais);
+      const tabela = {opcaoKits: kit.opcaoKits, opcaoExtras: kit.opcaoExtras}
       return (
         <>
           <div className={`${styles.title} center`}>
@@ -105,6 +106,7 @@ export default class AreaAluno extends BasePage {
               turma={kit.turma}
               escola={kit.escola}
               opcoes={opcoes}
+              tabela={tabela}
               onPedidoFeito={(nPedido) => this.onPedidoFeito(nPedido)}
             />
           </div>

@@ -1,9 +1,9 @@
 package br.com.photostyle.api.model.adapter;
 
-import br.com.photostyle.api.model.dto.OpcaoPedidoDto;
-import br.com.photostyle.api.model.dto.PedidoDto;
-import br.com.photostyle.api.model.entity.ItemPedidoEntity;
-import br.com.photostyle.api.model.entity.PedidoEntity;
+import br.com.photostyle.api.model.dto.pedido.OpcaoPedidoDto;
+import br.com.photostyle.api.model.dto.pedido.PedidoDto;
+import br.com.photostyle.api.model.entity.pedido.ItemPedidoEntity;
+import br.com.photostyle.api.model.entity.pedido.PedidoEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 

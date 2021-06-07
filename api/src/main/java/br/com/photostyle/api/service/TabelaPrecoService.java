@@ -98,7 +98,7 @@ public class TabelaPrecoService extends BaseService<TabelaDePrecoEntity, TabelaP
         for (OpcaoKitDto dto : kitDtos) {
             OpcaoKitEntity entity;
             if (dto.getId() != null) {
-                entity = opKitRepository.getByTabelaId(id);
+                entity = opKitRepository.getOne(dto.getId());
                 entity.setValor(dto.getValor());
                 entity.setNome(dto.getNome());
                 entity.setIrmao(dto.getIsIrmao());
@@ -113,7 +113,7 @@ public class TabelaPrecoService extends BaseService<TabelaDePrecoEntity, TabelaP
         for (OpcaoExtraDto dto : extraDtos) {
             OpcaoExtraEntity entity;
             if (dto.getId() != null) {
-                entity = opExtraRepository.getByTabelaId(id);
+                entity = opExtraRepository.getOne(dto.getId());
                 entity.setValor(dto.getValor());
                 entity.setNome(dto.getNome());
                 entity.setIrmao(dto.getIsIrmao());

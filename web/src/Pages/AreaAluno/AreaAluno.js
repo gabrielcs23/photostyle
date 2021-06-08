@@ -92,12 +92,13 @@ export default class AreaAluno extends BasePage {
       return (
         <>
           <div className={`${styles.title} center`}>
-            <h3>Kit Fotográfico Escolar 2020</h3>
+            <h3>Kit Fotográfico Escolar</h3>
           </div>
           <div className="content container">
             <Mostruario
               kit={kit}
               mostraExtras={this.mostraExtras}
+              showHelper={kit.fotosTurma}
               styles={styles}
             />
 

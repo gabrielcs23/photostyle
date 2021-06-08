@@ -2,7 +2,7 @@ import React from "react";
 import ImgBox from "../../Utils/ImgBox/ImgBox";
 import DisplayFotos from "../DisplayFotos/DisplayFotos";
 
-function Mostruario({ styles, kit, mostraExtras }) {
+function Mostruario({ styles, kit, mostraExtras, showHelper }) {
   const {
     codigoAcesso,
     escola,
@@ -39,20 +39,22 @@ function Mostruario({ styles, kit, mostraExtras }) {
 
   return (
     <>
-      <blockquote style={{ fontStyle: "italic" }}>
-        O kit é composto por 2 (duas) fotos diagramadas, sendo:
-        <ul className="browser-default">
-          <li>Uma individual com legenda: nome, turma e ano.</li>
-          <li>
-            Uma foto do grupo com legenda: nomes dos alunos em ordem, nome dos
-            professores, turma e ano.
-          </li>
-        </ul>
-        <p>
-          As fotos são impressas em papel profissional mate (fosco) e entregues
-          dentro de um folder.
-        </p>
-      </blockquote>
+      {showHelper ? (
+        <blockquote style={{ fontStyle: "italic" }}>
+          O kit é composto por 2 (duas) fotos diagramadas, sendo:
+          <ul className="browser-default">
+            <li>Uma individual com legenda: nome, turma e ano.</li>
+            <li>
+              Uma foto do grupo com legenda: nomes dos alunos em ordem, nome dos
+              professores, turma e ano.
+            </li>
+          </ul>
+          <p>
+            As fotos são impressas em papel profissional mate (fosco) e
+            entregues dentro de um folder.
+          </p>
+        </blockquote>
+      ) : null}
 
       <div className="header">
         <div className="left-align">
@@ -137,7 +139,9 @@ function Mostruario({ styles, kit, mostraExtras }) {
 
       <div className="row mb-5">
         <div className="col s12 mt-2">
-          <DisplayFotos fotos={getFotosMostruario(fotosMostruarioEscola, mostraExtras)} />
+          <DisplayFotos
+            fotos={getFotosMostruario(fotosMostruarioEscola, mostraExtras)}
+          />
         </div>
       </div>
 

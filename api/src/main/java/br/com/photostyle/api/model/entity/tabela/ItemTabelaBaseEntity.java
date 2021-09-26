@@ -70,4 +70,11 @@ public abstract class ItemTabelaBaseEntity extends BaseEntity {
     public void setTurma(boolean turma) {
         isTurma = turma;
     }
+
+    protected static <T extends ItemTabelaBaseEntity> void copia(T org, T dest) {
+        dest.setIrmao(org.isIrmao());
+        dest.setTurma(org.isTurma());
+        dest.setNome(org.getNome());
+        dest.setValor(org.getValor());
+    }
 }

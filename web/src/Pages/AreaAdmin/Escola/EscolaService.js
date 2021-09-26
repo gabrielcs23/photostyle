@@ -96,5 +96,23 @@ class EscolaService extends BaseApiService {
         }
     }
 
+    async listarTabelas() {
+        try {
+            const res = await this.axiosInstance.get(`${BASE_URL}/tabela`);
+            return res.data;
+        } catch (error) {
+            throw this.parseError(error);
+        }
+    }
+
+    async copiarTabela(id, idTabela) {
+        try {
+            const res = await this.axiosInstance.post(`${BASE_URL}/${id}/tabela/${idTabela}`);
+            return res.data;
+        } catch (error) {
+            throw this.parseError(error);
+        }
+    }
+
 }
 export default new EscolaService();

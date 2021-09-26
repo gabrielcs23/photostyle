@@ -4,6 +4,7 @@ import br.com.photostyle.api.model.dto.EscolaDto;
 import br.com.photostyle.api.model.dto.FotoDto;
 import br.com.photostyle.api.model.dto.MostruarioDto;
 import br.com.photostyle.api.model.dto.TurmaDto;
+import br.com.photostyle.api.model.dto.tabela.TabelaPorEscolaDTO;
 import br.com.photostyle.api.model.dto.tabela.TabelaPrecoDto;
 import br.com.photostyle.api.model.entity.EscolaEntity;
 import br.com.photostyle.api.service.EscolaService;
@@ -157,6 +158,20 @@ public class EscolaController {
         return ResponseEntity.ok(dto);
     }
 
+    @GetMapping("{id}/tabela")
+    public ResponseEntity<TabelaPrecoDto> recuperarTabelaPreco(@PathVariable Long id) {
+        TabelaPrecoDto dto = tabelaPrecoService.recuperarPorEscola(id);
+        if (dto == null) {
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.ok(dto);
+    }
+
+    @PostMapping("{id}/tabela/{idTabela}")
+    public ResponseEntity<TabelaPrecoDto> copiarTabela(@PathVariable Long id, @PathVariable Long idTabela) {
+        return ResponseEntity.ok(tabelaPrecoService.copiarTabela(id, idTabela));
+    }
+
     @PostMapping("/tabela")
     public ResponseEntity<TabelaPrecoDto> cadastrarTabelaPreco(@RequestBody @Valid TabelaPrecoDto tabela) {
         TabelaPrecoDto dto = tabelaPrecoService.criarSemEscola(tabela);
@@ -173,13 +188,9 @@ public class EscolaController {
         return ResponseEntity.ok(dto);
     }
 
-    @GetMapping("{id}/tabela")
-    public ResponseEntity<TabelaPrecoDto> recuperarTabelaPreco(@PathVariable Long id) {
-        TabelaPrecoDto dto = tabelaPrecoService.recuperarPorEscola(id);
-        if (dto == null) {
-            return ResponseEntity.ok().build();
-        }
-        return ResponseEntity.ok(dto);
+    @GetMapping("/tabela")
+    public ResponseEntity<List<TabelaPorEscolaDTO>> listarTabelas() {
+        return ResponseEntity.ok(tabelaPrecoService.listarTabelas());
     }
 
 }

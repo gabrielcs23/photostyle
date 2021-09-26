@@ -8,7 +8,7 @@ public abstract class BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
-    private Long id;
+    protected Long id;
 
     public Long getId() {
         return id;

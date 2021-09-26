@@ -5,6 +5,7 @@ import br.com.photostyle.api.model.adapter.tabela.OpcaoKitAdapter;
 import br.com.photostyle.api.model.adapter.tabela.TabelaPrecoAdapter;
 import br.com.photostyle.api.model.dto.tabela.OpcaoExtraDto;
 import br.com.photostyle.api.model.dto.tabela.OpcaoKitDto;
+import br.com.photostyle.api.model.dto.tabela.TabelaPorEscolaDTO;
 import br.com.photostyle.api.model.dto.tabela.TabelaPrecoDto;
 import br.com.photostyle.api.model.entity.EscolaEntity;
 import br.com.photostyle.api.model.entity.tabela.OpcaoExtraEntity;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -128,6 +130,36 @@ public class TabelaPrecoService extends BaseService<TabelaDePrecoEntity, TabelaP
 
         tabelaEntity = getEntityPorId(id);
         return adapter.entityToDto(tabelaEntity);
+    }
+
+    public List<TabelaPorEscolaDTO> listarTabelas() {
+        return repository.listarTabelas();
+    }
+
+    @Transactional
+    public TabelaPrecoDto copiarTabela(long idEscola, long idTabela) {
+        TabelaDePrecoEntity dest = new TabelaDePrecoEntity();
+
+        List<OpcaoKitEntity> destKits = new ArrayList<>();
+        for (OpcaoKitEntity orgKit : repository.getOpcoesKit(idTabela)) {
+            OpcaoKitEntity destKit = OpcaoKitEntity.copia(orgKit);
+            destKit.setTabela(dest);
+            destKits.add(destKit);
+        }
+        dest.setOpcoesKit(destKits);
+
+        List<OpcaoExtraEntity> destExtras = new ArrayList<>();
+        for (OpcaoExtraEntity orgExtra : repository.getOpcoesExtra(idTabela)) {
+            OpcaoExtraEntity destExtra = OpcaoExtraEntity.copia(orgExtra);
+            destExtra.setTabela(dest);
+            destExtras.add(destExtra);
+        }
+        dest.setOpcoesExtra(destExtras);
+
+        dest.setEscola(new EscolaEntity(idEscola));
+        dest = repository.save(dest);
+
+        return adapter.entityToDto(dest);
     }
 
     private TabelaDePrecoEntity construir(TabelaPrecoDto dto) {

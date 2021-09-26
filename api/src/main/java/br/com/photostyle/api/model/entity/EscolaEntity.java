@@ -19,6 +19,13 @@ public class EscolaEntity extends BaseEntity {
     @OneToMany(mappedBy = "escola", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<TurmaEntity> turmas;
 
+    public EscolaEntity() {
+    }
+
+    public EscolaEntity(long id) {
+        this.id = id;
+    }
+
     public String getNome() {
         return nome;
     }

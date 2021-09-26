@@ -29,4 +29,12 @@ public class OpcaoExtraEntity extends ItemTabelaBaseEntity {
     public void setOpcional(boolean opcional) {
         isOpcional = opcional;
     }
+
+    public static OpcaoExtraEntity copia(OpcaoExtraEntity org) {
+        OpcaoExtraEntity dest = new OpcaoExtraEntity();
+        copia(org, dest);
+        dest.setDigital(org.isDigital);
+        dest.setOpcional(org.isOpcional);
+        return dest;
+    }
 }

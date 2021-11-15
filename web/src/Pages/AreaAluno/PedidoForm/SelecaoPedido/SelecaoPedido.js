@@ -55,6 +55,9 @@ export default class SelecaoPedido extends Component {
     }
 
     onChangeQtdExtra(idx, qtd, cleaveRef) {
+        if (!qtd) {
+           return
+        }
         if (this.state.extrasSel[idx].isDigital && qtd > 1) {
             if (cleaveRef) {
                 cleaveRef.setRawValue('1');
@@ -108,6 +111,9 @@ export default class SelecaoPedido extends Component {
     }
 
     onChangeQtdOpcaoExtra(idxExtra, nome, qtd, cleaveRef) {
+        if (!qtd) {
+            return
+        }
         if (this.state.extrasSel[idxExtra].isDigital && qtd > 1) {
             if (cleaveRef) {
                 cleaveRef.setRawValue('1');
@@ -118,9 +124,6 @@ export default class SelecaoPedido extends Component {
     }
 
     selecionaQtdOpcao(idxExtra, nome, qtd) {
-        if (!qtd) {
-            qtd = 0;
-        }
         const extras = this.state.extrasSel.slice();
         const extra = extras[idxExtra];
         extra.opcao.set(nome, qtd);

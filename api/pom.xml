@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>br.com.photostyle</groupId>
 	<artifactId>api</artifactId>
-	<version>1.3</version>
+	<version>1.4-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>api</name>
 
@@ -177,11 +177,11 @@
 						<configuration>
 							<!--	Incluindo conf da AWS Beanstalk no jar		-->
 							<target>
-								<unzip src="${project.build.directory}/${project.build.finalName}.jar" dest="${project.build.directory}/${project.build.finalName}" />
-								<copy todir="${project.build.directory}/${project.build.finalName}/" overwrite="false">
+								<copy todir="${project.build.directory}/${project.build.finalName}/" overwrite="true">
 									<fileset dir="./" includes=".ebextensions/**"/>
+									<fileset dir="${project.build.directory}" includes="${project.build.finalName}.jar"/>
 								</copy>
-								<zip compress="false" destfile="${project.build.directory}/${project.build.finalName}.jar" basedir="${project.build.directory}/${project.build.finalName}"/>
+								<zip destfile="${project.build.directory}/${project.build.finalName}.zip" basedir="${project.build.directory}/${project.build.finalName}"/>
 								<delete dir="${project.build.directory}/${project.build.finalName}" includeemptydirs="true"/>
 							</target>
 						</configuration>

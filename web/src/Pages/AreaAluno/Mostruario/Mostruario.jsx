@@ -97,7 +97,7 @@ function Mostruario({ styles, kit, mostraExtras, showHelper }) {
 
           <div className={styles.explicacaoCenter}>
             <blockquote>
-              Mostra das fotos de turma oficial e funny
+              Mostra da(s) foto(s) de turma
               {`${temFotosIrmaos(kit) ? " e foto de Irmãos" : ""}`}
             </blockquote>
           </div>

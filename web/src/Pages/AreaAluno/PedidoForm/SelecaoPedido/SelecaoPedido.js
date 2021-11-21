@@ -127,6 +127,13 @@ export default class SelecaoPedido extends Component {
         const extras = this.state.extrasSel.slice();
         const extra = extras[idxExtra];
         extra.opcao.set(nome, qtd);
+
+        extra.qtd = 0;
+        for (let qtdItem of extra.opcao.values()) {
+            extra.qtd += qtdItem;
+        }
+        extra.total = extra.val * extra.qtd;
+
         this.setState({extrasSel: extras});
         this.montaSelecao(this.state.itemSel, extras);
     }

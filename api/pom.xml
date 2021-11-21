@@ -177,11 +177,12 @@
 						<configuration>
 							<!--	Incluindo conf da AWS Beanstalk no jar		-->
 							<target>
-								<copy todir="${project.build.directory}/${project.build.finalName}/" overwrite="true">
+								<copy todir="${project.build.directory}/${project.build.finalName}/" overwrite="false">
 									<fileset dir="./" includes=".ebextensions/**"/>
-									<fileset dir="${project.build.directory}" includes="${project.build.finalName}.jar"/>
+									<fileset dir="./" includes=".platform/**"/>
 								</copy>
-								<zip destfile="${project.build.directory}/${project.build.finalName}.zip" basedir="${project.build.directory}/${project.build.finalName}"/>
+								<copy file="${project.build.directory}/${project.build.finalName}.jar" tofile="${project.build.directory}/${project.build.finalName}/${project.build.finalName}.jar"/>
+								<zip compress="false" destfile="${project.build.directory}/${project.build.finalName}.jar" basedir="${project.build.directory}/${project.build.finalName}"/>
 								<delete dir="${project.build.directory}/${project.build.finalName}" includeemptydirs="true"/>
 							</target>
 						</configuration>

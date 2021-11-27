@@ -28,6 +28,28 @@ export default class SelecaoPedido extends Component {
         if (this.itens.length === 1) {
             this.selectItem(0);
         }
+        this.inicializaOpcoes();
+    }
+
+    inicializaOpcoes() {
+        const extras = this.state.extrasSel.slice();
+        for (const extra of extras) {
+            if (extra.temEscolha()) {
+                if (extra.isTurma && !this.possuiFotoTurma()) {
+                    continue;
+                }
+                if (extra.isIrmao && !this.possuiFotosIrmaos()) {
+                    continue;
+                }
+                if (extra.isOpcional && !this.possuiFotoAdicional()) {
+                    continue;
+                }
+                for (const opcao of this.getOpcoes(extra.isTurma, extra.isIrmao, extra.isOpcional)) {
+                    this.inicializaOpcao(extra, opcao);
+                }
+            }
+        }
+        this.setState({extrasSel: extras});
     }
 
     selectItem(idx) {
@@ -51,7 +73,21 @@ export default class SelecaoPedido extends Component {
     }
 
     checkExtra(checked, idx) {
-        checked ? this.setQtdExtra(idx, 1) : this.setQtdExtra(idx, 0);
+        checked ? this.setQtdExtra(idx, 1) : this.uncheckExtra(idx);
+    }
+
+    uncheckExtra(idx) {
+        const extras = this.state.extrasSel.slice();
+        const extra = extras[idx];
+        if (extra.opcao) {
+            for (let key of extra.opcao.keys()) {
+                extra.opcao.set(key, 0)
+            }
+            extra.qtd = 0;
+            this.setValOpcao(extras, extra);
+        } else {
+            this.setQtdExtra(idx, 0)
+        }
     }
 
     onChangeQtdExtra(idx, qtd, cleaveRef) {
@@ -71,7 +107,9 @@ export default class SelecaoPedido extends Component {
         const extras = this.state.extrasSel.slice();
         const campo = extras[idx];
         campo.qtd = qtd;
-        campo.total = campo.val * campo.qtd;
+        if (!campo.opcao) {
+            campo.total = campo.val * campo.qtd;
+        }
         this.setState({extrasSel: extras});
         this.montaSelecao(this.state.itemSel, extras);
     }
@@ -132,6 +170,10 @@ export default class SelecaoPedido extends Component {
         for (let qtdItem of extra.opcao.values()) {
             extra.qtd += qtdItem;
         }
+        this.setValOpcao(extras, extra);
+    }
+
+    setValOpcao(extras, extra) {
         extra.total = extra.val * extra.qtd;
 
         this.setState({extrasSel: extras});
@@ -268,7 +310,6 @@ export default class SelecaoPedido extends Component {
                     }
                     { extra.qtd > 0 && extra.temEscolha() ?
                         this.getOpcoes(extra.isTurma, extra.isIrmao, extra.isOpcional).map((opcao, idxOpcao) => {
-                            this.inicializaOpcao(extra, opcao);
                             return (
                                 <div className="row" key={`extra${idx}.opcao${idxOpcao}`}>
                                     <div

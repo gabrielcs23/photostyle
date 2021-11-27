@@ -125,7 +125,7 @@ export default class PedidoForm extends Component {
     selecionaPedido(opcoes) {
         let valorTotal = opcoes.item.val;
         opcoes.extras.forEach(extra => {
-            if (!extra.modeloOpcao) {
+            if (!extra.opcao) {
                 valorTotal += (extra.val * extra.qtd)
             } else if(extra.opcao) {
                 extra.opcao.forEach(qtd => valorTotal += (extra.val * qtd));

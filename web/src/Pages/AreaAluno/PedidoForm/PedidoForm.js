@@ -60,6 +60,15 @@ export default class PedidoForm extends Component {
         this.setState({[name]: value});
     }
 
+    extraTemOpcaoSelecionada(extra) {
+        for (const op of extra.opcao.values()) {
+            if (op > 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     submitForm = () => {
         const validacao = this.validador.valida(this.state);
 
@@ -67,6 +76,22 @@ export default class PedidoForm extends Component {
             if (!this.state.item) {
                 PopUp.erro('Escolha uma opção de kit');
                 return;
+            }
+            if (this.state.item.isTurma && !this.state.item.opcao?.turma) {
+                PopUp.erro('Escolha foto de turma do kit');
+                return;
+            }
+            if (this.state.item.isIrmao && !this.state.item.opcao?.irmao) {
+                PopUp.erro('Escolha foto de irmão do kit');
+                return;
+            }
+            for (const extra of this.state.extras) {
+                if (extra.opcao) {
+                    if (!this.extraTemOpcaoSelecionada(extra)) {
+                        PopUp.erro(`Escolha quantidade de: ${extra.nome}`);
+                        return;
+                    }
+                }
             }
             this.setState({submitDisabled: true});
 
@@ -90,7 +115,12 @@ export default class PedidoForm extends Component {
                     });
                 }
             }
-            
+
+            const item = Object.assign({}, this.state.item)
+            item.opcao = this.state.item.opcao.turma
+            if (this.state.item.opcao.irmao) {
+                item.opcao += ` + ${this.state.item.opcao.irmao}`;
+            }            
             const pedido = {
                 aluno: this.aluno,
                 turma: this.turma,
@@ -98,9 +128,10 @@ export default class PedidoForm extends Component {
                 responsavel: this.state.responsavel,
                 tel: this.state.tel,
                 email: this.state.email,
-                item: this.state.item,
+                item: item,
                 extras: extras
             };
+
             AreaAlunoService.fazerPedido(pedido)
                 .then(res => {
                     this.props.onPedidoFeito(res.nPedido);

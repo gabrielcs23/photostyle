@@ -53,21 +53,26 @@ export default class SelecaoPedido extends Component {
     }
 
     selectItem(idx) {
-        const item = this.itens[idx];
+        const itemSel = this.itens[idx]
+        const item = new ModeloPedido(itemSel.nome, itemSel.val, itemSel.isTurma, itemSel.isIrmao, itemSel.isOpcional, itemSel.isDigital);
+        item.qtd = 1;
+        item.total = item.val;
+        item.opcao = {turma: '', irmao: ''}
+        
         this.setState({itemSel: item});
         this.montaSelecao(item, this.state.extrasSel.slice());
     }
 
-    selecionarFotoTurma(idxItem, idxOpcao) {
-        const item = Object.assign({}, this.itens[idxItem]);
-        item.opcao = this.props.opcoesTurma[idxOpcao].nome;
+    selecionarFotoTurma(idxOpcao) {
+        const item = this.state.itemSel;
+        item.opcao.turma = this.props.opcoesTurma[idxOpcao].nome;
         this.setState({itemSel: item});
         this.montaSelecao(item, this.state.extrasSel.slice());
     }
 
     selecionarFotoIrmao(idxOpcao) {
         const item = this.state.itemSel;
-        item.opcao += ` + ${this.props.opcoesIrmaos[idxOpcao].nome}`;
+        item.opcao.irmao = this.props.opcoesIrmaos[idxOpcao].nome;
         this.setState({itemSel: item});
         this.montaSelecao(item, this.state.extrasSel.slice());
     }
@@ -182,8 +187,6 @@ export default class SelecaoPedido extends Component {
 
     montaSelecao(item, extrasSel) {
         const extras = extrasSel.filter(extra => extra.qtd > 0);
-        item.qtd = 1;
-        item.total = item.val;
         const opcoes = {
             item: item,
             extras: extras
@@ -202,7 +205,7 @@ export default class SelecaoPedido extends Component {
             const renderOpcaoKit = () => {
                 let opcaoTurma;
                 let opcaoIrmao;
-                if (item.qtd > 0 && this.state.itemSel?.nome === item.nome) {
+                if (this.state.itemSel?.nome === item.nome && this.state.itemSel.qtd > 0) {
                     if(this.possuiFotoTurma()) {
                         opcaoTurma = (
                             <div
@@ -214,7 +217,7 @@ export default class SelecaoPedido extends Component {
                                     label={'Foto Turma'}
                                     options={opcoesTurma}
                                     disabled={false}
-                                    selecionar={idxFoto => this.selecionarFotoTurma(idx, idxFoto)}
+                                    selecionar={idxFoto => this.selecionarFotoTurma(idxFoto)}
                                 />
                             </div>
                         )

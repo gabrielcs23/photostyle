@@ -16,9 +16,6 @@ const Carousel = () => {
         `${process.env.PUBLIC_URL}/assets/images/carousel/09.jpg`,
         `${process.env.PUBLIC_URL}/assets/images/carousel/10.jpg`,
         `${process.env.PUBLIC_URL}/assets/images/carousel/11.jpg`,
-        `${process.env.PUBLIC_URL}/assets/images/carousel/12.jpg`,
-        `${process.env.PUBLIC_URL}/assets/images/carousel/13.jpg`,
-        `${process.env.PUBLIC_URL}/assets/images/carousel/14.jpg`,
     ];
 
     const slides = imgs.map((img, idx) => {

@@ -27,8 +27,8 @@ const Header = activePage => {
                     />
                 </NavLink>
                 <ul id="nav-mobile" className="right hide-on-small-only">
-                    <li><NavLink to="/sobre" activeClassName="active">Quem Somos</NavLink></li>
-                    <li><NavLink to="/contato" className={activePage === 'contato' ? 'active' : ''}>Contato</NavLink></li>
+                    {/* <li><NavLink to="/sobre" activeClassName="active">Quem Somos</NavLink></li>
+                    <li><NavLink to="/contato" className={activePage === 'contato' ? 'active' : ''}>Contato</NavLink></li> */}
                 </ul>
             </div>
         </nav>

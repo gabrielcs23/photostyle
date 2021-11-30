@@ -30,7 +30,7 @@ class AreaAcesso extends Component {
     }
 
     render() {
-        const title = 'Recordação Escolar 2020';
+        const title = 'Recordação Escolar';
         return (
                 <div className={`container ${styles.containerBox}`}>
                     <div 

@@ -11,6 +11,7 @@ import org.thymeleaf.spring5.SpringTemplateEngine;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import java.util.Date;
 import java.util.Map;
 
 @Service
@@ -62,7 +63,8 @@ public class EmailService {
         helper.setTo(to);
         helper.setSubject(subject);
         helper.setText(htmlBody, true);
-        mailSender.send(mail);
+        helper.setSentDate(new Date());
+        mailSender.send(helper.getMimeMessage());
     }
 
 }

@@ -254,8 +254,8 @@ export default class SelecaoPedido extends Component {
                     <div className="col s12 mb-2">
                         <label style={{color: 'initial'}}>
                             <input
-                                className="with-gap"
-                                type="radio"
+                                className="filled-in"
+                                type="checkbox"
                                 id={`item${idx}`}
                                 name={`item${idx}`}
                                 checked={this.state.itemSel?.nome === item.nome}

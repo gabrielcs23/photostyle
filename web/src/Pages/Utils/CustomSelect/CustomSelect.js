@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import M from 'materialize-css';
 import Select from 'react-select';
 
 class CustomSelect extends Component {
@@ -12,30 +11,24 @@ class CustomSelect extends Component {
         // se valor foi carregado do banco
         if (this.props.disabled && this.props.options?.length === 1) {
             this.state = {
-                selecionado: true
+                selecionado: 0
             }
-        } else if(this.props.valorInicial) {
+        } else if(this.props.valorInicial != null) {
             this.state = {
                 selecionado: this.props.valorInicial
             }
         } else {
             this.state = {
-                selecionado: ''
+                selecionado: undefined
             }
         }
-    }
-
-    componentDidMount() {
-        this.formSelect = M.FormSelect.init(this.Select);
     }
 
     componentDidUpdate(prevProps, prevState) {
         if(this.props.disabled !== prevProps.disabled) {
             if(this.state.selecionado !== prevState.selecionado) {
-                this.setState({selecionado: ''});
+                this.setState({selecionado: undefined});
             }
-            this.formSelect.destroy();
-            this.formSelect = M.FormSelect.init(this.Select);
         }
     }
 
@@ -60,7 +53,7 @@ class CustomSelect extends Component {
                 <span>{this.props.label}</span>
                 <Select
                     options={options}
-                    defaultValue={this.state.selecionado && options[0]}
+                    defaultValue={this.state.selecionado !== undefined && options[this.state.selecionado]}
                     onChange={event => this.select(event)}
                     isDisabled={this.props.disabled}
                     placeholder={'Selecione...'}

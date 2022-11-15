@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
-import Select from '../../../Utils/Select/Select';
+import CustomSelect from '../../../Utils/CustomSelect/CustomSelect';
+import styles from "../../AreaAluno.module.scss";
 import Cleave from 'cleave.js/react';
 import './SelecaoPedido.scss'
 import ModeloPedido from '../Models/ModeloPedido';
@@ -212,7 +213,7 @@ export default class SelecaoPedido extends Component {
                                 className="input-field col s12 m6 select-opcoes select-opcoes-fotos"
                                 style={{paddingLeft: "3.5rem"}}
                             >
-                                <Select
+                                <CustomSelect
                                     composedKey={`item${idx}.opcao`}
                                     label={'Foto Turma'}
                                     options={opcoesTurma}
@@ -229,7 +230,7 @@ export default class SelecaoPedido extends Component {
                                 className="input-field col s12 m6 select-opcoes select-opcoes-fotos"
                                 style={{paddingLeft: "3.5rem"}}
                             >
-                                <Select
+                                <CustomSelect
                                     composedKey={`item${idx}.opcao`}
                                     label={'Foto Irmãos'}
                                     options={opcoesIrmaos}
@@ -332,7 +333,7 @@ export default class SelecaoPedido extends Component {
                                         />
                                     </div>
                                     <div className="input-field col s12 m6 mb-3 select-opcoes">
-                                        <Select
+                                        <CustomSelect
                                             composedKey={`extra${idx}.opcao${idxOpcao}.select`}
                                             label={'Opção'}
                                             options={[opcao]}
@@ -352,13 +353,13 @@ export default class SelecaoPedido extends Component {
         return (
             <>
                 <div>
-                    <h6 style={{fontWeight: 'bold'}}>
-                        Kit &nbsp;
-                        <span style={{color: 'red'}}>*</span>
-                    </h6>
+                    <h5 className={`${styles.title}`} style={{fontWeight: 'bold'}}>
+                        Kit Recordação Escolar
+                        {/* <span style={{color: 'red'}}>*</span> */}
+                    </h5>
                     {this.itens.length > 1 ? (
                         <blockquote style={{ fontStyle: "italic" }}>
-                            Selecione uma opção de kit. Campo obrigatório
+                            Selecione a opção aqui! <b>E veja os extras.</b>
                         </blockquote>
                     ) : null}
                 </div>

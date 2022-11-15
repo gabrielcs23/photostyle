@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import '../../../Utils/Modal/Modal.css'
 import M from "materialize-css";
-import Select from "../../../Utils/Select/Select";
+import CustomSelect from "../../../Utils/CustomSelect/CustomSelect";
 
 class ModalCopiarTabela extends Component {
 
@@ -45,7 +45,7 @@ class ModalCopiarTabela extends Component {
                 <div className="modal-content">
                     <h4>{this.props.titulo}</h4>
                     {this.props.opcoes ? (
-                        <Select
+                        <CustomSelect
                             composedKey="copia-select"
                             label="Escola de onde copiar"
                             options={this.getOpcoes()}

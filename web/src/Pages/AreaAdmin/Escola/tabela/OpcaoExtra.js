@@ -1,6 +1,6 @@
 import Cleave from "cleave.js/react";
 import React from "react";
-import Select from "../../../Utils/Select/Select";
+import CustomSelect from "../../../Utils/CustomSelect/CustomSelect";
 
 const divisoria = {
     display: 'flex',
@@ -66,7 +66,7 @@ const OpcaoExtra = ({extra, id, onChange}) => {
                     />
                 </div>
                 <div className="input-field col s12 m4 mb-3">
-                    <Select
+                    <CustomSelect
                         composedKey={`extra-turma-${id}`}
                         label={'Turma'}
                         options={opcoes}
@@ -76,7 +76,7 @@ const OpcaoExtra = ({extra, id, onChange}) => {
                     />
                 </div>
                 <div className="input-field col s12 m4 mb-3">
-                    <Select
+                    <CustomSelect
                         composedKey={`extra-irmao-${id}`}
                         label={'Irmão'}
                         options={opcoes}
@@ -88,7 +88,7 @@ const OpcaoExtra = ({extra, id, onChange}) => {
             </div>
             <div className="row">
                 <div className="input-field col s12 m4 mb-3">
-                    <Select
+                    <CustomSelect
                         composedKey={`extra-digital-${id}`}
                         label={'Digital'}
                         options={opcoes}
@@ -98,7 +98,7 @@ const OpcaoExtra = ({extra, id, onChange}) => {
                     />
                 </div>
                 <div className="input-field col s12 m4 mb-3">
-                    <Select
+                    <CustomSelect
                         composedKey={`extra-opcional-${id}`}
                         label={'Opcional'}
                         options={opcoes}

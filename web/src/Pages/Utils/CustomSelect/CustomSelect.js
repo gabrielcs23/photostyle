@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import M from 'materialize-css';
+import Select from 'react-select';
 
-class Select extends Component {
+class CustomSelect extends Component {
     
     constructor(props) {
         super(props);
@@ -11,7 +12,7 @@ class Select extends Component {
         // se valor foi carregado do banco
         if (this.props.disabled && this.props.options?.length === 1) {
             this.state = {
-                selecionado: this.props.options[0]
+                selecionado: true
             }
         } else if(this.props.valorInicial) {
             this.state = {
@@ -39,39 +40,36 @@ class Select extends Component {
     }
 
     select(event) {
-        const valor = event.target.value;
-        this.setState({selecionado: valor});
-        this.props.selecionar(valor);
+        if (this.props.selecionar) {
+            const valor = event.value;
+            this.setState({selecionado: valor});
+            this.props.selecionar(valor);
+        }
     }
 
     render() {
-        const options = this.props.options.slice().map((option, idx) => (
-            <option value={idx} key={this.composedKey + idx + option.id}>
-                {option.nome}
-            </option>
-        ));
+        const options = this.props.options.slice().map((option, idx) => {
+            return {
+                value: idx,
+                label: option.nome
+            }
+        })
 
         return (
             <>
-                <select
-                    ref={Select => {
-                        this.Select = Select;
-                    }}
-                    value={this.state.selecionado}
+                <span>{this.props.label}</span>
+                <Select
+                    options={options}
+                    defaultValue={this.state.selecionado && options[0]}
                     onChange={event => this.select(event)}
-                    disabled={this.props.disabled}
-                >
-                    {!this.props.autoSelect ?
-                        <option value="" disabled={true}>Selecione</option>
-                        :
-                        null
-                    }
-                    {options}
-                </select>
-                <label>{this.props.label}</label>
+                    isDisabled={this.props.disabled}
+                    placeholder={'Selecione...'}
+                    isClearable={false}
+                    backspaceRemovesValue={false}             
+                />
             </>
         )
     }
 
 }
-export default Select;
+export default CustomSelect;

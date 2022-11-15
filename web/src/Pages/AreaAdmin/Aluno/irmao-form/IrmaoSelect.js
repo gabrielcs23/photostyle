@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Select from '../../../Utils/Select/Select';
+import CustomSelect from '../../../Utils/CustomSelect/CustomSelect';
 import PopUp from '../../../Utils/pop-up/PopUp';
 import TurmaService from '../../Turma/TurmaService';
 import AlunoService from '../AlunoService';
@@ -71,7 +71,7 @@ class IrmaoSelect extends Component {
         return (
             <div className="row">
                 <div className="input-field col s12 m6">
-                    <Select
+                    <CustomSelect
                         composedKey={this.composedKey + '0'}
                         label={'Turmas'}
                         options={this.state.turmas}
@@ -80,7 +80,7 @@ class IrmaoSelect extends Component {
                     />
                 </div>
                 <div className="input-field col s12 m6">
-                    <Select
+                    <CustomSelect
                         composedKey={this.composedKey + '1'}
                         label={'Alunos'}
                         options={this.state.alunos}

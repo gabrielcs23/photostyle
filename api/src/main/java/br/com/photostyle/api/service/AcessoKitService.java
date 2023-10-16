@@ -1,5 +1,7 @@
 package br.com.photostyle.api.service;
 
+import br.com.photostyle.api.email.pdf.PDFDto;
+import br.com.photostyle.api.email.pdf.PDFHelper;
 import br.com.photostyle.api.email.service.EmailService;
 import br.com.photostyle.api.model.adapter.FotoAdapter;
 import br.com.photostyle.api.model.adapter.PedidoAdapter;
@@ -142,9 +144,14 @@ public class AcessoKitService {
         templateModel.put("extras", pedido.getExtras());
         templateModel.put("valorTotal", pedido.getValorTotal());
 
-        emailService.enviarEmailSistema(templateModel);
-        emailService.enviarEmailResponsavel(pedidoEntity.getEmail(), templateModel);
-        return new RetornoPedidoDto(nPedido);
+        try {
+            PDFDto pdfDto = PDFHelper.writeToPDF("TestFileName");
+            emailService.enviarEmailSistema(templateModel, pdfDto);
+            emailService.enviarEmailResponsavel(pedidoEntity.getEmail(), templateModel);
+            return new RetornoPedidoDto(nPedido);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private String geraNumeroPedido(Long id) {

@@ -119,6 +119,7 @@ public class EscolaService extends BaseService<EscolaEntity, EscolaDto> {
                 for (Row row : sheet) {
                     Cell cell = row.getCell(0);
                     String nomeAluno = ImportacaoXlsxHelper.getStringCellValue(cell);
+                    if (nomeAluno == null || nomeAluno.isEmpty()) break;
                     cell = row.getCell(1);
                     String matrAluno = ImportacaoXlsxHelper.getStringCellValue(cell);
                     alunoService.criarNovoAluno(escola, turma, nomeAluno, matrAluno);

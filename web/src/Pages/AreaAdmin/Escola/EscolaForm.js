@@ -174,11 +174,14 @@ class EscolaForm extends Component {
             .catch(() => PopUp.erro('Erro'));
     }
 
-    uploadPlanilhaTurmas(id) {
-        EscolaService.uploadPlanilhaTurmas(id)
+    uploadPlanilhaTurmas(id, arq, onCloseHook) {
+        const formData = new FormData();
+        formData.append('file', arq, arq.name);
+        EscolaService.uploadPlanilhaTurmas(id, formData)
             .then(() => PopUp.sucesso('Turmas cadastradas com sucesso'))
             .catch(error => this.props.handleUnauthorized(error))
-            .catch(() => PopUp.erro('Erro no cadastro de turmas'));
+            .catch(() => PopUp.erro('Erro no cadastro de turmas'))
+            .finally(onCloseHook);
     }
 
     render() {
@@ -293,7 +296,7 @@ class EscolaForm extends Component {
 
                 <ModalImportarTurmas
                     idModal={this.idModal}
-                    confirmar={() => this.uploadPlanilhaTurmas(this.state.id)}
+                    confirmar={(arq, onCloseHook) => this.uploadPlanilhaTurmas(this.state.id, arq, onCloseHook)}
                 />
             </>
         )

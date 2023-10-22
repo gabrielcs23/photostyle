@@ -3,13 +3,21 @@ import '../../../Utils/Modal/Modal.css'
 import M from "materialize-css";
 import PlanilhaDropZone from "../../../Utils/PlanilhaDropZone/PlanilhaDropZone";
 
+const loadingWrapper = {
+    width: '20px',
+    height: '20px',
+    marginRight: '1em',
+    marginTop: '0.5em'
+};
+
 class ModalImportarTurmas extends Component {
 
     constructor(props) {
         super(props);
 
         this.state = {
-            file: null
+            file: null,
+            loading: false
         }
     }
 
@@ -19,11 +27,26 @@ class ModalImportarTurmas extends Component {
 
     confirmar = (e) => {
         e.preventDefault()
-        this.props.confirmar(this.state.file)
+        this.setState({ loading: true })
+        const closeModalHook = () => M.Modal.getInstance(this.Modal).close();
+        this.props.confirmar(this.state.file, closeModalHook)
+    }
+
+    cancelar = (e) => {
+        e.preventDefault()
+        this.setState({ file: null })
     }
 
     onDrop = (arq) => {
         this.setState({ file: arq })
+    }
+
+    close = () => {
+        M.Modal.getInstance(this.Modal).close();
+    }
+
+    isLoading = () => {
+        return this.state.loading
     }
 
     render() {
@@ -43,14 +66,31 @@ class ModalImportarTurmas extends Component {
                     />
                 </div>
                 <div className="modal-footer mt-5 mb-3">
-                    <button className="btn mr-3 modal-close waves-effect waves-light grey darken-1"
+                    <button className={`btn mr-3 modal-close waves-effect waves-light grey darken-1 ${!this.isLoading() ? '' : 'disabled'}`}
                         onClick={e => e.preventDefault()}
                     >
                         Cancelar
                     </button>
-                    <button className={`btn mr-3 modal-close waves-effect waves-light green darken-3 ${this.state.file ? '' : 'disabled'}`}
+                    <button className={`btn mr-3 waves-effect waves-light green darken-3 ${this.state.file && !this.isLoading() ? '' : 'disabled'}`}
                         onClick={this.confirmar}
                     >
+                        {this.isLoading()
+                            ? (
+                                <div className="preloader-wrapper active" style={loadingWrapper}>
+                                    <div className="spinner-layer spinner-blue-only">
+                                        <div className="circle-clipper left">
+                                            <div className="circle" />
+                                        </div>
+                                        <div className="gap-patch">
+                                            <div className="circle" />
+                                        </div>
+                                        <div className="circle-clipper right">
+                                            <div className="circle" />
+                                        </div>
+                                    </div>
+                                </div>
+                            ) : null
+                        }
                         Confirmar
                     </button>
                 </div>

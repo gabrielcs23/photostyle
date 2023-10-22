@@ -4,6 +4,20 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     </head>
 
+    <style>
+        p {
+            line-height: 0.8;
+            margin-bottom: 7px;
+        }
+        .etiqueta-entrega {
+            border-style: dashed;
+        }
+        .etiqueta-content {
+            margin: 7px 7px 25px;
+            display: flex;
+        }
+    </style>
+
     <body>
         <h3>Resumo Pedido <span th:text="${nPedido}"></span></h3>
 
@@ -11,7 +25,6 @@
             <b>Escola: </b>
             <span th:text="${escola}"></span>
         </p>
-
         <p>
             <b>Nome Aluno: </b>
             <span th:text="${aluno}"></span>
@@ -46,65 +59,53 @@
                     border-spacing:0;"
             >
                 <thead>
-                    <tr style="border-bottom:1px solid #cccccc;text-align:center;"
+                    <tr style="border-bottom:1px solid #cccccc;"
                     >
                         <th style="border:none;
                                     padding:15px 5px;
                                     display:table-cell;
-                                    vertical-align:middle;
-                                    border-radius:2px;
-                                    text-align:center;"
+                                    border-radius:2px;"
                         >
                             Opção
                         </th>
                         <th style="border:none;
                                     padding:15px 5px;
                                     display:table-cell;
-                                    vertical-align:middle;
-                                    border-radius:2px;
-                                    text-align:center;"
+                                    border-radius:2px;"
                         >
                             Obs
                         </th>
                         <th style="border:none;
                                     padding:15px 5px;
                                     display:table-cell;
-                                    vertical-align:middle;
-                                    border-radius:2px;
-                                    text-align:center;"
+                                    border-radius:2px;"
                         >
                             Valor
                         </th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr style="border-bottom:1px solid #cccccc;text-align:center;"
+                    <tr style="border-bottom:1px solid #cccccc;"
                     >
                         <td th:text="${kit.nome}"
                             style="border:none;
                                     padding:15px 5px;
                                     display:table-cell;
-                                    vertical-align:middle;
-                                    border-radius:2px;
-                                    text-align:center;"
+                                    border-radius:2px;"
                         >
                         </td>
                         <td th:text="${kit.opcao}"
                             style="border:none;
                                     padding:15px 5px;
                                     display:table-cell;
-                                    vertical-align:middle;
-                                    border-radius:2px;
-                                    text-align:center;"
+                                    border-radius:2px;"
                         >
                         </td>
                         <td th:text="${kit.totalInd}"
                             style="border:none;
                                     padding:15px 5px;
                                     display:table-cell;
-                                    vertical-align:middle;
-                                    border-radius:2px;
-                                    text-align:center;"
+                                    border-radius:2px;"
                         >
                         </td>
                     </tr>
@@ -119,98 +120,78 @@
                     border-collapse:collapse;
                     border-spacing:0;"
             >
-                <tr style="border-bottom:1px solid #cccccc;text-align:center;"
+                <tr style="border-bottom:1px solid #cccccc;"
                 >
                     <th style="border:none;
                             padding:15px 5px;
                             display:table-cell;
-                            vertical-align:middle;
-                            border-radius:2px;
-                            text-align:center;"
+                            border-radius:2px;"
                     >
                         Extra
                     </th>
                     <th style="border:none;
                             padding:15px 5px;
                             display:table-cell;
-                            vertical-align:middle;
-                            border-radius:2px;
-                            text-align:center;"
+                            border-radius:2px;"
                     >
                         Opção
                     <th style="border:none;
                             padding:15px 5px;
                             display:table-cell;
-                            vertical-align:middle;
-                            border-radius:2px;
-                            text-align:center;"
+                            border-radius:2px;"
                     >
                         Valor Ind.
                     </th>
                     <th style="border:none;
                             padding:15px 5px;
                             display:table-cell;
-                            vertical-align:middle;
-                            border-radius:2px;
-                            text-align:center;"
+                            border-radius:2px;"
                     >
                         Quantidade
                     </th>
                     <th style="border:none;
                             padding:15px 5px;
                             display:table-cell;
-                            vertical-align:middle;
-                            border-radius:2px;
-                            text-align:center;"
+                            border-radius:2px;"
                     >
                         Total Ind.
                     </th>
                 </tr>
                 <tr th:each="extra : ${extras}"
-                    style="border-bottom:1px solid #cccccc;text-align:center;"
+                    style="border-bottom:1px solid #cccccc;"
                 >
                     <td th:text="${extra.nome}"
                         style="border:none;
                             padding:15px 5px;
                             display:table-cell;
-                            vertical-align:middle;
-                            border-radius:2px;
-                            text-align:center;"
+                            border-radius:2px;"
                     >
                     <td th:text="${extra.opcao}"
                         style="border:none;
                             padding:15px 5px;
                             display:table-cell;
-                            vertical-align:middle;
-                            border-radius:2px;
-                            text-align:center;"
+                            border-radius:2px;"
                     >
                     </td>
                     <td th:text="${extra.valorInd}"
                         style="border:none;
                             padding:15px 5px;
                             display:table-cell;
-                            vertical-align:middle;
-                            border-radius:2px;
-                            text-align:center;"
+                            border-radius:2px;"
                     >
                     </td>
                     <td th:text="${extra.qtd}"
                         style="border:none;
                             padding:15px 5px;
                             display:table-cell;
-                            vertical-align:middle;
-                            border-radius:2px;
-                            text-align:center;"
+                            border-radius:2px;"
                     >
                     </td>
                     <td th:text="${extra.totalInd}"
                         style="border:none;
                             padding:15px 5px;
                             display:table-cell;
-                            vertical-align:middle;
-                            border-radius:2px;
-                            text-align:center;"
+                            border-radius:2px;"
                     >
                     </td>
                 </tr>
@@ -221,5 +202,45 @@
             <b>Total do pedido: </b> R$
             <span th:text="${valorTotal}"></span>
         </p>
+
+        <div class="etiqueta-entrega">
+            <div class="etiqueta-content">
+                <div style="width: 80%;">
+                    <h3>Recordação Escolar</h3>
+                    <p>
+                        <b>Pedido: </b>
+                        <span th:text="${nPedido}"></span>
+                    </p>
+                    <p>
+                        <b>Escola: </b>
+                        <span th:text="${escola}"></span>
+                    </p>
+                    <p>
+                        <b>Nome Aluno: </b>
+                        <span th:text="${aluno}"></span>
+                    </p>
+                    <p>
+                        <b>Turma: </b>
+                        <span th:text="${turma}"></span>
+                    </p>
+                    <p>
+                        <b>Responsável: </b>
+                        <span th:text="${responsavel}"></span>
+                    </p>
+                </div>
+                <div style="width: 20%;
+                            text-align:center;
+                            margin: auto;"
+                >
+                    <img style="width: auto;
+                                height: 150px !important;"
+                         src="https://s3.sa-east-1.amazonaws.com/photostyle-img-prod/logo/logoPhotoStyle.jpg"
+                         alt="Photostyle Logo"
+                         title="Photostyle"
+                    />
+                </div>
+            </div>
+        </div>
+
     </body>
 </html>

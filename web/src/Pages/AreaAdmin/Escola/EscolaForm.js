@@ -121,8 +121,9 @@ class EscolaForm extends Component {
             escola.apelido = this.state.apelido;
             EscolaService.postEscola(escola)
                 .then(escola => {
-                    this.props.selecionar(escola);
                     PopUp.sucesso('Escola cadastrada com sucesso');
+                    this.props.history.push(Rotas.ESCOLA_LISTA);
+                    this.props.history.push(Rotas.ESCOLA_EDICAO.replace(':id', escola.id));
                 })
                 .catch(error => this.props.handleUnauthorized(error))
                 .catch(() => {

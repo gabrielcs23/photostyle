@@ -40,7 +40,7 @@ const dragzone = {
 const PlanilhaDropZone = (props) => {
     const [file, setFile] = useState()
     const { getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject } = useDropzone({
-        accept: '.xlsx,.xls',
+        accept: '.xlsx,.xls,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         multiple: false,
         onDrop: acceptedFiles => onDrop(acceptedFiles)
     });

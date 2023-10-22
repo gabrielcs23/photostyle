@@ -105,7 +105,7 @@ public class TurmaService extends BaseService<TurmaEntity, TurmaDto> {
             turma.getAlunos().forEach(aluno -> alunoService.remover(aluno));
         }
         if (!CollectionUtils.isEmpty(turma.getFotos())) {
-            turma.getFotos().forEach(foto -> this.removerFoto(turma, foto.getId()));
+            fotoService.removerEmLote(turma.getFotos());
         }
         repository.delete(turma);
     }

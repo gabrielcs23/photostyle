@@ -74,11 +74,11 @@ public class EscolaController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> remover(@PathVariable @NotNull Long id) {
-        EscolaDto dto = escolaService.getPorId(id);
-        if (dto == null) {
+        EscolaEntity escola = escolaService.getEntityPorId(id);
+        if (escola == null) {
             return ResponseEntity.notFound().build();
         }
-        escolaService.remover(id);
+        escolaService.remover(escola);
         return ResponseEntity.ok().build();
     }
 

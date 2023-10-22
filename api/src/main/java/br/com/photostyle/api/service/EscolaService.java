@@ -11,6 +11,7 @@ import br.com.photostyle.api.model.entity.MostruarioEntity;
 import br.com.photostyle.api.model.entity.TurmaEntity;
 import br.com.photostyle.api.repository.EscolaRepository;
 import br.com.photostyle.api.utils.ImportacaoXlsxHelper;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -58,6 +59,16 @@ public class EscolaService extends BaseService<EscolaEntity, EscolaDto> {
         mostruarioService.criar(salva);
 
         return adapter.entityToDto(salva);
+    }
+
+    @Transactional
+    public void remover(EscolaEntity escola) {
+        mostruarioService.removerPorEscola(escola.getId());
+        List<TurmaEntity> turmas = escola.getTurmas();
+        if (CollectionUtils.isNotEmpty(turmas)) {
+            turmas.forEach(turmaService::remover);
+        }
+        repository.delete(escola);
     }
 
     public MostruarioDto getMostruario(Long id) {

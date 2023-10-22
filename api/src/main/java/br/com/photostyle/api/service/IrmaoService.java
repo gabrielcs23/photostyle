@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class IrmaoService {
-    
+
     @Autowired
     private IrmaoRelRepository repository;
 
@@ -27,7 +27,7 @@ public class IrmaoService {
 
     @Autowired
     private AlunoService alunoService;
-    
+
     @Autowired
     private FotoService fotoService;
 
@@ -85,11 +85,7 @@ public class IrmaoService {
             rel.setIrmaos(null);
 
             List<FotoEntity> fotos = rel.getFotos();
-            while(fotos.size() > 0) {
-                FotoEntity foto = fotos.remove(fotos.size() - 1);
-                fotoService.remover(foto);
-            }
-
+            fotoService.removerEmLote(fotos);
             repository.delete(rel);
         }
     }

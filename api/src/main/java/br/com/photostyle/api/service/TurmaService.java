@@ -11,6 +11,7 @@ import br.com.photostyle.api.repository.TurmaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
@@ -77,6 +78,17 @@ public class TurmaService extends BaseService<TurmaEntity, TurmaDto> {
         return new ArrayList<>();
     }
 
+    @Transactional
+    public TurmaEntity cadastrarTurmaEmEscola(EscolaEntity escola, String nomeTurma) {
+        if (StringUtils.isEmpty(nomeTurma)) {
+            throw new RuntimeException("Nome da turma não pode ser vazio");
+        }
+        TurmaEntity turma = new TurmaEntity();
+        turma.setEscola(escola);
+        turma.setNome(nomeTurma);
+        return repository.save(turma);
+    }
+
     public List<TurmaDto> getTurmasPorEscolaId(Long idEscola) {
         List<TurmaEntity> turmas = repository.getTurmaEntitiesByEscola_Id(idEscola);
         return entityListToDtoList(turmas);
@@ -89,10 +101,10 @@ public class TurmaService extends BaseService<TurmaEntity, TurmaDto> {
 
     @Transactional
     public void remover(TurmaEntity turma) {
-        if(!CollectionUtils.isEmpty(turma.getAlunos())) {
+        if (!CollectionUtils.isEmpty(turma.getAlunos())) {
             turma.getAlunos().forEach(aluno -> alunoService.remover(aluno));
         }
-        if(!CollectionUtils.isEmpty(turma.getFotos())) {
+        if (!CollectionUtils.isEmpty(turma.getFotos())) {
             turma.getFotos().forEach(foto -> this.removerFoto(turma, foto.getId()));
         }
         repository.delete(turma);

@@ -96,6 +96,19 @@ class EscolaService extends BaseApiService {
         }
     }
 
+    async uploadPlanilhaTurmas(id, formData) {
+        try {
+            const config = {
+                headers: {
+                    'content-type': 'multipart/form-data'
+                }
+            }
+            return await this.axiosInstance.post(`${BASE_URL}/${id}/importar`, formData, config);
+        } catch (error) {
+            throw this.parseError(error);
+        }
+    }
+
     async listarTabelas() {
         try {
             const res = await this.axiosInstance.get(`${BASE_URL}/tabela`);

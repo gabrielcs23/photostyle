@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom';
 import Rotas from '../AreaAdminRotas';
 import EscolaService from './EscolaService';
 import TabelaPreco from './tabela/TabelaPreco';
+import ModalImportarTurmas from './import-turmas/ModalImportarTurmas';
 import Escola from '../../../Model/Escola';
 import FormValidator from '../form-utils/FormValidator';
 import PopUp from '../../Utils/pop-up/PopUp'
@@ -11,7 +12,7 @@ import FotoDropzone from '../../Utils/FotoDropzone/FotoDropzone';
 import Foto from '../../../Model/Foto';
 
 class EscolaForm extends Component {
-    
+
     constructor(props) {
         super(props);
 
@@ -41,10 +42,12 @@ class EscolaForm extends Component {
         if (params.id) {
             this.state.id = params.id;
         }
+
+        this.idModal = 'modal-import-turmas'
     }
 
     componentDidMount() {
-        if(this.state.id) {
+        if (this.state.id) {
             EscolaService.getPorId(this.state.id)
                 .then(escola => {
                     this.setState({
@@ -82,7 +85,7 @@ class EscolaForm extends Component {
         const foto = new Foto(arq);
         const mostruario = this.state.mostruario;
         mostruario.fotos.push(foto);
-        this.setState({mostruario: mostruario, canSubmit: true});
+        this.setState({ mostruario: mostruario, canSubmit: true });
     }
 
     removerFoto = (idx) => {
@@ -97,22 +100,22 @@ class EscolaForm extends Component {
                     PopUp.erro('Erro na remoção da foto');
                     fotos.push(bk);
                     mostruario.fotos = fotos;
-                    this.setState({mostruario: mostruario});
+                    this.setState({ mostruario: mostruario });
                 })
         }
         fotos.splice(idx, 1);
         mostruario.fotos = fotos
-        this.setState({mostruario: mostruario});
+        this.setState({ mostruario: mostruario });
     }
 
     submitForm = () => {
-        this.setState({canSubmit: false});
+        this.setState({ canSubmit: false });
         const validacao = this.validador.valida(this.state);
 
         if (this.state.id) {
             return this.uploadFotos();
         }
-        
+
         if (validacao.isValid) {
             const escola = new Escola(this.state.nome);
             escola.apelido = this.state.apelido;
@@ -124,7 +127,7 @@ class EscolaForm extends Component {
                 .catch(error => this.props.handleUnauthorized(error))
                 .catch(() => {
                     PopUp.erro('Erro no cadastro de escola');
-                    this.setState({canSubmit: true});
+                    this.setState({ canSubmit: true });
                 });
         } else {
             const { nome } = validacao;
@@ -171,6 +174,13 @@ class EscolaForm extends Component {
             .catch(() => PopUp.erro('Erro'));
     }
 
+    uploadPlanilhaTurmas(id) {
+        EscolaService.uploadPlanilhaTurmas(id)
+            .then(() => PopUp.sucesso('Turmas cadastradas com sucesso'))
+            .catch(error => this.props.handleUnauthorized(error))
+            .catch(() => PopUp.erro('Erro no cadastro de turmas'));
+    }
+
     render() {
         const { nome, apelido } = this.state;
         return (
@@ -179,9 +189,9 @@ class EscolaForm extends Component {
                     <div className="row">
                         <div className="col left">
                             <NavLink to={Rotas.ESCOLA_LISTA}>
-                                <button 
+                                <button
                                     className="btn btn-small waves-effect waves-light grey darken-1"
-                                    >
+                                >
                                     Cancelar
                                 </button>
                             </NavLink>
@@ -192,10 +202,25 @@ class EscolaForm extends Component {
                                     className="btn btn-small waves-effect waves-light green"
                                     onClick={() => this.downloadCodigoAlunos(this.state.id)}
                                     type="button"
-                                    >
+                                >
                                     <span className="d-inline-flex">
                                         <i className="material-icons">download</i>
                                         <span className="pl-2">Código Alunos</span>
+                                    </span>
+                                </button>
+                            </div>
+                            : null
+                        }
+                        {this.state.id ?
+                            <div className="col left">
+                                <button
+                                    className="btn btn-small waves-effect waves-light blue modal-trigger"
+                                    type="button"
+                                    data-target={this.idModal}
+                                >
+                                    <span className="d-inline-flex">
+                                        <i className="material-icons">publish</i>
+                                        <span className="pl-2">Carregar Turmas</span>
                                     </span>
                                 </button>
                             </div>
@@ -207,7 +232,7 @@ class EscolaForm extends Component {
                                 disabled={!this.state.canSubmit}
                                 onClick={this.submitForm}
                                 type="button"
-                                >
+                            >
                                 <span className="d-inline-flex">
                                     <i className="material-icons">save</i>
                                     <span className="pl-2">Salvar</span>
@@ -215,11 +240,11 @@ class EscolaForm extends Component {
                             </button>
                         </div>
                     </div>
-                    
+
                     <div className="row">
                         <div className="input-field col s12">
                             <label htmlFor="nome">Nome da Escola</label>
-                            <input 
+                            <input
                                 className="validate"
                                 id="nome"
                                 type="text"
@@ -233,7 +258,7 @@ class EscolaForm extends Component {
                     <div className="row">
                         <div className="input-field col s6">
                             <label htmlFor="apelido">Apelido</label>
-                            <input 
+                            <input
                                 id="nome"
                                 type="text"
                                 name="apelido"
@@ -244,7 +269,7 @@ class EscolaForm extends Component {
                         </div>
                     </div>
 
-                    {this.state.id ? 
+                    {this.state.id ?
                         <>
                             <h5 className="mb-4">Fotos Mostruário</h5>
                             <FotoDropzone
@@ -260,11 +285,16 @@ class EscolaForm extends Component {
                 </form>
 
                 {this.state.id ?
-                    <div style={{marginTop: "2.5rem"}}>
+                    <div style={{ marginTop: "2.5rem" }}>
                         <TabelaPreco idEscola={this.state.id} handleUnauthorized={this.props.handleUnauthorized} />
-                    </div>                    
+                    </div>
                     : null
                 }
+
+                <ModalImportarTurmas
+                    idModal={this.idModal}
+                    confirmar={() => this.uploadPlanilhaTurmas(this.state.id)}
+                />
             </>
         )
     }

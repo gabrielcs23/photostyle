@@ -33,13 +33,12 @@ public class TurmaAdapter extends BaseAdapter<TurmaEntity, TurmaDto> {
             List<FotoDto> fotos = fotoAdapter.entityListToDtoList(entity.getFotos());
             dto.setFotos(fotos);
         }
-
         return dto;
     }
 
     @Override
     public List<TurmaDto> entityListToDtoList(List<TurmaEntity> turmaEntityList) {
-        return turmaEntityList.stream().map(this::createBasicDto).collect(Collectors.toList());
+        return turmaEntityList.stream().map(this::entityToDto).collect(Collectors.toList());
     }
 
     private TurmaDto createBasicDto(TurmaEntity entity) {

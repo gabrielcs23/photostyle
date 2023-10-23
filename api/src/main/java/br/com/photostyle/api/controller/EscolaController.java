@@ -74,11 +74,11 @@ public class EscolaController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> remover(@PathVariable @NotNull Long id) {
-        EscolaDto dto = escolaService.getPorId(id);
-        if (dto == null) {
+        EscolaEntity escola = escolaService.getEntityPorId(id);
+        if (escola == null) {
             return ResponseEntity.notFound().build();
         }
-        escolaService.remover(id);
+        escolaService.remover(escola);
         return ResponseEntity.ok().build();
     }
 
@@ -143,6 +143,24 @@ public class EscolaController {
                     .ok()
                     .headers(headers)
                     .body(new ByteArrayResource(stream.toByteArray()));
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @PostMapping("/{id}/importar")
+    public ResponseEntity<?> importarTurmasEAlunos(@PathVariable Long id, @RequestParam("file") MultipartFile xlsx) {
+        EscolaEntity escola = escolaService.getEntityPorId(id);
+        if (escola == null) {
+            return ResponseEntity.notFound().build();
+        }
+        if (!CollectionUtils.isEmpty(escola.getTurmas())) {
+            return ResponseEntity.badRequest()
+                    .body("Não é possível importar novas turmas em uma escola que já tenha alguma turma criada");
+        }
+        try {
+            escolaService.importarTurmasEAlunos(escola, xlsx);
+            return ResponseEntity.ok().build();
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }

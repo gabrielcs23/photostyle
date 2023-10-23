@@ -54,7 +54,7 @@ public class FotoService {
             String desc = StringUtils.stripFilenameExtension(orgFileName);
             entity.setDescricao(desc);
             return repository.save(entity);
-        } catch(Exception e) {
+        } catch (Exception e) {
             if (!StringUtils.isEmpty(imgName)) {
                 imgService.deleteImage(imgName);
             }
@@ -74,6 +74,11 @@ public class FotoService {
         repository.delete(foto);
     }
 
+    @Transactional
+    public void removerEmLote(List<FotoEntity> fotos) {
+        fotos.forEach(this::remover);
+    }
+
     private String buildFotoName(String originalFileName) {
         String imgName;
         boolean isNameUnico = false;
@@ -82,7 +87,7 @@ public class FotoService {
             if (repository.getByFileName(imgName) == null) {
                 isNameUnico = true;
             }
-        } while(!isNameUnico);
+        } while (!isNameUnico);
         return imgName;
     }
 

@@ -36,6 +36,22 @@ public class MostruarioService {
         repository.save(entity);
     }
 
+    @Transactional
+    public void remover(MostruarioEntity mostruario) {
+        if (!CollectionUtils.isEmpty(mostruario.getFotos())) {
+            fotoService.removerEmLote(mostruario.getFotos());
+        }
+        repository.delete(mostruario);
+    }
+
+    @Transactional
+    public void removerPorEscola(Long idEscola) {
+        MostruarioEntity mostruario = repository.getMostruarioEntityByEscola_Id(idEscola);
+        if (mostruario != null) {
+            remover(mostruario);
+        }
+    }
+
     public MostruarioEntity getEntityPorId(Long id) {
         return repository.findById(id).orElseThrow(() -> new RuntimeException("Mostruário não encontrado"));
     }

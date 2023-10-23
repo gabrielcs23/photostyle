@@ -31,6 +31,14 @@ class EscolaService extends BaseApiService {
         }
     }
 
+    async deleteEscola(id) {
+        try {
+            await this.axiosInstance.delete(`${BASE_URL}/${id}`);
+        } catch (error) {
+            throw this.parseError(error);
+        }
+    }
+
     async getTabelaPreco(idEscola) {
         try {
             const res = await this.axiosInstance.get(`${BASE_URL}/${idEscola}/tabela`);
@@ -82,7 +90,7 @@ class EscolaService extends BaseApiService {
 
     async removerFotoMostruario(idMostruario, idFoto) {
         try {
-            await this.axiosInstance.delete(`${BASE_URL}/mostruario/${idMostruario}/foto/${idFoto}`)    
+            await this.axiosInstance.delete(`${BASE_URL}/mostruario/${idMostruario}/foto/${idFoto}`)
         } catch (error) {
             throw this.parseError(error);
         }
@@ -90,7 +98,20 @@ class EscolaService extends BaseApiService {
 
     async downloadCodigoAlunos(id) {
         try {
-            return await this.axiosInstance.get(`${BASE_URL}/${id}/exportar-codigos`, { responseType: 'blob' })    
+            return await this.axiosInstance.get(`${BASE_URL}/${id}/exportar-codigos`, { responseType: 'blob' })
+        } catch (error) {
+            throw this.parseError(error);
+        }
+    }
+
+    async uploadPlanilhaTurmas(id, formData) {
+        try {
+            const config = {
+                headers: {
+                    'content-type': 'multipart/form-data'
+                }
+            }
+            return await this.axiosInstance.post(`${BASE_URL}/${id}/importar`, formData, config);
         } catch (error) {
             throw this.parseError(error);
         }

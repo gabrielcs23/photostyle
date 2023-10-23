@@ -10,6 +10,9 @@ import br.com.photostyle.api.model.entity.EscolaEntity;
 import br.com.photostyle.api.model.entity.MostruarioEntity;
 import br.com.photostyle.api.model.entity.TurmaEntity;
 import br.com.photostyle.api.repository.EscolaRepository;
+import br.com.photostyle.api.utils.ImportacaoXlsxHelper;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -21,13 +24,18 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.transaction.Transactional;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class EscolaService extends BaseService<EscolaEntity, EscolaDto> {
 
     @Autowired
     private TurmaService turmaService;
+
+    @Autowired
+    private AlunoService alunoService;
 
     @Autowired
     private MostruarioService mostruarioService;
@@ -39,7 +47,7 @@ public class EscolaService extends BaseService<EscolaEntity, EscolaDto> {
 
     public EscolaDto getBasicPorId(Long id) {
         EscolaEntity entity = getEntityPorId(id);
-        return ((EscolaAdapter)adapter).createBasicDto(entity);
+        return ((EscolaAdapter) adapter).createBasicDto(entity);
     }
 
     @Override
@@ -51,6 +59,16 @@ public class EscolaService extends BaseService<EscolaEntity, EscolaDto> {
         mostruarioService.criar(salva);
 
         return adapter.entityToDto(salva);
+    }
+
+    @Transactional
+    public void remover(EscolaEntity escola) {
+        mostruarioService.removerPorEscola(escola.getId());
+        List<TurmaEntity> turmas = escola.getTurmas();
+        if (CollectionUtils.isNotEmpty(turmas)) {
+            turmas.forEach(turmaService::remover);
+        }
+        repository.delete(escola);
     }
 
     public MostruarioDto getMostruario(Long id) {
@@ -79,10 +97,10 @@ public class EscolaService extends BaseService<EscolaEntity, EscolaDto> {
 
     public ByteArrayOutputStream exportarCodigoAlunoPorTurma(EscolaEntity escola) throws IOException {
         Workbook wb = new XSSFWorkbook();
-        for(TurmaEntity turma : escola.getTurmas()) {
+        for (TurmaEntity turma : escola.getTurmas()) {
             Sheet sheet = wb.createSheet(turma.getNome());
             List<AlunoEntity> alunos = turma.getAlunos();
-            for(int i = 0; i < alunos.size(); i++) {
+            for (int i = 0; i < alunos.size(); i++) {
                 AlunoEntity aluno = alunos.get(i);
                 Row row = sheet.createRow(i);
                 row.createCell(0).setCellValue(aluno.getNome());
@@ -94,4 +112,31 @@ public class EscolaService extends BaseService<EscolaEntity, EscolaDto> {
         wb.close();
         return stream;
     }
+
+    @Transactional
+    public void importarTurmasEAlunos(EscolaEntity escola, MultipartFile xlsx) throws IOException {
+        try (XSSFWorkbook wb = new XSSFWorkbook(xlsx.getInputStream())) {
+            Map<String, TurmaEntity> turmasPorNomeDeSheet = new HashMap<>();
+
+            for (Sheet sheet : wb) {
+                String nomeSheet = sheet.getSheetName();
+                TurmaEntity turma = turmaService.cadastrarTurmaEmEscola(escola, nomeSheet.trim());
+                turmasPorNomeDeSheet.put(nomeSheet, turma);
+            }
+
+            for (String nomeSheet : turmasPorNomeDeSheet.keySet()) {
+                TurmaEntity turma = turmasPorNomeDeSheet.get(nomeSheet);
+                Sheet sheet = wb.getSheet(nomeSheet);
+                for (Row row : sheet) {
+                    Cell cell = row.getCell(0);
+                    String nomeAluno = ImportacaoXlsxHelper.getStringCellValue(cell);
+                    if (nomeAluno == null || nomeAluno.isEmpty()) break;
+                    cell = row.getCell(1);
+                    String matrAluno = ImportacaoXlsxHelper.getStringCellValue(cell);
+                    alunoService.criarNovoAluno(escola, turma, nomeAluno, matrAluno);
+                }
+            }
+        }
+    }
+
 }

@@ -6,6 +6,7 @@ import br.com.photostyle.api.model.dto.AlunoDto;
 import br.com.photostyle.api.model.dto.FotoDto;
 import br.com.photostyle.api.model.dto.IrmaoRelDto;
 import br.com.photostyle.api.model.entity.AlunoEntity;
+import br.com.photostyle.api.model.entity.EscolaEntity;
 import br.com.photostyle.api.model.entity.FotoEntity;
 import br.com.photostyle.api.model.entity.TurmaEntity;
 import br.com.photostyle.api.repository.AlunoRepository;
@@ -84,7 +85,7 @@ public class AlunoService extends BaseService<AlunoEntity, AlunoDto> {
         do {
             codigoAcesso = geradorCodAcesso.gerarCodigo(aluno.getEscola().getNome(), aluno.getMatricula());
             isCodUnico = repository.getByCodigoAcesso(codigoAcesso) == null;
-        } while(!isCodUnico);
+        } while (!isCodUnico);
         aluno.setCodigoAcesso(codigoAcesso);
     }
 
@@ -186,6 +187,17 @@ public class AlunoService extends BaseService<AlunoEntity, AlunoDto> {
                     }).collect(Collectors.toList());
         }
         return new ArrayList<>();
+    }
+
+    @Transactional
+    public void criarNovoAluno(EscolaEntity escola, TurmaEntity turma, String nome, String matr) {
+        AlunoEntity aluno = new AlunoEntity();
+        aluno.setEscola(escola);
+        aluno.setTurma(turma);
+        aluno.setNome(nome);
+        aluno.setMatricula(matr);
+        gerarCodigo(aluno);
+        repository.save(aluno);
     }
 
     public AlunoDto moverAlunoParaTurma(Long idAluno, Long idTurma) {

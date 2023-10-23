@@ -2,13 +2,7 @@ import React, { Component } from "react";
 import '../../../Utils/Modal/Modal.css'
 import M from "materialize-css";
 import PlanilhaDropZone from "../../../Utils/PlanilhaDropZone/PlanilhaDropZone";
-
-const loadingWrapper = {
-    width: '20px',
-    height: '20px',
-    marginRight: '1em',
-    marginTop: '0.5em'
-};
+import LoadingBotao from "../../../Utils/Loading/LoadingBotao";
 
 class ModalImportarTurmas extends Component {
 
@@ -76,19 +70,7 @@ class ModalImportarTurmas extends Component {
                     >
                         {this.isLoading()
                             ? (
-                                <div className="preloader-wrapper active" style={loadingWrapper}>
-                                    <div className="spinner-layer spinner-blue-only">
-                                        <div className="circle-clipper left">
-                                            <div className="circle" />
-                                        </div>
-                                        <div className="gap-patch">
-                                            <div className="circle" />
-                                        </div>
-                                        <div className="circle-clipper right">
-                                            <div className="circle" />
-                                        </div>
-                                    </div>
-                                </div>
+                                <LoadingBotao />
                             ) : null
                         }
                         Confirmar

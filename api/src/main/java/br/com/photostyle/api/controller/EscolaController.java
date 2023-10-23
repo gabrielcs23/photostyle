@@ -3,7 +3,6 @@ package br.com.photostyle.api.controller;
 import br.com.photostyle.api.model.dto.EscolaDto;
 import br.com.photostyle.api.model.dto.FotoDto;
 import br.com.photostyle.api.model.dto.MostruarioDto;
-import br.com.photostyle.api.model.dto.TurmaDto;
 import br.com.photostyle.api.model.dto.tabela.TabelaPorEscolaDTO;
 import br.com.photostyle.api.model.dto.tabela.TabelaPrecoDto;
 import br.com.photostyle.api.model.entity.EscolaEntity;
@@ -102,25 +101,6 @@ public class EscolaController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
-    }
-
-    @GetMapping("/{id}/turmas")
-    public ResponseEntity<List<TurmaDto>> getTurmas(@PathVariable Long id) {
-        List<TurmaDto> turmas = escolaService.getTurmas(id);
-        if (CollectionUtils.isEmpty(turmas)) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(turmas);
-    }
-
-    @PostMapping("/{id}/turmas")
-    public ResponseEntity<List<TurmaDto>> cadastrarTurmas(@PathVariable Long id,
-                                                          @RequestBody @Valid List<TurmaDto> turmas) {
-        List<TurmaDto> turmasSalvas = escolaService.cadastrarTurmas(id, turmas);
-        if (CollectionUtils.isEmpty(turmasSalvas)) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(turmasSalvas);
     }
 
     @GetMapping("/{id}/exportar-codigos")

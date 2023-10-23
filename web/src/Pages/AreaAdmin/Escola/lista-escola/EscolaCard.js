@@ -47,7 +47,9 @@ const EscolaCard = (props) => {
                                     {escola.apelido ? `Apelido: ${escola.apelido}` : ''}
                                     &nbsp;
                                 </p>
+                                {/*
                                 <p>Turmas: {escola.turmas ? escola.turmas.length : '0'}</p>
+                                */}
                             </div>
                         </>
                     )

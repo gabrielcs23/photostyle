@@ -8,6 +8,7 @@ import Foto from '../../../Model/Foto';
 import FormValidator from '../form-utils/FormValidator';
 import PopUp from '../../Utils/pop-up/PopUp';
 import FotoDropzone from '../../Utils/FotoDropzone/FotoDropzone';
+import LoadingBotao from '../../Utils/Loading/LoadingBotao';
 
 class TurmaForm extends Component {
 
@@ -30,40 +31,39 @@ class TurmaForm extends Component {
                 id: '',
                 nome: '',
                 escola: this.props.escola,
-                alunos: [],
                 fotos: [],
                 validacao: this.validador.valido(),
-                canSubmit: false
+                canSubmit: false,
+                loading: false
             }
         } else {
             this.state = {
                 id: params.id,
                 nome: '',
                 escola: '',
-                alunos: [],
                 fotos: [],
                 validacao: this.validador.valido(),
-                canSubmit: false
+                canSubmit: false,
+                loading: false
             }
         }
     }
 
     componentDidMount() {
-        if(this.state.id) {
+        if (this.state.id) {
             TurmaService.getPorId(this.state.id)
                 .then(turma => {
                     this.setState({
                         id: turma.id,
                         nome: turma.nome,
                         escola: turma.escola,
-                        alunos: turma.alunos ? turma.alunos : [],
                         fotos: turma.fotos ? turma.fotos : []
                     });
                     M.updateTextFields();
                 })
                 .catch(error => this.props.handleUnauthorized(error))
                 .catch(() => PopUp.erro('Erro no cadastro de turma'));
-        } else if(this.props.escola == null) {
+        } else if (this.props.escola == null) {
             this.props.history.push(Rotas.ESCOLA_LISTA);
         }
     }
@@ -81,7 +81,7 @@ class TurmaForm extends Component {
         const foto = new Foto(arq);
         const fotos = this.state.fotos.slice();
         fotos.push(foto);
-        this.setState({fotos: fotos, canSubmit: true});
+        this.setState({ fotos: fotos, canSubmit: true });
     }
 
     removerFoto = (idx) => {
@@ -94,22 +94,22 @@ class TurmaForm extends Component {
                 .catch(() => {
                     PopUp.erro('Erro na remoção da foto');
                     fotos.push(bk);
-                    this.setState({fotos: fotos});
+                    this.setState({ fotos: fotos });
                 })
         }
         fotos.splice(idx, 1);
-        this.setState({fotos: fotos});
+        this.setState({ fotos: fotos });
     }
 
     submitForm = () => {
-        this.setState({canSubmit: false});
+        this.setState({ canSubmit: false });
         const validacao = this.validador.valida(this.state);
 
         if (validacao.isValid) {
+            this.setState({ loading: true })
             const turma = new Turma(this.state.nome, this.state.escola);
             if (this.state.id) {
                 turma.id = this.state.id;
-                turma.alunos = this.state.alunos;
             }
 
             let turmaAposPost;
@@ -126,7 +126,7 @@ class TurmaForm extends Component {
                     }
                 })
                 .then(() => {
-                    if(this.state.id) {
+                    if (this.state.id) {
                         this.props.history.push(Rotas.TURMA_LISTA);
                     } else {
                         this.props.selecionar(turmaAposPost);
@@ -135,8 +135,9 @@ class TurmaForm extends Component {
                 .catch(error => this.props.handleUnauthorized(error))
                 .catch(() => {
                     PopUp.erro('Erro no cadastro de turma');
-                    this.setState({canSubmit: true});
-                });
+                    this.setState({ canSubmit: true });
+                })
+                .finally(() => this.setState({ loading: false }));
         } else {
             const { nome } = validacao;
             const campos = [nome];
@@ -166,9 +167,9 @@ class TurmaForm extends Component {
                 <div className="row">
                     <div className="col left">
                         <NavLink to={Rotas.TURMA_LISTA}>
-                            <button 
+                            <button
                                 className="btn btn-small waves-effect waves-light grey darken-1"
-                                >
+                            >
                                 Cancelar
                             </button>
                         </NavLink>
@@ -176,11 +177,16 @@ class TurmaForm extends Component {
                     <div className="col right">
                         <button
                             className="btn btn-small waves-effect waves-light blue"
-                            disabled={!this.state.canSubmit}
+                            disabled={!this.state.canSubmit || this.state.loading}
                             onClick={this.submitForm}
                             type="button"
-                            >
+                        >
                             <span className="d-inline-flex">
+                                {this.state.loading
+                                    ? (
+                                        <LoadingBotao />
+                                    ) : null
+                                }
                                 <i className="material-icons">save</i>
                                 <span className="pl-2">Salvar</span>
                             </span>
@@ -190,7 +196,7 @@ class TurmaForm extends Component {
                 <div className="row">
                     <div className="input-field col s12">
                         <label htmlFor="nome">Nome da Turma</label>
-                        <input 
+                        <input
                             className="validate"
                             id="nome"
                             type="text"
@@ -201,13 +207,13 @@ class TurmaForm extends Component {
                     </div>
                 </div>
 
-                <FotoDropzone 
+                <FotoDropzone
                     fotos={this.state.fotos.slice()}
                     onFotoDrop={this.onFotoDrop}
                     removerFoto={this.removerFoto}
                     multiple={true}
                 />
-                
+
             </form>
         )
     }

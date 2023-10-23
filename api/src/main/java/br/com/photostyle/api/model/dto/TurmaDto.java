@@ -14,8 +14,6 @@ public class TurmaDto {
 
     private EscolaDto escola;
 
-    private List<AlunoDto> alunos;
-
     private List<FotoDto> fotos;
 
     public Long getId() {
@@ -40,14 +38,6 @@ public class TurmaDto {
 
     public void setEscola(EscolaDto escola) {
         this.escola = escola;
-    }
-
-    public List<AlunoDto> getAlunos() {
-        return alunos;
-    }
-
-    public void setAlunos(List<AlunoDto> alunos) {
-        this.alunos = alunos;
     }
 
     public List<FotoDto> getFotos() {

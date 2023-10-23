@@ -21,13 +21,7 @@ class AlunoForm extends Component {
                 metodo: 'isEmpty',
                 validoQuando: false,
                 mensagem: 'Entre com um nome'
-            },
-            {
-                campo: 'matricula',
-                metodo: 'isEmpty',
-                validoQuando: false,
-                mensagem: 'Entre com uma matrícula'
-            },
+            }
         ]);
 
         const { match: { params } } = this.props;

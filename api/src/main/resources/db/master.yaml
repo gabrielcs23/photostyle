@@ -11,3 +11,6 @@ databaseChangeLog:
 - include:
     file: changelog/2021-05-14_tabela_precos.yaml
     relativeToChangelogFile: true
+- include:
+    file: changelog/2023-10-22_matricula.yaml
+    relativeToChangelogFile: true

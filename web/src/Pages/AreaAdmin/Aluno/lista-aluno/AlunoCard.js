@@ -29,7 +29,7 @@ const AlunoCard = (props) => {
                     <div className="card-title text-truncate">
                         <span>{aluno.nome}</span>
                     </div>
-                    <p class="mt-2">Código de Acesso: {aluno.codigoAcesso}</p>
+                    <p className="mt-2">Código de Acesso: {aluno.codigoAcesso}</p>
                 </div>
 
             </div>

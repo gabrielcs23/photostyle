@@ -9,6 +9,7 @@ import M from 'materialize-css';
 import IrmaoForm from './irmao-form/IrmaoForm';
 import FotoDropzone from '../../Utils/FotoDropzone/FotoDropzone';
 import Foto from '../../../Model/Foto';
+import LoadingBotao from '../../Utils/Loading/LoadingBotao';
 
 class AlunoForm extends Component {
 
@@ -39,7 +40,9 @@ class AlunoForm extends Component {
                 irmaoRel: null,
                 codigoAcesso: '',
                 validacao: this.validador.valido(),
-                canSubmit: false
+                canSubmit: false,
+                loading: false,
+                atualizarAluno: false
             }
         } else {
             this.state = {
@@ -53,13 +56,15 @@ class AlunoForm extends Component {
                 irmaoRel: null,
                 codigoAcesso: '',
                 validacao: this.validador.valido(),
-                canSubmit: false
+                canSubmit: false,
+                loading: false,
+                atualizarAluno: false
             }
         }
     }
 
     componentDidMount() {
-        if(this.state.id) {
+        if (this.state.id) {
             AlunoService.getPorId(this.state.id)
                 .then(aluno => {
                     this.setState({
@@ -77,8 +82,8 @@ class AlunoForm extends Component {
                 })
                 .catch(error => this.props.handleUnauthorized(error))
                 .catch(error => PopUp.erro(error));
-        } else if(this.props.turma == null) {
-            this.props.history.push(Rotas.ESCOLA_LISTA);  
+        } else if (this.props.turma == null) {
+            this.props.history.push(Rotas.ESCOLA_LISTA);
         }
     }
 
@@ -87,53 +92,20 @@ class AlunoForm extends Component {
 
         this.setState({
             [name]: value,
-            canSubmit: this.state.canSubmit ? this.state.canSubmit : !this.state.canSubmit
+            canSubmit: this.state.canSubmit ? this.state.canSubmit : !this.state.canSubmit,
+            atualizarAluno: true
         });
     }
 
     submitForm = () => {
-        this.setState({canSubmit: false});
+        this.setState({ canSubmit: false });
         const validacao = this.validador.valida(this.state);
 
         if (validacao.isValid) {
-            const aluno = this.getAluno();
+            this.setState({ loading: true })
 
-            let alunoAposPost;
-            AlunoService.postAluno(aluno)
-                .then(aluno => {
-                    alunoAposPost = aluno;
-                    if(this.state.id) {
-                        PopUp.sucesso('Aluno(a) atualizado(a) com sucesso');
-                    } else {
-                        PopUp.sucesso('Aluno(a) cadastrado(a) com sucesso');
-                    }
-                })
-                .then(async () => {
-                    if (this.state.foto && !this.state.foto.id) {
-                        try {
-                            await AlunoService.uploadFoto(aluno.id, this.state.foto.formData);
-                            return PopUp.sucesso('Foto enviada com sucesso');
-                        }
-                        catch (e) {
-                            return PopUp.erro('Erro no envio da foto');
-                        }
-                    }
-                    if(this.state.fotosOpcionais?.length > 0) {
-                        return this.uploadFotosOpcionais(aluno.id);
-                    }
-                })
-                .then(() => {
-                    if (this.state.irmaoRel?.fotos.length > 0) {
-                        const fotos = this.state.irmaoRel.fotos;
-                        return this.uploadFotosIrmaos(alunoAposPost.id, fotos);
-                    }
-                })
-                .then(() => this.props.history.push(Rotas.ALUNO_LISTA))
-                .catch(error => this.props.handleUnauthorized(error))
-                .catch(() => {
-                    PopUp.erro('Erro no cadastro de aluno');
-                    this.setState({canSubmit: true});
-                });
+            this.submitFormAsync()
+                .finally(() => this.setState({ loading: false }))
         } else {
             const { nome, matricula } = validacao;
             const campos = [nome, matricula];
@@ -141,6 +113,54 @@ class AlunoForm extends Component {
             const camposInvalidos = campos.filter(elem => elem.isInvalid);
             camposInvalidos.forEach(campo => PopUp.erro(campo.message));
         }
+    }
+
+    async submitFormAsync() {
+        let aluno = this.getAluno();
+
+        if (this.state.atualizarAluno) {
+            aluno = await AlunoService.postAluno(aluno)
+                .then(alunoAtualizado => {
+                    if (this.state.id) {
+                        PopUp.sucesso('Aluno(a) atualizado(a) com sucesso');
+                    } else {
+                        PopUp.sucesso('Aluno(a) cadastrado(a) com sucesso');
+                    }
+                    return alunoAtualizado
+                })
+                .catch(error => this.props.handleUnauthorized(error))
+                .catch(() => {
+                    PopUp.erro('Erro no cadastro de aluno');
+                    this.setState({ canSubmit: true });
+                    return undefined
+                });
+        }
+
+        if (aluno == null) {
+            return
+        }
+
+        if (this.state.foto && !this.state.foto.id) {
+            await AlunoService.uploadFoto(aluno.id, this.state.foto.formData)
+                .then(() => PopUp.sucesso('Foto individual enviada com sucesso'))
+                .catch(() => PopUp.erro('Erro no envio da foto'));
+        }
+
+        if (this.state.fotosOpcionais?.length > 0) {
+            let { fotosOpcionais } = this.state;
+            fotosOpcionais = fotosOpcionais.filter(foto => foto.id == null)
+            if (fotosOpcionais?.length > 0) {
+                await this.uploadFotosOpcionais(aluno.id, fotosOpcionais);
+            }
+        }
+
+        if (this.state.irmaoRel?.fotos.length > 0) {
+            const fotos = this.state.irmaoRel.fotos;
+            await this.uploadFotosIrmaos(aluno.id, fotos);
+        }
+
+        this.props.history.push(Rotas.ALUNO_LISTA)
+        this.props.history.push(Rotas.ALUNO_EDICAO.replace(':id', aluno.id));
     }
 
     getAluno() {
@@ -161,14 +181,14 @@ class AlunoForm extends Component {
             PopUp.aviso('Foto individual será substituída');
         }
         const foto = new Foto(arq);
-        this.setState({foto: foto, canSubmit: true});
+        this.setState({ foto: foto, canSubmit: true });
     }
 
     onFotoOpcionalDrop(arq) {
         const foto = new Foto(arq);
         const fotos = this.state.fotosOpcionais.slice();
         fotos.push(foto);
-        this.setState({fotosOpcionais: fotos, canSubmit: true});
+        this.setState({ fotosOpcionais: fotos, canSubmit: true });
     }
 
     removerFoto() {
@@ -179,11 +199,10 @@ class AlunoForm extends Component {
                 .catch(error => this.props.handleUnauthorized(error))
                 .catch(error => PopUp.erro(error));
         }
-        this.setState({foto: null});
+        this.setState({ foto: null });
     }
 
-    uploadFotosOpcionais(idAluno) {
-        const fotos = this.state.fotosOpcionais;
+    async uploadFotosOpcionais(idAluno, fotos) {
         const formData = new FormData();
         fotos.forEach(foto => {
             if (foto.id == null) {
@@ -192,19 +211,16 @@ class AlunoForm extends Component {
             }
         });
 
-        AlunoService.uploadFotosOpcionais(idAluno, formData)
-            .then(fotos => {
-                PopUp.sucesso('Foto(s) enviada(s) com sucesso');
-                this.setState({fotosOpcionais: fotos});
-            })
-            .catch(error => this.props.handleUnauthorized(error))
-            .catch(() => {
-                PopUp.erro('Erro no envio de alguma foto');
-            });
+        try {
+            fotos = await AlunoService.uploadFotosOpcionais(idAluno, formData)
+            PopUp.sucesso('Foto(s) opcionais enviada(s) com sucesso');
+        } catch (e) {
+            PopUp.erro('Erro no envio de alguma foto opcional');
+        }
     }
 
     removerFotoOpcional = (idx) => {
-        const fotos = this.state.mostruario.fotos.slice();
+        const fotos = this.state.fotosOpcionais.slice();
         if (fotos[idx].id) {
             const bk = fotos[idx];
             AlunoService.removerFotoOpcional(this.state.id, fotos[idx].id)
@@ -213,31 +229,34 @@ class AlunoForm extends Component {
                 .catch(() => {
                     PopUp.erro('Erro na remoção da foto');
                     fotos.push(bk);
-                    this.setState({fotosOpcionais: fotos});
+                    this.setState({ fotosOpcionais: fotos });
                 })
         }
         fotos.splice(idx, 1);
-        this.setState({fotosOpcionais: fotos});
+        this.setState({ fotosOpcionais: fotos });
     }
 
     relacionarIrmao(irmaoRel) {
         if (this.validador.valida(this.state)) {
-            this.setState({irmaoRel: irmaoRel, canSubmit: true})
+            this.setState({ irmaoRel: irmaoRel, canSubmit: true, atualizarAluno: true })
         } else {
-            this.setState({irmaoRel: irmaoRel});
+            this.setState({ irmaoRel: irmaoRel, atualizarAluno: true });
         }
     }
 
-    uploadFotosIrmaos(id, fotos) {
-        const promises = [];
-        fotos.forEach(foto => {
-            if (foto.id == null) {
-                promises.push(AlunoService.adicionarFotoIrmao(id, foto.formData));
+    async uploadFotosIrmaos(id, fotos) {
+        let fotosEnviadasComSucesso = 0
+        for (const foto of fotos) {
+            try {
+                await AlunoService.adicionarFotoIrmao(id, foto.formData)
+                fotosEnviadasComSucesso++
+            } catch (e) {
+                break
             }
-        });
-        return Promise.allSettled(promises)
-            .then(resultados => resultados.filter(resultado => resultado.status === 'rejected'))
-            .then(resultados => resultados.length === 0 ? PopUp.sucesso('Foto(s) enviadas com sucesso') : PopUp.erro(`Erro no envio de ${resultados.length} foto(s)`));
+        }
+        fotosEnviadasComSucesso === fotos.length
+            ? PopUp.sucesso('Foto(s) com irmão enviada(s) com sucesso')
+            : PopUp.erro(`Apenas ${fotosEnviadasComSucesso} foto(s) foram enviadas com sucesso`)
     }
 
     render() {
@@ -247,9 +266,10 @@ class AlunoForm extends Component {
                 <div className="row">
                     <div className="col left">
                         <NavLink to={Rotas.ALUNO_LISTA}>
-                            <button 
+                            <button
                                 className="btn btn-small waves-effect waves-light grey darken-1"
-                                >
+                                disabled={this.state.loading}
+                            >
                                 Cancelar
                             </button>
                         </NavLink>
@@ -257,11 +277,16 @@ class AlunoForm extends Component {
                     <div className="col right">
                         <button
                             className="btn btn-small waves-effect waves-light blue"
-                            disabled={!this.state.canSubmit}
+                            disabled={!this.state.canSubmit || this.state.loading}
                             onClick={() => this.submitForm()}
                             type="button"
-                            >
+                        >
                             <span className="d-inline-flex">
+                                {this.state.loading
+                                    ? (
+                                        <LoadingBotao />
+                                    ) : null
+                                }
                                 <i className="material-icons">save</i>
                                 <span className="pl-2">Salvar</span>
                             </span>
@@ -271,7 +296,7 @@ class AlunoForm extends Component {
                 <div className="row">
                     <div className="input-field col s12">
                         <label htmlFor="nome">Nome do Aluno</label>
-                        <input 
+                        <input
                             className="validate"
                             id="nome"
                             type="text"
@@ -284,7 +309,7 @@ class AlunoForm extends Component {
                 <div className="row">
                     <div className="input-field col s12 m6">
                         <label htmlFor="matricula">Matrícula</label>
-                        <input 
+                        <input
                             className="validate"
                             id="matricula"
                             type="text"
@@ -293,10 +318,10 @@ class AlunoForm extends Component {
                             onChange={this.inputChangeHandler}
                         />
                     </div>
-                    {this.state.id ? 
+                    {this.state.id ?
                         <div className="input-field col s12 m6">
                             <label htmlFor="codAcesso">Código de Acesso</label>
-                            <input 
+                            <input
                                 className="validate"
                                 id="codAcesso"
                                 type="text"
@@ -314,19 +339,19 @@ class AlunoForm extends Component {
                     fotos={this.state.foto ? [this.state.foto] : null}
                     multiple={false}
                     onFotoDrop={foto => this.onFotoDrop(foto)}
-                    removerFoto={() => this.removerFoto()} 
+                    removerFoto={() => this.removerFoto()}
                 />
 
                 <h4>Fotos opcionais</h4>
                 <FotoDropzone
                     fotos={this.state.fotosOpcionais.slice()}
                     onFotoDrop={foto => this.onFotoOpcionalDrop(foto)}
-                    removerFoto={() => this.removerFotoOpcional()}
+                    removerFoto={this.removerFotoOpcional}
                     multiple={true}
                 />
 
-                {this.state.escola ? 
-                    <IrmaoForm 
+                {this.state.escola ?
+                    <IrmaoForm
                         escolaId={this.state.escola.id}
                         irmaoRel={this.state.irmaoRel}
                         relacionarIrmao={irmaoRel => this.relacionarIrmao(irmaoRel)}

@@ -183,6 +183,7 @@ class TurmaForm extends Component {
                         <NavLink to={Rotas.TURMA_LISTA}>
                             <button
                                 className="btn btn-small waves-effect waves-light grey darken-1"
+                                disabled={this.state.loading}
                             >
                                 Cancelar
                             </button>

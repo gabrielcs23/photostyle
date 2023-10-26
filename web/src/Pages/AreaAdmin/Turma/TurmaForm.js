@@ -34,7 +34,8 @@ class TurmaForm extends Component {
                 fotos: [],
                 validacao: this.validador.valido(),
                 canSubmit: false,
-                loading: false
+                loading: false,
+                atualizarTurma: false
             }
         } else {
             this.state = {
@@ -44,7 +45,8 @@ class TurmaForm extends Component {
                 fotos: [],
                 validacao: this.validador.valido(),
                 canSubmit: false,
-                loading: false
+                loading: false,
+                atualizarTurma: false
             }
         }
     }
@@ -73,7 +75,8 @@ class TurmaForm extends Component {
 
         this.setState({
             [name]: value,
-            canSubmit: this.state.canSubmit ? this.state.canSubmit : !this.state.canSubmit
+            canSubmit: this.state.canSubmit ? this.state.canSubmit : !this.state.canSubmit,
+            atualizarTurma: true
         });
     }
 
@@ -112,32 +115,8 @@ class TurmaForm extends Component {
                 turma.id = this.state.id;
             }
 
-            let turmaAposPost;
-            TurmaService.postTurma(turma)
-                .then(turma => {
-                    turmaAposPost = turma;
-                    if(this.state.id) {
-                        PopUp.sucesso('Turma atualizada com sucesso');
-                    } else {
-                        PopUp.sucesso('Turma cadastrada com sucesso');
-                    }
-                    if(this.state.fotos?.length > 0) {
-                        return this.uploadFotos(turmaAposPost.id);
-                    }
-                })
-                .then(() => {
-                    if (this.state.id) {
-                        this.props.history.push(Rotas.TURMA_LISTA);
-                    } else {
-                        this.props.selecionar(turmaAposPost);
-                    }
-                })
-                .catch(error => this.props.handleUnauthorized(error))
-                .catch(() => {
-                    PopUp.erro('Erro no cadastro de turma');
-                    this.setState({ canSubmit: true });
-                })
-                .finally(() => this.setState({ loading: false }));
+            this.submitFormAsync(turma)
+                .finally(() => this.setState({ loading: false }))
         } else {
             const { nome } = validacao;
             const campos = [nome];
@@ -147,17 +126,52 @@ class TurmaForm extends Component {
         }
     }
 
-    uploadFotos(id) {
-        const { fotos } = this.state;
-        const promises = [];
-        fotos.forEach(foto => {
-            if (foto.id == null) {
-                promises.push(TurmaService.adicionarFoto(id, foto.formData));
+    async submitFormAsync(turma) {
+        if (this.state.atualizarTurma) {
+            turma = await TurmaService.postTurma(turma)
+                .then(turmaAtualizada => {
+                    this.setState({ atualizarTurma: false })
+                    if (this.state.id) {
+                        PopUp.sucesso('Turma atualizada com sucesso');
+                    } else {
+                        PopUp.sucesso('Turma cadastrada com sucesso');
+                    }
+                    return turmaAtualizada
+                })
+                .catch(error => this.props.handleUnauthorized(error))
+                .catch(() => {
+                    PopUp.erro('Erro no cadastro de turma');
+                    this.setState({ canSubmit: true });
+                    return undefined
+                })
+        }
+        if (turma == null) {
+            return
+        }
+        if (this.state.fotos?.length > 0) {
+            let { fotos } = this.state;
+            fotos = fotos.filter(foto => foto.id == null)
+            if (fotos?.length > 0) {
+                await this.uploadFotosAsync(turma.id, fotos);
             }
-        });
-        return Promise.allSettled(promises)
-            .then(resultados => resultados.filter(resultado => resultado.status === 'rejected'))
-            .then(resultados => resultados.length === 0 ? PopUp.sucesso('Foto(s) enviadas com sucesso') : PopUp.erro(`Erro no envio de ${resultados.length} foto(s)`));
+        }
+        this.props.history.push(Rotas.TURMA_LISTA);
+        this.props.history.push(Rotas.TURMA_EDICAO.replace(':id', turma.id));
+    }
+
+    async uploadFotosAsync(id, fotos) {
+        let fotosEnviadasComSucesso = 0
+        for (const foto of fotos) {
+            try {
+                await TurmaService.adicionarFoto(id, foto.formData)
+                fotosEnviadasComSucesso++
+            } catch (e) {
+                break
+            }
+        }
+        fotosEnviadasComSucesso === fotos.length
+            ? PopUp.sucesso('Foto(s) enviadas com sucesso')
+            : PopUp.erro(`Apenas ${fotosEnviadasComSucesso} foto(s) foram enviadas com sucesso`)
     }
 
     render() {

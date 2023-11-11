@@ -155,8 +155,11 @@ class AlunoForm extends Component {
         }
 
         if (this.state.irmaoRel?.fotos.length > 0) {
-            const fotos = this.state.irmaoRel.fotos;
-            await this.uploadFotosIrmaos(aluno.id, fotos);
+            let fotosIrmaos = this.state.irmaoRel.fotos;
+            fotosIrmaos = fotosIrmaos.filter(foto => foto.id == null)
+            if (fotosIrmaos?.length > 0) {
+                await this.uploadFotosIrmaos(aluno.id, fotosIrmaos);
+            }
         }
 
         this.props.history.push(Rotas.ALUNO_LISTA)

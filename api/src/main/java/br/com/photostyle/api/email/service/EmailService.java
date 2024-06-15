@@ -1,5 +1,6 @@
 package br.com.photostyle.api.email.service;
 
+import br.com.photostyle.api.email.config.EmailConfigurationProperties;
 import br.com.photostyle.api.email.templates.TemplatesEmail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,6 +24,9 @@ public class EmailService {
     @Autowired
     private SpringTemplateEngine templateEngine;
 
+    @Autowired
+    private EmailConfigurationProperties configProperties;
+
     @Value("${spring.mail.username}")
     private String mailSistema;
 
@@ -39,12 +43,20 @@ public class EmailService {
 
     public void enviarEmailResponsavel(String to, Map<String, Object> templateModel) {
         try {
+            fillConfigParaEmailResponsavel(templateModel);
             String nPedido = (String) templateModel.get("nPedido");
             String subject = "Pedido realizado " + nPedido;
             enviarEmailComTemplate(to, subject, templateModel, TemplatesEmail.CONFIRMACAO_PEDIDO);
         } catch (MessagingException e) {
             e.printStackTrace();
         }
+    }
+
+    private void fillConfigParaEmailResponsavel(Map<String, Object> templateModel) {
+        templateModel.put("pixTipo", configProperties.getPixTipo());
+        templateModel.put("pixChave", configProperties.getPixChave());
+        templateModel.put("empresaTelefone", configProperties.getTelefone());
+        templateModel.put("empresaEmail", configProperties.getContato());
     }
 
     private void enviarEmailComTemplate(

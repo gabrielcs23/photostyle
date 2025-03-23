@@ -57,7 +57,7 @@ export default class PedidoForm extends Component {
     inputChangeHandler = (event) => {
         const { name, value } = event.target;
 
-        this.setState({[name]: value});
+        this.setState({ [name]: value });
     }
 
     extraTemOpcaoSelecionada(extra) {
@@ -93,7 +93,7 @@ export default class PedidoForm extends Component {
                     }
                 }
             }
-            this.setState({submitDisabled: true});
+            this.setState({ submitDisabled: true });
 
             const extras = [];
             for (const extra of this.state.extras.slice()) {
@@ -120,7 +120,7 @@ export default class PedidoForm extends Component {
             item.opcao = this.state.item.opcao.turma
             if (this.state.item.opcao.irmao) {
                 item.opcao += ` + ${this.state.item.opcao.irmao}`;
-            }            
+            }
             const pedido = {
                 aluno: this.aluno,
                 turma: this.turma,
@@ -142,7 +142,7 @@ export default class PedidoForm extends Component {
                     } else {
                         PopUp.erro(error);
                     }
-                    this.setState({submitDisabled: false});
+                    this.setState({ submitDisabled: false });
                 });
         } else {
             const { responsavel, tel, email } = validacao;
@@ -158,11 +158,11 @@ export default class PedidoForm extends Component {
         opcoes.extras.forEach(extra => {
             if (!extra.opcao) {
                 valorTotal += (extra.val * extra.qtd)
-            } else if(extra.opcao) {
+            } else if (extra.opcao) {
                 extra.opcao.forEach(qtd => valorTotal += (extra.val * qtd));
             }
         });
-        this.setState({item: opcoes.item, extras: opcoes.extras, valorTotal});
+        this.setState({ item: opcoes.item, extras: opcoes.extras, valorTotal });
     }
 
     render() {
@@ -173,7 +173,7 @@ export default class PedidoForm extends Component {
         }
         return (
             <>
-                <blockquote style={{fontStyle: 'italic'}}>
+                <blockquote style={{ fontStyle: 'italic' }}>
                     Solicitamos que o responsável do aluno(a) preencha esta solicitação prévia com seus dados de contato.
                 </blockquote>
 
@@ -181,7 +181,7 @@ export default class PedidoForm extends Component {
                     <div className="row">
                         <div className="input-field col s12 m6">
                             <label htmlFor="responsavel">Nome do(a) Responsável</label>
-                            <input 
+                            <input
                                 className="validate"
                                 id="responsavel"
                                 type="text"
@@ -207,7 +207,7 @@ export default class PedidoForm extends Component {
                     <div className="row">
                         <div className="input-field col s12 m6">
                             <label htmlFor="email">Email Contato</label>
-                            <input 
+                            <input
                                 className="validate"
                                 id="email"
                                 type="text"
@@ -242,12 +242,12 @@ export default class PedidoForm extends Component {
                                 onClick={() => this.submitForm()}
                                 disabled={this.state.submitDisabled}
                                 type="button"
-                                >
+                            >
                                 <span className="d-inline-flex">
                                     <span className="pl-2">Fazer pedido!</span>
                                 </span>
                             </button>
-                            <div style={{padding: '0 1rem'}}>
+                            <div style={{ padding: '0 1rem' }}>
                                 {this.state.submitDisabled ?
                                     <div className="preloader-wrapper small active">
                                         <div className="spinner-layer spinner-green-only">
@@ -265,6 +265,13 @@ export default class PedidoForm extends Component {
                                     : null
                                 }
                             </div>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col left d-inline-flex">
+                            <p>
+                                <b>Importante: </b>O prazo para produção é de <b>30 dias úteis</b> a partir da confirmação do pagamento.
+                            </p>
                         </div>
                     </div>
                 </form>

@@ -15,13 +15,16 @@ const ConfirmacaoPedido = ({ nPedido, styles }) => (
           </span>
         </div>
         <p className={`${styles.confirm} ${styles.agradecimento}`}>
-          Obrigado por realizar seu pedido!
+          Obrigado por seu pedido!
         </p>
         <p className={`${styles.confirm}`}>
-          Verifique seu e-mail, não se esquecendo da caixa de spam
+          Por favor, verifique seu e-mail, incluindo a caixa de spam, para garantir o recebimento.
         </p>
         <p className={`${styles.confirm}`}>
-          Enviamos um resumo de seu pedido com os dados para pagamento.
+          Enviamos um resumo do seu pedido, juntamente com as informações para pagamento.
+        </p>
+        <p className={`${styles.confirm}`}>
+          Se precisar de ajuda, estamos à disposição!
         </p>
       </div>
     </div>

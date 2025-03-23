@@ -1,6 +1,5 @@
 package br.com.photostyle.api.model.adapter;
 
-import br.com.photostyle.api.model.dto.AlunoDto;
 import br.com.photostyle.api.model.dto.EscolaDto;
 import br.com.photostyle.api.model.dto.FotoDto;
 import br.com.photostyle.api.model.dto.TurmaDto;
@@ -30,25 +29,10 @@ public class TurmaAdapter extends BaseAdapter<TurmaEntity, TurmaDto> {
     @Override
     public TurmaDto entityToDto(TurmaEntity entity) {
         TurmaDto dto = createBasicDto(entity);
-
-        if (!CollectionUtils.isEmpty(entity.getAlunos())) {
-            List<AlunoDto> alunos = entity.getAlunos().stream().map(alunoEntity -> {
-                AlunoDto alunoDto = new AlunoDto();
-                alunoDto.setId(alunoEntity.getId());
-                alunoDto.setMatricula(alunoEntity.getMatricula());
-                alunoDto.setNome(alunoEntity.getNome());
-                alunoDto.setEscola(dto.getEscola());
-                alunoDto.setTurma(dto);
-                return alunoDto;
-            }).collect(Collectors.toList());
-            dto.setAlunos(alunos);
-        }
-
         if (!CollectionUtils.isEmpty(entity.getFotos())) {
             List<FotoDto> fotos = fotoAdapter.entityListToDtoList(entity.getFotos());
             dto.setFotos(fotos);
         }
-
         return dto;
     }
 

@@ -3,9 +3,7 @@ package br.com.photostyle.api.model.dto;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
-import java.util.List;
-
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", scope=EscolaDto.class)
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", scope = EscolaDto.class)
 public class EscolaDto {
 
     private Long id;
@@ -13,8 +11,6 @@ public class EscolaDto {
     private String nome;
 
     private String apelido;
-
-    private List<TurmaDto> turmas;
 
     public Long getId() {
         return id;
@@ -38,13 +34,5 @@ public class EscolaDto {
 
     public void setApelido(String apelido) {
         this.apelido = apelido;
-    }
-
-    public List<TurmaDto> getTurmas() {
-        return turmas;
-    }
-
-    public void setTurmas(List<TurmaDto> turmas) {
-        this.turmas = turmas;
     }
 }

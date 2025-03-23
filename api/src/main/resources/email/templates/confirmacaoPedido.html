@@ -53,26 +53,16 @@
                                 Veja o resumo a baixo.
                               </p>
                               <p>
-                                Favor realizar o pagamento de seu pedido em nossa conta Corrente no banco:
+                                Favor realizar o pagamento de seu pedido em nossa chave Pix:
                               </p>
                               <p>
-                                Itaú - 341
+                                Pix (<span th:text="${pixTipo}"></span>): <span th:text="${pixChave}"></span>
                               </p>
                               <p>
-                                Agencia: 0783
-                              </p>
-                              <p>
-                                Conta corrente: 06653-3
-                              </p>
-                              <p>
-                                Angela M. Costa e Silva (MEI) – 20.332.587/0001.43
-                              </p>
-                              <p>
-                                Pix (CNPJ): 20332587000143
-                              </p>
-                              <p>
-                                Não se esqueça de enviar-nos o comprovante deste pagamento para que possamos dar
-                                prosseguimento ao seu pedido. O prazo para produção será de 30 dias após esta confirmação.
+                                Não se esqueça de enviar-nos o comprovante deste pagamento pelo email
+                                <span th:text="${empresaEmail}"></span>
+                                para que possamos dar prosseguimento ao seu pedido. O prazo para produção será de
+                                30 dias úteis após esta confirmação.
                               </p>
                               <p>
                                 A entrega do pedido será informada, seguindo orientações dos procedimentos de segurança
@@ -337,9 +327,9 @@
                               <div style="margin: 10px 0 !important;">
                                 <div>Att.</div>
                                 <hr />
-                                <div>Angela e Eduardo / Photostyle</div>
-                                <div>(21) 99907-4544</div>
-                                <div>contato@photostyle.com.br</div>
+                                <div>Equipe Photostyle</div>
+                                <div><span th:text="${empresaTelefone}"></span></div>
+                                <div><span th:text="${empresaEmail}"></span></div>
                               </div>
                             </td>
                           </tr>

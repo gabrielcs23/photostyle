@@ -8,7 +8,7 @@ const TurmaCard = (props) => {
     const toggleHover = () => setHovered(!hovered);
 
     const { turma } = props;
-    
+
     const idModal = `modal-confirmar-exclusao-${turma.id}`
 
     return (
@@ -18,7 +18,7 @@ const TurmaCard = (props) => {
                 onMouseEnter={toggleHover}
                 onMouseLeave={toggleHover}
             >
-                
+
                 <CardActions idModal={idModal} editar={props.editar} />
 
                 <div className="card-image"
@@ -34,30 +34,21 @@ const TurmaCard = (props) => {
                     <div className="card-title mb-0 text-truncate">
                         <span>{turma.nome}</span>
                     </div>
+                    {/*
                     <p>Alunos: {turma.alunos ? turma.alunos.length : '0'}</p>
                     <p>Fotos: {turma.fotos ? turma.fotos.length : '0'}</p>
-
+                    */}
                 </div>
 
             </div>
 
             <ModalConfirmarExclusao
                 idModal={idModal}
-                titulo={`Excluir ${turma.nome}?`}
+                titulo={`Excluir turma ${turma.nome}?`}
                 mensagem={(
                     <div>
                         <p>Tem certeza de que deseja excluir a turma {turma.nome}?</p>
-                        { turma.alunos || turma.fotos ? 
-                            <>
-                                <p>Também serão excluídos:</p>
-                                <ul className="browser-default">
-                                    {turma.alunos ? <li className="browser-default">{turma.alunos.length} alunos</li> : null}
-                                    {turma.fotos ? <li className="browser-default">{turma.fotos.length} fotos</li> : null}
-                                </ul>
-                            </>
-                            :
-                            null
-                        }
+                        <p>Também serão excluídos todas seus alunos e fotos.</p>
                     </div>
                 )}
                 confirmar={props.excluir}

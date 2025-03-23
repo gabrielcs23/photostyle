@@ -83,7 +83,7 @@ public class AlunoService extends BaseService<AlunoEntity, AlunoDto> {
         String codigoAcesso;
         boolean isCodUnico;
         do {
-            codigoAcesso = geradorCodAcesso.gerarCodigo(aluno.getEscola().getNome(), aluno.getMatricula());
+            codigoAcesso = geradorCodAcesso.gerarCodigo(aluno.getEscola().getNome(), aluno.getNome());
             isCodUnico = repository.getByCodigoAcesso(codigoAcesso) == null;
         } while (!isCodUnico);
         aluno.setCodigoAcesso(codigoAcesso);

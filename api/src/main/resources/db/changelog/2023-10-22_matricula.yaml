@@ -1,0 +1,9 @@
+databaseChangeLog:
+- changeSet:
+    id: matricula-1
+    author: gabri (generated)
+    changes:
+    - dropNotNullConstraint:
+        columnName: matr
+        columnDataType: VARCHAR(255)
+        tableName: aluno

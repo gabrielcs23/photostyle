@@ -29,27 +29,18 @@ const AlunoCard = (props) => {
                     <div className="card-title text-truncate">
                         <span>{aluno.nome}</span>
                     </div>
-                    <p class="mt-2">Código de Acesso: {aluno.codigoAcesso}</p>
+                    <p className="mt-2">Código de Acesso: {aluno.codigoAcesso}</p>
                 </div>
 
             </div>
 
             <ModalConfirmarExclusao
                 idModal={idModal}
-                titulo={`Excluir ${aluno.nome}?`}
+                titulo={`Excluir aluno ${aluno.nome}?`}
                 mensagem={(
                     <div>
                         <p>Tem certeza de que deseja excluir o aluno {aluno.nome}?</p>
-                        { aluno.fotos ? 
-                            <>
-                                <p>Também serão excluídos:</p>
-                                <ul className="browser-default">
-                                    {aluno.fotos ? <li className="browser-default">{aluno.fotos.length} fotos</li> : null}
-                                </ul>
-                            </>
-                            :
-                            null
-                        }
+                        <p>Também serão excluídos todas suas fotos.</p>
                     </div>
                 )}
                 confirmar={props.excluir}

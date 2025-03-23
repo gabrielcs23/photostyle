@@ -10,7 +10,7 @@ public class AlunoEntity extends BaseEntity {
     @Column(name = "NOME", nullable = false)
     private String nome;
 
-    @Column(name = "MATR", nullable = false)
+    @Column(name = "MATR")
     private String matricula;
 
     @Column(name = "COD_AC", nullable = false, unique = true)

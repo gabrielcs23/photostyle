@@ -1,0 +1,74 @@
+databaseChangeLog:
+- changeSet:
+    id: 1743360467033-7
+    author: gabri (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+            name: id_aluno
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: id_foto
+            type: BIGINT
+        tableName: rl_aluno_fotos
+- changeSet:
+    id: 1743360467033-8
+    author: gabri (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: id_foto
+        constraintName: UK_hi27ov9xeo4j71q8cgkxavpbl
+        tableName: rl_aluno_fotos
+- changeSet:
+    id: 1743360467033-9
+    author: gabri (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: id_aluno
+        baseTableName: rl_aluno_fotos
+        constraintName: FK5eno4ujvm3ne2b7mslllju2cn
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: aluno
+        validate: true
+- changeSet:
+    id: 1743360467033-10
+    author: gabri (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: id_foto
+        baseTableName: rl_aluno_fotos
+        constraintName: FKn6w9f8vtjy82bqkrj7lfmkrhg
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: foto
+        validate: true
+- changeSet:
+    id: migrar-dados-aluno-para-rl_aluno_fotos
+    author: gabriel
+    changes:
+    - sql:
+        dbms: 'all'
+        splitStatements: false
+        sql: INSERT INTO rl_aluno_fotos (id_aluno, id_foto) SELECT id, foto_id FROM aluno WHERE foto_id IS NOT NULL;
+- changeSet:
+    id: 1743360467033-11
+    author: gabri (generated)
+    changes:
+    - dropForeignKeyConstraint:
+        baseTableName: aluno
+        constraintName: FK_FOTO_ALUNO
+- changeSet:
+    id: 1743360467033-17
+    author: gabri (generated)
+    changes:
+    - dropColumn:
+        columnName: foto_id
+        tableName: aluno

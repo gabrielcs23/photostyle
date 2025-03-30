@@ -14,3 +14,6 @@ databaseChangeLog:
 - include:
     file: changelog/2023-10-22_matricula.yaml
     relativeToChangelogFile: true
+- include:
+    file: changelog/2025-03-30_individual_multiplo.yaml
+    relativeToChangelogFile: true

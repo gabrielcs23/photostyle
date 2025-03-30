@@ -31,6 +31,11 @@ public class AlunoAdapter extends BaseAdapter<AlunoEntity, AlunoDto> {
     public AlunoDto entityToDto(AlunoEntity entity) {
         AlunoDto dto = createBasicDto(entity);
 
+        if (entity.getFotos() != null) {
+            List<FotoDto> fotos = fotoAdapter.entityListToDtoList(entity.getFotos());
+            dto.setFotos(fotos);
+        }
+
         if (entity.getFotosOpcionais() != null) {
             List<FotoDto> fotoDtos = fotoAdapter.entityListToDtoList(entity.getFotosOpcionais());
             dto.setFotosOpcionais(fotoDtos);
@@ -51,11 +56,6 @@ public class AlunoAdapter extends BaseAdapter<AlunoEntity, AlunoDto> {
             }
 
             dto.setIrmaoRel(irmaoRelDto);
-        }
-
-        if (entity.getFoto() != null) {
-            FotoDto fotoDto = fotoAdapter.entityToDto(entity.getFoto());
-            dto.setFoto(fotoDto);
         }
 
         return dto;
@@ -87,11 +87,6 @@ public class AlunoAdapter extends BaseAdapter<AlunoEntity, AlunoDto> {
 
         dto.setEscola(escolaDto);
         dto.setTurma(turmaDto);
-
-        if (entity.getFoto() != null) {
-            FotoDto fotoDto = fotoAdapter.entityToDto(entity.getFoto());
-            dto.setFoto(fotoDto);
-        }
 
         return dto;
     }

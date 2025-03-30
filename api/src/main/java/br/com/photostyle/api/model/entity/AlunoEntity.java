@@ -28,8 +28,9 @@ public class AlunoEntity extends BaseEntity {
     @JoinColumn(name = "RL_IRMAO_ID")
     private IrmaoRelEntity irmaoRel;
 
-    @OneToOne
-    private FotoEntity foto;
+    @OneToMany(cascade = CascadeType.REMOVE)
+    @JoinTable(name="RL_ALUNO_FOTOS", joinColumns=@JoinColumn(name="ID_ALUNO"), inverseJoinColumns=@JoinColumn(name="ID_FOTO"))
+    private List<FotoEntity> fotos;
 
     @OneToMany(cascade = CascadeType.REMOVE)
     @JoinTable(name="RL_ALUNO_OPCIONAIS",
@@ -84,12 +85,12 @@ public class AlunoEntity extends BaseEntity {
         this.irmaoRel = irmaoRel;
     }
 
-    public FotoEntity getFoto() {
-        return foto;
+    public List<FotoEntity> getFotos() {
+        return fotos;
     }
 
-    public void setFoto(FotoEntity foto) {
-        this.foto = foto;
+    public void setFotos(List<FotoEntity> fotos) {
+        this.fotos = fotos;
     }
 
     public List<FotoEntity> getFotosOpcionais() {

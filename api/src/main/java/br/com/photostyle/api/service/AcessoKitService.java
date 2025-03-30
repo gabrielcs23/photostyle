@@ -58,10 +58,11 @@ public class AcessoKitService {
         KitDto kit = new KitDto();
         kit.setCodigoAcesso(aluno.getCodigoAcesso());
         kit.setNomeAluno(aluno.getNome());
-        FotoEntity fotoIndividual = aluno.getFoto();
-        if (fotoIndividual != null) {
-            FotoDto fotoIndDto = fotoAdapter.entityToDto(fotoIndividual);
-            kit.setFotoIndividual(fotoIndDto);
+
+        List<FotoEntity> fotos = aluno.getFotos();
+        if (!CollectionUtils.isEmpty(fotos)) {
+            List<FotoDto> fotoDtos = fotoAdapter.entityListToDtoList(fotos);
+            kit.setFotoIndividual(fotoDtos);
         }
 
         EscolaEntity escola = aluno.getEscola();

@@ -72,22 +72,23 @@ public class AlunoController {
     }
 
     @PostMapping("/{id}/foto")
-    public ResponseEntity<FotoDto> uploadFoto(@PathVariable @NotNull Long id, @RequestParam("file") MultipartFile foto) {
+    public ResponseEntity<List<FotoDto>> uploadFotos(@PathVariable @NotNull Long id,
+                                                              @RequestParam("files") List<MultipartFile> files) {
         AlunoEntity entity = alunoService.getEntityPorId(id);
         if (entity == null) {
             return ResponseEntity.notFound().build();
         }
-        FotoDto fotoSalva = alunoService.uploadFoto(entity, foto);
-        return ResponseEntity.ok(fotoSalva);
+        List<FotoDto> fotoDtos = alunoService.uploadFotos(entity, files);
+        return ResponseEntity.ok(fotoDtos);
     }
 
-    @DeleteMapping("/{id}/foto")
-    public ResponseEntity<?> removerFoto(@PathVariable @NotNull Long id) {
+    @DeleteMapping("/{id}/foto/{idFoto}")
+    public ResponseEntity<?> removerFotos(@PathVariable @NotNull Long id, @PathVariable @NotNull Long idFoto) {
         AlunoEntity entity = alunoService.getEntityPorId(id);
-        if (entity == null || entity.getFoto() == null) {
+        if (entity == null) {
             return ResponseEntity.notFound().build();
         }
-        alunoService.removeFoto(entity);
+        alunoService.removerFoto(entity, idFoto);
         return ResponseEntity.ok().build();
     }
 

@@ -58,10 +58,9 @@ public class AlunoService extends BaseService<AlunoEntity, AlunoDto> {
 
         if (aluno.getId() != null) {
             AlunoEntity entityAnterior = getEntityPorId(aluno.getId());
-            if (entityAnterior.getFoto() != null) {
-                alunoEntity.setFoto(entityAnterior.getFoto());
-            }
             alunoEntity.setCodigoAcesso(entityAnterior.getCodigoAcesso());
+            alunoEntity.setFotos(entityAnterior.getFotos());
+            alunoEntity.setFotosOpcionais(entityAnterior.getFotosOpcionais());
         } else {
             gerarCodigo(alunoEntity);
         }
@@ -94,11 +93,11 @@ public class AlunoService extends BaseService<AlunoEntity, AlunoDto> {
         if (aluno.getIrmaoRel() != null) {
             irmaoService.removeRelacionamento(aluno.getIrmaoRel(), aluno);
         }
-
-        if (aluno.getFoto() != null) {
-            FotoEntity fotoCopia = fotoService.copiaFoto(aluno.getFoto());
-            aluno.setFoto(null);
-            fotoService.remover(fotoCopia);
+        if (!CollectionUtils.isEmpty(aluno.getFotos())) {
+            fotoService.removerEmLote(aluno.getFotos());
+        }
+        if (!CollectionUtils.isEmpty(aluno.getFotosOpcionais())) {
+            fotoService.removerEmLote(aluno.getFotosOpcionais());
         }
 
         repository.delete(aluno);
@@ -115,29 +114,29 @@ public class AlunoService extends BaseService<AlunoEntity, AlunoDto> {
     }
 
     @Transactional
-    public FotoDto uploadFoto(AlunoEntity aluno, MultipartFile foto) {
-        FotoEntity fotoEntity = fotoService.upload(foto);
-
-        FotoEntity fotoAntiga = null;
-        if (aluno.getFoto() != null) {
-            fotoAntiga = fotoService.copiaFoto(aluno.getFoto());
-        }
-
-        aluno.setFoto(fotoEntity);
+    public List<FotoDto> uploadFotos(AlunoEntity aluno, List<MultipartFile> novasFotos) {
+        List<FotoEntity> fotos = aluno.getFotos();
+        novasFotos.forEach(foto -> {
+            FotoEntity uploaded = fotoService.upload(foto);
+            fotos.add(uploaded);
+        });
+        aluno.setFotos(fotos);
         repository.save(aluno);
 
-        if (fotoAntiga != null) {
-            fotoService.remover(fotoAntiga);
-        }
-        return fotoService.entityToDto(fotoEntity);
+        return fotoService.entityListToDtoList(fotos);
     }
 
     @Transactional
-    public void removeFoto(AlunoEntity aluno) {
-        FotoEntity foto = fotoService.copiaFoto(aluno.getFoto());
-        aluno.setFoto(null);
-        repository.save(aluno);
-        fotoService.remover(foto);
+    public void removerFoto(AlunoEntity aluno, Long idFoto) {
+        List<FotoEntity> fotos = aluno.getFotos();
+        if (!CollectionUtils.isEmpty(fotos)) {
+            List<FotoEntity> fotosFiltradas = fotos.stream()
+                    .filter(foto -> !foto.getId().equals(idFoto))
+                    .collect(Collectors.toList());
+            aluno.setFotos(fotosFiltradas);
+            repository.save(aluno);
+            fotoService.remover(idFoto);
+        }
     }
 
     @Transactional

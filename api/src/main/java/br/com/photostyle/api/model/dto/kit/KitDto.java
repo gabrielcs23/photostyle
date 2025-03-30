@@ -10,7 +10,7 @@ public class KitDto {
     private String nomeAluno;
     private String escola;
     private String turma;
-    private FotoDto fotoIndividual;
+    private List<FotoDto> fotoIndividual;
     private List<OpcaoKit> opcaoKits;
     private List<OpcaoExtra> opcaoExtras;
     private List<FotoDto> fotosTurma;
@@ -50,11 +50,11 @@ public class KitDto {
         this.turma = turma;
     }
 
-    public FotoDto getFotoIndividual() {
+    public List<FotoDto> getFotoIndividual() {
         return fotoIndividual;
     }
 
-    public void setFotoIndividual(FotoDto fotoIndividual) {
+    public void setFotoIndividual(List<FotoDto> fotoIndividual) {
         this.fotoIndividual = fotoIndividual;
     }
 

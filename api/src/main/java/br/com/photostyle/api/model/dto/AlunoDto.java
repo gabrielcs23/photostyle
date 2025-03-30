@@ -23,7 +23,7 @@ public class AlunoDto {
 
     private IrmaoRelDto irmaoRel;
 
-    private FotoDto foto;
+    private List<FotoDto> fotos;
 
     private List<FotoDto> fotosOpcionais;
 
@@ -83,12 +83,12 @@ public class AlunoDto {
         this.irmaoRel = irmaoRel;
     }
 
-    public FotoDto getFoto() {
-        return foto;
+    public List<FotoDto> getFotos() {
+        return fotos;
     }
 
-    public void setFoto(FotoDto foto) {
-        this.foto = foto;
+    public void setFotos(List<FotoDto> fotos) {
+        this.fotos = fotos;
     }
 
     public List<FotoDto> getFotosOpcionais() {

@@ -9,10 +9,11 @@ class CustomSelect extends Component {
         this.composedKey = this.props.composedKey;
         
         // se valor foi carregado do banco
-        if (this.props.disabled && this.props.options?.length === 1) {
+        if (this.props.disabled || this.props.options?.length === 1) {
             this.state = {
                 selecionado: 0
             }
+            this.props.selecionar(0)
         } else if(this.props.valorInicial != null) {
             this.state = {
                 selecionado: this.props.valorInicial

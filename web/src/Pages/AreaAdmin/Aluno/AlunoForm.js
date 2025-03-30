@@ -35,7 +35,7 @@ class AlunoForm extends Component {
                 matricula: '',
                 escola: turma ? turma.escola : '',
                 turma: turma,
-                foto: null,
+                fotos: [],
                 fotosOpcionais: [],
                 irmaoRel: null,
                 codigoAcesso: '',
@@ -51,7 +51,7 @@ class AlunoForm extends Component {
                 matricula: '',
                 escola: turma ? turma.escola : '',
                 turma: turma,
-                foto: null,
+                fotos: [],
                 fotosOpcionais: [],
                 irmaoRel: null,
                 codigoAcesso: '',
@@ -73,7 +73,7 @@ class AlunoForm extends Component {
                         matricula: aluno.matricula,
                         escola: aluno.escola,
                         turma: aluno.turma,
-                        foto: aluno.foto,
+                        fotos: aluno.fotos,
                         fotosOpcionais: aluno.fotosOpcionais,
                         irmaoRel: aluno.irmaoRel,
                         codigoAcesso: aluno.codigoAcesso
@@ -140,14 +140,16 @@ class AlunoForm extends Component {
             return
         }
 
-        if (this.state.foto && !this.state.foto.id) {
-            await AlunoService.uploadFoto(aluno.id, this.state.foto.formData)
-                .then(() => PopUp.sucesso('Foto individual enviada com sucesso'))
-                .catch(() => PopUp.erro('Erro no envio da foto'));
+        if (this.state.fotos?.length > 0) {
+            let fotos = this.state.fotos.slice();
+            fotos = fotos.filter(foto => foto.id == null)
+            if (fotos?.length > 0) {
+                await this.uploadFotos(aluno.id, fotos);
+            }
         }
 
         if (this.state.fotosOpcionais?.length > 0) {
-            let { fotosOpcionais } = this.state;
+            let fotosOpcionais = this.state.fotosOpcionais.slice();
             fotosOpcionais = fotosOpcionais.filter(foto => foto.id == null)
             if (fotosOpcionais?.length > 0) {
                 await this.uploadFotosOpcionais(aluno.id, fotosOpcionais);
@@ -155,7 +157,7 @@ class AlunoForm extends Component {
         }
 
         if (this.state.irmaoRel?.fotos.length > 0) {
-            let fotosIrmaos = this.state.irmaoRel.fotos;
+            let fotosIrmaos = this.state.irmaoRel.fotos.slice();
             fotosIrmaos = fotosIrmaos.filter(foto => foto.id == null)
             if (fotosIrmaos?.length > 0) {
                 await this.uploadFotosIrmaos(aluno.id, fotosIrmaos);
@@ -170,9 +172,6 @@ class AlunoForm extends Component {
         const aluno = new Aluno(this.state.nome, this.state.matricula, this.state.escola, this.state.turma);
         if (this.state.id) {
             aluno.id = this.state.id;
-            if (this.state.foto?.id) {
-                aluno.foto = this.state.foto
-            }
         }
         aluno.setIrmaoRel(this.state.irmaoRel);
 
@@ -180,11 +179,10 @@ class AlunoForm extends Component {
     }
 
     onFotoDrop(arq) {
-        if (this.state.foto?.id) {
-            PopUp.aviso('Foto individual será substituída');
-        }
         const foto = new Foto(arq);
-        this.setState({ foto: foto, canSubmit: true });
+        const fotos = this.state.fotos.slice();
+        fotos.push(foto);
+        this.setState({ fotos: fotos, canSubmit: true });
     }
 
     onFotoOpcionalDrop(arq) {
@@ -194,15 +192,38 @@ class AlunoForm extends Component {
         this.setState({ fotosOpcionais: fotos, canSubmit: true });
     }
 
-    removerFoto() {
-        const foto = this.state.foto;
-        if (foto.id) {
-            AlunoService.removerFoto(this.state.id)
+    async uploadFotos(idAluno, fotos) {
+        const formData = new FormData();
+        fotos.forEach(foto => {
+            if (foto.id == null) {
+                const file = foto.formData.get('file');
+                formData.append('files', file, file.name);
+            }
+        });
+
+        try {
+            fotos = await AlunoService.uploadFotos(idAluno, formData)
+            PopUp.sucesso('Foto(s) enviada(s) com sucesso');
+        } catch (e) {
+            PopUp.erro('Erro no envio de alguma foto');
+        }
+    }
+
+    removerFoto = (idx) => {
+        const fotos = this.state.fotos.slice();
+        if (fotos[idx].id) {
+            const bk = fotos[idx];
+            AlunoService.removerFoto(this.state.id, fotos[idx].id)
                 .then(() => PopUp.sucesso('Foto removida com sucesso'))
                 .catch(error => this.props.handleUnauthorized(error))
-                .catch(error => PopUp.erro(error));
+                .catch(() => {
+                    PopUp.erro('Erro na remoção da foto');
+                    fotos.push(bk);
+                    this.setState({ fotos: fotos });
+                })
         }
-        this.setState({ foto: null });
+        fotos.splice(idx, 1);
+        this.setState({ fotos: fotos });
     }
 
     async uploadFotosOpcionais(idAluno, fotos) {
@@ -339,10 +360,10 @@ class AlunoForm extends Component {
 
                 <h4>Foto individual</h4>
                 <FotoDropzone
-                    fotos={this.state.foto ? [this.state.foto] : null}
-                    multiple={false}
+                    fotos={this.state.fotos.slice()}
+                    multiple={true}
                     onFotoDrop={foto => this.onFotoDrop(foto)}
-                    removerFoto={() => this.removerFoto()}
+                    removerFoto={this.removerFoto}
                 />
 
                 <h4>Fotos opcionais</h4>

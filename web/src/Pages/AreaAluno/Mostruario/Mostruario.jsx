@@ -1,5 +1,4 @@
 import React from "react";
-import ImgBox from "../../Utils/ImgBox/ImgBox";
 import DisplayFotos from "../DisplayFotos/DisplayFotos";
 
 function Mostruario({ styles, kit, mostraExtras, showHelper }) {
@@ -73,18 +72,24 @@ function Mostruario({ styles, kit, mostraExtras, showHelper }) {
         </div>
       </div>
 
-      <hr />
+      {fotoIndividual?.length ? (
+        <>
+          <hr />
 
-      <div className={`${styles.title} center`}>
-        <h4>Foto Individual</h4>
-      </div>
+          <div className={`${styles.title} center`}>
+            <h4>Foto Individual</h4>
+          </div>
 
-      <div
-        className={`center mb-5 ${styles.fotoIndividual}`}
-        id="fotoIndividual"
-      >
-        <ImgBox img={fotoIndividual?.url} alt="foto individual" />
-      </div>
+          <div
+            className={`center mb-5 ${styles.fotoIndividual}`}
+            id="fotoIndividual"
+          >
+            <DisplayFotos
+                fotos={fotoIndividual}
+              />
+          </div>
+        </>
+      ): null}
 
       {fotosTurma?.length ? (
         <>

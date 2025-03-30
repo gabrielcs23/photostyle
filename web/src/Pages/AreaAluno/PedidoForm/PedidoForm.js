@@ -77,6 +77,10 @@ export default class PedidoForm extends Component {
                 PopUp.erro('Escolha uma opção de kit');
                 return;
             }
+            if (!this.state.item.opcao?.individual) {
+                PopUp.erro('Escolha foto individual do kit');
+                return;
+            }
             if (this.state.item.isTurma && !this.state.item.opcao?.turma) {
                 PopUp.erro('Escolha foto de turma do kit');
                 return;
@@ -117,9 +121,9 @@ export default class PedidoForm extends Component {
             }
 
             const item = Object.assign({}, this.state.item)
-            item.opcao = this.state.item.opcao.turma
+            item.opcao = `Individual: ${this.state.item.opcao.individual} ; Turma: ${this.state.item.opcao.turma}`
             if (this.state.item.opcao.irmao) {
-                item.opcao += ` + ${this.state.item.opcao.irmao}`;
+                item.opcao += ` ; Irmão: ${this.state.item.opcao.irmao} `;
             }
             const pedido = {
                 aluno: this.aluno,
@@ -221,6 +225,7 @@ export default class PedidoForm extends Component {
                     <SelecaoPedido
                         seleciona={opcoes => this.selecionaPedido(opcoes)}
                         tabela={this.tabela}
+                        opcoesIndividual={this.props.opcoes?.individual}
                         opcoesTurma={this.props.opcoes?.turma}
                         opcoesIrmaos={this.props.opcoes?.irmaos}
                         opcoesAdicionais={this.props.opcoes?.adicionais}

@@ -10,7 +10,6 @@ class Aluno {
     escola;
     turma;
     irmaoRel;
-    foto;
 
     constructor(nome, matricula, escola, turma) {
         this.nome = nome;

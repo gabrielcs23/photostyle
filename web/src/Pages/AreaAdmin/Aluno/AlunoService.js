@@ -48,22 +48,22 @@ class AlunoService extends BaseApiService {
         }
     }
 
-    async uploadFoto(id, foto) {
+    async uploadFotos(id, fotos) {
         try {
             const config = {
                 headers: {
                     'content-type': 'multipart/form-data'
                 }
             }
-            return await this.axiosInstance.post(`${BASE_URL}/${id}/foto`, foto, config);
+            return await this.axiosInstance.post(`${BASE_URL}/${id}/foto`, fotos, config);
         } catch (error) {
             throw this.parseError(error);
         }
     }
 
-    async removerFoto(id) {
+    async removerFoto(id, idFoto) {
         try {
-            await this.axiosInstance.delete(`${BASE_URL}/${id}/foto`);
+            await this.axiosInstance.delete(`${BASE_URL}/${id}/foto/${idFoto}`);
         } catch (error) {
             throw this.parseError(error);
         }

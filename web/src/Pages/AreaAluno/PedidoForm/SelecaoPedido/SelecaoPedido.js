@@ -58,8 +58,15 @@ export default class SelecaoPedido extends Component {
         const item = new ModeloPedido(itemSel.nome, itemSel.val, itemSel.isTurma, itemSel.isIrmao, itemSel.isOpcional, itemSel.isDigital);
         item.qtd = 1;
         item.total = item.val;
-        item.opcao = {turma: '', irmao: ''}
+        item.opcao = {individual: '', turma: '', irmao: ''}
         
+        this.setState({itemSel: item});
+        this.montaSelecao(item, this.state.extrasSel.slice());
+    }
+
+    selecionarFotoIndividual(idxOpcao) {
+        const item = this.state.itemSel;
+        item.opcao.individual = this.props.opcoesIndividual[idxOpcao].nome;
         this.setState({itemSel: item});
         this.montaSelecao(item, this.state.extrasSel.slice());
     }
@@ -200,13 +207,29 @@ export default class SelecaoPedido extends Component {
             if (item.isIrmao && !this.possuiFotosIrmaos()) {
                 return null;
             }
+            const opcoesIndividual = this.props.opcoesIndividual?.slice();
             const opcoesTurma = this.getOpcoes(true);
             const opcoesIrmaos = this.getOpcoes(false, true);
 
             const renderOpcaoKit = () => {
+                let opcaoIndividual;
                 let opcaoTurma;
                 let opcaoIrmao;
                 if (this.state.itemSel?.nome === item.nome && this.state.itemSel.qtd > 0) {
+                    opcaoIndividual = (
+                        <div
+                                className="input-field col s12 m6 select-opcoes select-opcoes-fotos"
+                                style={{paddingLeft: "3.5rem"}}
+                            >
+                                <CustomSelect
+                                    composedKey={`item${idx}.opcao`}
+                                    label={'Foto Individual'}
+                                    options={opcoesIndividual}
+                                    disabled={false}
+                                    selecionar={idxFoto => this.selecionarFotoIndividual(idxFoto)}
+                                />
+                            </div>
+                    )
                     if(this.possuiFotoTurma()) {
                         opcaoTurma = (
                             <div
@@ -243,6 +266,7 @@ export default class SelecaoPedido extends Component {
                 }
                 return (
                     <>
+                    {opcaoIndividual}
                     {opcaoTurma}
                     {opcaoIrmao}
                     </>

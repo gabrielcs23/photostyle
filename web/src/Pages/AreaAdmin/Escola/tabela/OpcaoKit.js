@@ -72,7 +72,6 @@ const OpcaoKit = ({kit, id, onChange}) => {
                         options={opcoes}
                         selecionar={sel => selecionar(sel, "isTurma")}
                         valorInicial={getOpcaoSelecionada(isTurma)}
-                        autoSelect
                     />
                 </div>
                 <div className="input-field col s12 m4 mb-3">
@@ -82,7 +81,6 @@ const OpcaoKit = ({kit, id, onChange}) => {
                         options={opcoes}
                         selecionar={sel => selecionar(sel, "isIrmao")}
                         valorInicial={getOpcaoSelecionada(isIrmao)}
-                        autoSelect
                     />
                 </div>
             </div>

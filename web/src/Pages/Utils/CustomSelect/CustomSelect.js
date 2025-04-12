@@ -13,7 +13,6 @@ class CustomSelect extends Component {
             this.state = {
                 selecionado: 0
             }
-            this.props.selecionar(0)
         } else if(this.props.valorInicial != null) {
             this.state = {
                 selecionado: this.props.valorInicial

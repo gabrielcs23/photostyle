@@ -72,7 +72,6 @@ const OpcaoExtra = ({extra, id, onChange}) => {
                         options={opcoes}
                         selecionar={sel => selecionar(sel, "isTurma")}
                         valorInicial={getOpcaoSelecionada(isTurma)}
-                        autoSelect
                     />
                 </div>
                 <div className="input-field col s12 m4 mb-3">
@@ -82,7 +81,6 @@ const OpcaoExtra = ({extra, id, onChange}) => {
                         options={opcoes}
                         selecionar={sel => selecionar(sel, "isIrmao")}
                         valorInicial={getOpcaoSelecionada(isIrmao)}
-                        autoSelect
                     />
                 </div>
             </div>
@@ -94,7 +92,6 @@ const OpcaoExtra = ({extra, id, onChange}) => {
                         options={opcoes}
                         selecionar={sel => selecionar(sel, "isDigital")}
                         valorInicial={getOpcaoSelecionada(isDigital)}
-                        autoSelect
                     />
                 </div>
                 <div className="input-field col s12 m4 mb-3">
@@ -104,7 +101,6 @@ const OpcaoExtra = ({extra, id, onChange}) => {
                         options={opcoes}
                         selecionar={sel => selecionar(sel, "isOpcional")}
                         valorInicial={getOpcaoSelecionada(isOpcional)}
-                        autoSelect
                     />
                 </div>
             </div>

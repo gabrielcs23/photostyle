@@ -361,7 +361,6 @@ export default class SelecaoPedido extends Component {
                                             composedKey={`extra${idx}.opcao${idxOpcao}.select`}
                                             label={'Opção'}
                                             options={[opcao]}
-                                            autoSelect
                                             disabled
                                         />
                                     </div>

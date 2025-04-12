@@ -2,6 +2,7 @@ package br.com.photostyle.api.service;
 
 import br.com.photostyle.api.component.GeradorCodigoAcesso;
 import br.com.photostyle.api.model.adapter.AlunoAdapter;
+import br.com.photostyle.api.model.dto.AlunoComFotoDTO;
 import br.com.photostyle.api.model.dto.AlunoDto;
 import br.com.photostyle.api.model.dto.FotoDto;
 import br.com.photostyle.api.model.dto.IrmaoRelDto;
@@ -104,8 +105,8 @@ public class AlunoService extends BaseService<AlunoEntity, AlunoDto> {
     }
 
     public List<AlunoDto> getAlunosByTurmaId(Long idTurma) {
-        List<AlunoEntity> alunos = repository.getAlunoEntitiesByTurma_Id(idTurma);
-        return adapter.entityListToDtoList(alunos);
+        List<AlunoComFotoDTO> alunos = repository.getAlunosComFotoDTOByTurmaId(idTurma);
+        return adapter.entityListComFotoToDtoList(alunos);
     }
 
     public List<AlunoDto> getAlunosNomesByTurmaId(Long idTurma) {

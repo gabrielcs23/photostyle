@@ -8,6 +8,7 @@ import br.com.photostyle.api.model.entity.TurmaEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -64,6 +65,19 @@ public class AlunoAdapter extends BaseAdapter<AlunoEntity, AlunoDto> {
     @Override
     public List<AlunoDto> entityListToDtoList(List<AlunoEntity> entityList) {
         return entityList.stream().map(this::createBasicDto).collect(Collectors.toList());
+    }
+
+    public List<AlunoDto> entityListComFotoToDtoList(List<AlunoComFotoDTO> entityList) {
+        return entityList.stream()
+                .map(alunoComFotoDTO -> {
+                    AlunoDto dto = createBasicDto(alunoComFotoDTO.getAluno());
+                    if (alunoComFotoDTO.getFoto() != null) {
+                        FotoDto foto = fotoAdapter.entityToDto(alunoComFotoDTO.getFoto());
+                        dto.setFotos(Collections.singletonList(foto));
+                    }
+                    return dto;
+                })
+                .collect(Collectors.toList());
     }
 
     private AlunoDto createBasicDto(AlunoEntity entity) {

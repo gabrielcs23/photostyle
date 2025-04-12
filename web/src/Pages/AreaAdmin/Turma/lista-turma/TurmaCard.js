@@ -21,10 +21,13 @@ const TurmaCard = (props) => {
 
                 <CardActions idModal={idModal} editar={props.editar} />
 
-                <div className="card-image"
+                <div className="card-image card-foto"
                     onClick={props.selecionar}
                 >
-                    <img src={turma.fotos ? turma.fotos[0]?.url : undefined} alt='' />
+                    {turma.fotos && turma.fotos.length > 0 ?
+                        <img src={turma.fotos[0].url} alt='' />
+                        : null
+                    }                    
                 </div>
 
 

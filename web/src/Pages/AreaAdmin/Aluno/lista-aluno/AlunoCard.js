@@ -20,8 +20,11 @@ const AlunoCard = (props) => {
                 
                 <CardActions idModal={idModal} editar={props.editar} />
 
-                <div className="card-image">
-                    <img src={aluno.foto?.url} alt='' />
+                <div className="card-image card-foto">
+                    {aluno.fotos && aluno.fotos.length > 0 ?
+                        <img src={aluno.fotos[0].url} alt='' />
+                        : null
+                    }
                 </div>
 
 

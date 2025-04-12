@@ -1,5 +1,7 @@
-.card-content.card-foto {
-    max-width: 50%;
+.card-foto {
+    display: flex;
+    align-content: center;
+    justify-content: center;
 }
 
 ul.browser-default {

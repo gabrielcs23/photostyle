@@ -13,7 +13,7 @@ const DisplayFotos = (props) => {
     ));
 
     return (
-        <div className="container">
+        <div className="container container-galeria">
             <ImageGallery
                 items={display}
                 showNav={false}

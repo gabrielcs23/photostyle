@@ -16,11 +16,14 @@ import br.com.photostyle.api.model.entity.tabela.OpcaoExtraEntity;
 import br.com.photostyle.api.model.entity.tabela.OpcaoKitEntity;
 import br.com.photostyle.api.model.entity.tabela.TabelaDePrecoEntity;
 import br.com.photostyle.api.repository.PedidoRepository;
+import com.lowagie.text.DocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import javax.transaction.Transactional;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,6 +52,9 @@ public class AcessoKitService {
 
     @Autowired
     private EmailService emailService;
+
+    @Autowired
+    private PdfService pdfService;
 
     public KitDto montarKit(String codAcesso) {
         AlunoEntity aluno = alunoService.getAlunoByCodAcesso(codAcesso);
@@ -143,7 +149,14 @@ public class AcessoKitService {
         templateModel.put("extras", pedido.getExtras());
         templateModel.put("valorTotal", pedido.getValorTotal());
 
-        emailService.enviarEmailSistema(templateModel);
+        try {
+            File etiquetaPdf = pdfService.gerarEtiquetaPdf(templateModel);
+            emailService.enviarEmailSistema(templateModel, etiquetaPdf);
+            etiquetaPdf.delete();
+        } catch (IOException | DocumentException e) {
+            e.printStackTrace();
+        }
+
         emailService.enviarEmailResponsavel(pedidoEntity.getEmail(), templateModel);
         return new RetornoPedidoDto(nPedido);
     }

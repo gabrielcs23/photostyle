@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <style>
+        @page {
+            size: 100mm 60mm;
+            margin: 0.8mm;
+        }
+        body {
+            font-family: Verdana, sans-serif;
+            font-size: 9pt;
+        }
+        p {
+            line-height: 0.8;
+            margin-bottom: 7px;
+        }
+    </style>
+</head>
+<body>
+    <div class="etiqueta-entrega">
+        <div style="overflow: auto; width: 100%;">
+            <div style="float: left;">
+                <h3 style="margin: 0;">Recordação Escolar</h3>
+            </div>
+            <div style="float: right;">
+                <img style="height: auto;
+                        width: 30mm !important;"
+                     src="https://photostyle-img-prod.s3.sa-east-1.amazonaws.com/logo/logoPhotoStylePb.png"
+                     alt="Photostyle Logo"
+                     title="Photostyle"
+                />
+            </div>
+        </div>
+        <div style="clear: both;">
+            <p>
+                <b>Pedido: </b>
+                <span th:text="${nPedido}"></span>
+            </p>
+            <p>
+                <b>Escola: </b>
+                <span th:text="${escola}"></span>
+            </p>
+            <p>
+                <b>Nome Aluno: </b>
+                <span th:text="${aluno}"></span>
+            </p>
+            <p>
+                <b>Turma: </b>
+                <span th:text="${turma}"></span>
+            </p>
+            <p>
+                <b>Responsável: </b>
+                <span th:text="${responsavel}"></span>
+            </p>
+        </div>
+    </div>
+</body>
+</html>

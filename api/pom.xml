@@ -119,6 +119,12 @@
 			<version>3.10</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.xhtmlrenderer</groupId>
+			<artifactId>flying-saucer-pdf</artifactId>
+			<version>9.1.22</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>

@@ -325,7 +325,7 @@ class AlunoForm extends Component {
                             id="nome"
                             type="text"
                             name="nome"
-                            value={nome}
+                            value={nome || ''}
                             onChange={this.inputChangeHandler}
                         />
                     </div>
@@ -338,7 +338,7 @@ class AlunoForm extends Component {
                             id="matricula"
                             type="text"
                             name="matricula"
-                            value={matricula}
+                            value={matricula || ''}
                             onChange={this.inputChangeHandler}
                         />
                     </div>
@@ -351,7 +351,7 @@ class AlunoForm extends Component {
                                 type="text"
                                 name="codAcesso"
                                 disabled={true}
-                                value={codigoAcesso}
+                                value={codigoAcesso || ''}
                             />
                         </div>
                         : null

@@ -37,7 +37,7 @@ class IrmaoSelect extends Component {
 
     listTurmas() {
         TurmaService.getListNomesPorEscola(this.props.escolaId)
-            .then(turmas => this.setState({turmas: turmas}))
+            .then(turmas => this.setState({ turmas: turmas }))
             .catch(error => PopUp.erro(error));
     }
 
@@ -46,24 +46,26 @@ class IrmaoSelect extends Component {
             .then(alunos => {
                 if (alunos.length === 0) {
                     PopUp.aviso('Esta turma não possui alunos');
-                    this.setState({alunos: []});
+                    this.setState({ alunos: [] });
                 } else {
                     alunos = alunos.filter(aluno => aluno.id !== this.props.alunoId);
-                    this.setState({alunos: alunos});
+                    this.setState({ alunos: alunos });
                 }
             })
             .catch(error => PopUp.erro(error));
     }
 
     selecionarTurma(idx) {
-        const turmaId = this.state.turmas[idx].id;
-        this.listAlunos(turmaId);
+        const turma = this.state.turmas[idx];
+        if (turma) this.listAlunos(turma.id);
     }
 
     selecionarIrmao(idx) {
         const irmao = this.state.alunos[idx];
-        this.setState({irmao: irmao});
-        this.props.selecionar(irmao);
+        if (irmao) {
+            this.setState({ irmao: irmao });
+            this.props.selecionar(irmao);
+        }
     }
 
 

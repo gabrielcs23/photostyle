@@ -18,6 +18,10 @@ import br.com.photostyle.api.model.entity.tabela.TabelaDePrecoEntity;
 import br.com.photostyle.api.repository.PedidoRepository;
 import com.lowagie.text.DocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -168,6 +172,16 @@ public class AcessoKitService {
             idString.insert(0, '0');
         }
         return '#' + idString.toString();
+    }
+
+    public Page<PedidoDto> listarPedidos(Pageable pageable) {
+        Pageable sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("id").descending());
+        Page<PedidoEntity> pedidos = pedidoRepository.findAll(sortedPageable);
+        return pedidos.map(pedido -> {
+            PedidoDto dto = pedidoAdapter.entityToDto(pedido);
+            dto.setNumeroPedido(geraNumeroPedido(pedido.getId()));
+            return dto;
+        });
     }
 
 }

@@ -1,17 +1,28 @@
 package br.com.photostyle.api.model.dto.pedido;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class PedidoDto {
 
+    private String numeroPedido;
     private String aluno;
     private String turma;
     private String escola;
     private String responsavel;
     private String tel;
     private String email;
+    private BigDecimal valorTotal;
     private OpcaoPedidoDto item;
     private List<OpcaoPedidoDto> extras;
+
+    public String getNumeroPedido() {
+        return numeroPedido;
+    }
+
+    public void setNumeroPedido(String numeroPedido) {
+        this.numeroPedido = numeroPedido;
+    }
 
     public String getAluno() {
         return aluno;
@@ -59,6 +70,14 @@ public class PedidoDto {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public BigDecimal getValorTotal() {
+        return valorTotal;
+    }
+
+    public void setValorTotal(BigDecimal valorTotal) {
+        this.valorTotal = valorTotal;
     }
 
     public OpcaoPedidoDto getItem() {

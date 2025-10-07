@@ -56,4 +56,39 @@ public class PedidoAdapter {
         return itemEntity;
     }
 
+    public PedidoDto entityToDto(PedidoEntity entity) {
+        PedidoDto dto = new PedidoDto();
+        dto.setAluno(entity.getNomeAluno());
+        dto.setTurma(entity.getNomeTurma());
+        dto.setEscola(entity.getNomeEscola());
+        dto.setResponsavel(entity.getNomeResponsavel());
+        dto.setTel(entity.getTelContato());
+        dto.setEmail(entity.getEmail());
+        dto.setValorTotal(entity.getValorTotal());
+
+        if (entity.getKit() != null) {
+            dto.setItem(this.itemEntityToDto(entity.getKit()));
+        }
+
+        if (!CollectionUtils.isEmpty(entity.getExtras())) {
+            List<OpcaoPedidoDto> extrasDto = new ArrayList<>();
+            for (ItemPedidoEntity extraEntity : entity.getExtras()) {
+                extrasDto.add(this.itemEntityToDto(extraEntity));
+            }
+            dto.setExtras(extrasDto);
+        }
+
+        return dto;
+    }
+
+    private OpcaoPedidoDto itemEntityToDto(ItemPedidoEntity item) {
+        OpcaoPedidoDto itemDto = new OpcaoPedidoDto();
+        itemDto.setNome(item.getNome());
+        itemDto.setOpcao(item.getOpcao());
+        itemDto.setQtd(item.getQtd());
+        itemDto.setVal(item.getValorInd());
+        itemDto.setTotal(item.getTotalInd());
+        return itemDto;
+    }
+
 }

@@ -5,6 +5,8 @@ import br.com.photostyle.api.model.dto.pedido.PedidoDto;
 import br.com.photostyle.api.model.dto.pedido.RetornoPedidoDto;
 import br.com.photostyle.api.service.AcessoKitService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +27,12 @@ public class AcessoKitController {
     public ResponseEntity<RetornoPedidoDto> fazerPedido(@RequestBody PedidoDto pedido) {
         RetornoPedidoDto retorno = service.realizarPedido(pedido);
         return ResponseEntity.ok(retorno);
+    }
+
+    @GetMapping("/pedido")
+    public ResponseEntity<Page<PedidoDto>> listarPedidos(Pageable pageable) {
+        Page<PedidoDto> pedidos = service.listarPedidos(pageable);
+        return ResponseEntity.ok(pedidos);
     }
 
 }

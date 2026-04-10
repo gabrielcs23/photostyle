@@ -73,6 +73,7 @@ class CustomSelect extends Component {
                 ...provided,
                 paddingTop: '2px',
                 paddingBottom: '2px',
+                flexWrap: 'wrap',
             }),
         };
 

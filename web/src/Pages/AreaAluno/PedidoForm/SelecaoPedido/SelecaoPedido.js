@@ -356,7 +356,7 @@ export default class SelecaoPedido extends Component {
                                             onChange={e => this.onChangeQtdOpcaoExtra(idx, opcao.nome, parseInt(e.target.value), this.cleaveRefs[idx])}
                                         />
                                     </div>
-                                    <div className="input-field col s12 m6 mb-3 select-opcoes">
+                                    <div className="input-field col s12 m6 l9 xl10 mb-3 select-opcoes">
                                         <CustomSelect
                                             composedKey={`extra${idx}.opcao${idxOpcao}.select`}
                                             label={'Opção'}

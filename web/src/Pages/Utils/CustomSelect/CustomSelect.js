@@ -51,6 +51,31 @@ class CustomSelect extends Component {
             }
         })
 
+        const customStyles = {
+            singleValue: (provided) => ({
+                ...provided,
+                whiteSpace: 'normal',
+                position: 'relative',
+                transform: 'none',
+                top: 'auto',
+                overflow: 'visible',
+            }),
+            option: (provided) => ({
+                ...provided,
+                whiteSpace: 'normal',
+            }),
+            control: (provided) => ({
+                ...provided,
+                height: 'auto',
+                minHeight: '38px',
+            }),
+            valueContainer: (provided) => ({
+                ...provided,
+                paddingTop: '2px',
+                paddingBottom: '2px',
+            }),
+        };
+
         return (
             <>
                 <span>{this.props.label}</span>
@@ -61,7 +86,8 @@ class CustomSelect extends Component {
                     isDisabled={this.props.disabled}
                     placeholder={'Selecione...'}
                     isClearable={false}
-                    backspaceRemovesValue={false}             
+                    backspaceRemovesValue={false}
+                    styles={customStyles}
                 />
             </>
         )

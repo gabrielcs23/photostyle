@@ -9,10 +9,10 @@ import br.com.photostyle.api.model.entity.IrmaoRelEntity;
 import br.com.photostyle.api.repository.IrmaoRelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 

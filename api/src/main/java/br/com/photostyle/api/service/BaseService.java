@@ -4,8 +4,8 @@ import br.com.photostyle.api.model.adapter.BaseAdapter;
 import br.com.photostyle.api.model.entity.BaseEntity;
 import br.com.photostyle.api.repository.BaseRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Optional;

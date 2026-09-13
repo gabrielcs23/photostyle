@@ -8,6 +8,8 @@ PhotoStyle é um sistema web de mostruário de fotos escolares. É um monorepo c
 
 Veja [README.md](README.md) para o conceito de negócio (Código de Acesso) e configuração de deploy na AWS (RDS, Elastic Beanstalk, S3).
 
+Melhorias já identificadas e ainda pendentes estão em [FOLLOWUPS.md](FOLLOWUPS.md), com evidência e objetivo de cada uma — consulte antes de abrir trabalho novo e remova o item ao concluí-lo.
+
 ## Direções gerais
 
 *(rascunho — ampliar conforme surgirem novos casos)*

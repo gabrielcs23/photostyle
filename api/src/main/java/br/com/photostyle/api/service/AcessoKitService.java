@@ -17,15 +17,17 @@ import br.com.photostyle.api.model.entity.tabela.OpcaoKitEntity;
 import br.com.photostyle.api.model.entity.tabela.TabelaDePrecoEntity;
 import br.com.photostyle.api.repository.PedidoRepository;
 import com.lowagie.text.DocumentException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import javax.transaction.Transactional;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -35,6 +37,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class AcessoKitService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(AcessoKitService.class);
 
     @Autowired
     private AlunoService alunoService;
@@ -158,7 +162,8 @@ public class AcessoKitService {
             emailService.enviarEmailSistema(templateModel, etiquetaPdf);
             etiquetaPdf.delete();
         } catch (IOException | DocumentException e) {
-            e.printStackTrace();
+            // O pedido já foi persistido e não deve ser desfeito por falha na etiqueta interna.
+            LOG.error("Falha ao gerar etiqueta ou enviar e-mail interno do pedido {}", nPedido, e);
         }
 
         emailService.enviarEmailResponsavel(pedidoEntity.getEmail(), templateModel);

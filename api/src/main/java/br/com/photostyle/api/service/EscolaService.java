@@ -12,21 +12,22 @@ import br.com.photostyle.api.model.entity.TurmaEntity;
 import br.com.photostyle.api.repository.EscolaRepository;
 import br.com.photostyle.api.utils.ImportacaoXlsxHelper;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.transaction.Transactional;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class EscolaService extends BaseService<EscolaEntity, EscolaDto> {
@@ -113,30 +114,36 @@ public class EscolaService extends BaseService<EscolaEntity, EscolaDto> {
         return stream;
     }
 
-    @Transactional
     public void importarTurmasEAlunos(EscolaEntity escola, MultipartFile xlsx) throws IOException {
+        Map<String, List<AlunoEntity>> alunosPorNomeDeSheet = lerPlanilha(escola, xlsx);
+
+        List<AlunoEntity> alunos = alunosPorNomeDeSheet.values().stream()
+                .flatMap(List::stream)
+                .collect(Collectors.toList());
+        alunoService.gerarCodigosAcesso(alunos);
+
+        turmaService.cadastrarTurmasComAlunos(escola, alunosPorNomeDeSheet);
+    }
+
+    private Map<String, List<AlunoEntity>> lerPlanilha(EscolaEntity escola, MultipartFile xlsx) throws IOException {
+        Map<String, List<AlunoEntity>> alunosPorNomeDeSheet = new LinkedHashMap<>();
         try (XSSFWorkbook wb = new XSSFWorkbook(xlsx.getInputStream())) {
-            Map<String, TurmaEntity> turmasPorNomeDeSheet = new HashMap<>();
-
             for (Sheet sheet : wb) {
-                String nomeSheet = sheet.getSheetName();
-                TurmaEntity turma = turmaService.cadastrarTurmaEmEscola(escola, nomeSheet.trim());
-                turmasPorNomeDeSheet.put(nomeSheet, turma);
-            }
-
-            for (String nomeSheet : turmasPorNomeDeSheet.keySet()) {
-                TurmaEntity turma = turmasPorNomeDeSheet.get(nomeSheet);
-                Sheet sheet = wb.getSheet(nomeSheet);
+                List<AlunoEntity> alunos = new ArrayList<>();
                 for (Row row : sheet) {
-                    Cell cell = row.getCell(0);
-                    String nomeAluno = ImportacaoXlsxHelper.getStringCellValue(cell);
+                    String nomeAluno = ImportacaoXlsxHelper.getStringCellValue(row.getCell(0));
                     if (nomeAluno == null || nomeAluno.isEmpty()) break;
-                    cell = row.getCell(1);
-                    String matrAluno = ImportacaoXlsxHelper.getStringCellValue(cell);
-                    alunoService.criarNovoAluno(escola, turma, nomeAluno, matrAluno);
+
+                    AlunoEntity aluno = new AlunoEntity();
+                    aluno.setEscola(escola);
+                    aluno.setNome(nomeAluno);
+                    aluno.setMatricula(ImportacaoXlsxHelper.getStringCellValue(row.getCell(1)));
+                    alunos.add(aluno);
                 }
+                alunosPorNomeDeSheet.put(sheet.getSheetName(), alunos);
             }
         }
+        return alunosPorNomeDeSheet;
     }
 
 }

@@ -8,10 +8,10 @@ import br.com.photostyle.api.model.entity.FotoEntity;
 import br.com.photostyle.api.model.entity.MostruarioEntity;
 import br.com.photostyle.api.repository.MostruarioRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;

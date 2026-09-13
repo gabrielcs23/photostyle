@@ -29,3 +29,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Configuração local ###
+# Precisa vir depois de "!**/src/main/**", que re-inclui tudo sob src/main.
+src/main/resources/application-dev.properties

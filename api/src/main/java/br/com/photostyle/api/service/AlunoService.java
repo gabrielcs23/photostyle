@@ -7,22 +7,28 @@ import br.com.photostyle.api.model.dto.AlunoDto;
 import br.com.photostyle.api.model.dto.FotoDto;
 import br.com.photostyle.api.model.dto.IrmaoRelDto;
 import br.com.photostyle.api.model.entity.AlunoEntity;
-import br.com.photostyle.api.model.entity.EscolaEntity;
 import br.com.photostyle.api.model.entity.FotoEntity;
 import br.com.photostyle.api.model.entity.TurmaEntity;
 import br.com.photostyle.api.repository.AlunoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 public class AlunoService extends BaseService<AlunoEntity, AlunoDto> {
+
+    private static final int MAX_RODADAS_VERIFICACAO = 3;
+    private static final int MAX_TENTATIVAS_POR_ALUNO = 50;
+    private static final int TAMANHO_LOTE_VERIFICACAO = 1000;
 
     @Autowired
     private AlunoRepository repository;
@@ -63,7 +69,7 @@ public class AlunoService extends BaseService<AlunoEntity, AlunoDto> {
             alunoEntity.setFotos(entityAnterior.getFotos());
             alunoEntity.setFotosOpcionais(entityAnterior.getFotosOpcionais());
         } else {
-            gerarCodigo(alunoEntity);
+            gerarCodigosAcesso(Collections.singletonList(alunoEntity));
         }
 
         AlunoEntity entitySaved = repository.save(alunoEntity);
@@ -79,14 +85,49 @@ public class AlunoService extends BaseService<AlunoEntity, AlunoDto> {
         return adapter.entityToDto(entitySaved);
     }
 
-    private void gerarCodigo(AlunoEntity aluno) {
-        String codigoAcesso;
-        boolean isCodUnico;
-        do {
-            codigoAcesso = geradorCodAcesso.gerarCodigo(aluno.getEscola().getNome(), aluno.getNome());
-            isCodUnico = repository.getByCodigoAcesso(codigoAcesso) == null;
-        } while (!isCodUnico);
-        aluno.setCodigoAcesso(codigoAcesso);
+    // Roda fora da transação de escrita: era a verificação de unicidade por aluno que mantinha
+    // a transação da importação aberta durante todo o processamento da planilha.
+    public void gerarCodigosAcesso(List<AlunoEntity> alunos) {
+        Set<String> indisponiveis = new HashSet<>();
+        List<AlunoEntity> pendentes = alunos;
+
+        for (int rodada = 0; rodada < MAX_RODADAS_VERIFICACAO && !pendentes.isEmpty(); rodada++) {
+            Set<String> gerados = new HashSet<>();
+            for (AlunoEntity aluno : pendentes) {
+                String codigo = gerarCodigoDisponivel(aluno, indisponiveis);
+                aluno.setCodigoAcesso(codigo);
+                indisponiveis.add(codigo);
+                gerados.add(codigo);
+            }
+            Set<String> existentes = buscarCodigosExistentes(gerados);
+            pendentes = pendentes.stream()
+                    .filter(aluno -> existentes.contains(aluno.getCodigoAcesso()))
+                    .collect(Collectors.toList());
+        }
+
+        if (!pendentes.isEmpty()) {
+            throw new RuntimeException("Não foi possível gerar código de acesso único para " + pendentes.size() + " aluno(s)");
+        }
+    }
+
+    private String gerarCodigoDisponivel(AlunoEntity aluno, Set<String> indisponiveis) {
+        for (int tentativa = 0; tentativa < MAX_TENTATIVAS_POR_ALUNO; tentativa++) {
+            String codigo = geradorCodAcesso.gerarCodigo(aluno.getEscola().getNome(), aluno.getNome());
+            if (!indisponiveis.contains(codigo)) {
+                return codigo;
+            }
+        }
+        throw new RuntimeException("Não foi possível gerar código de acesso único para o aluno " + aluno.getNome());
+    }
+
+    private Set<String> buscarCodigosExistentes(Set<String> codigos) {
+        List<String> lote = new ArrayList<>(codigos);
+        Set<String> existentes = new HashSet<>();
+        for (int i = 0; i < lote.size(); i += TAMANHO_LOTE_VERIFICACAO) {
+            int fim = Math.min(i + TAMANHO_LOTE_VERIFICACAO, lote.size());
+            existentes.addAll(repository.findCodigosAcessoExistentes(lote.subList(i, fim)));
+        }
+        return existentes;
     }
 
     @Transactional
@@ -190,14 +231,9 @@ public class AlunoService extends BaseService<AlunoEntity, AlunoDto> {
     }
 
     @Transactional
-    public void criarNovoAluno(EscolaEntity escola, TurmaEntity turma, String nome, String matr) {
-        AlunoEntity aluno = new AlunoEntity();
-        aluno.setEscola(escola);
-        aluno.setTurma(turma);
-        aluno.setNome(nome);
-        aluno.setMatricula(matr);
-        gerarCodigo(aluno);
-        repository.save(aluno);
+    public void salvarAlunosDaTurma(TurmaEntity turma, List<AlunoEntity> alunos) {
+        alunos.forEach(aluno -> aluno.setTurma(turma));
+        repository.saveAll(alunos);
     }
 
     public AlunoDto moverAlunoParaTurma(Long idAluno, Long idTurma) {

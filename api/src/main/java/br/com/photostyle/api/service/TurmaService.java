@@ -4,19 +4,21 @@ import br.com.photostyle.api.model.adapter.TurmaAdapter;
 import br.com.photostyle.api.model.dto.AlunoDto;
 import br.com.photostyle.api.model.dto.FotoDto;
 import br.com.photostyle.api.model.dto.TurmaDto;
+import br.com.photostyle.api.model.entity.AlunoEntity;
 import br.com.photostyle.api.model.entity.EscolaEntity;
 import br.com.photostyle.api.model.entity.FotoEntity;
 import br.com.photostyle.api.model.entity.TurmaEntity;
 import br.com.photostyle.api.repository.TurmaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -87,6 +89,14 @@ public class TurmaService extends BaseService<TurmaEntity, TurmaDto> {
         turma.setEscola(escola);
         turma.setNome(nomeTurma);
         return repository.save(turma);
+    }
+
+    @Transactional
+    public void cadastrarTurmasComAlunos(EscolaEntity escola, Map<String, List<AlunoEntity>> alunosPorNomeDeSheet) {
+        alunosPorNomeDeSheet.forEach((nomeSheet, alunos) -> {
+            TurmaEntity turma = cadastrarTurmaEmEscola(escola, nomeSheet.trim());
+            alunoService.salvarAlunosDaTurma(turma, alunos);
+        });
     }
 
     public List<TurmaDto> getTurmasPorEscolaId(Long idEscola) {

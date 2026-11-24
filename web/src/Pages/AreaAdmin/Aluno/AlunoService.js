@@ -40,6 +40,15 @@ class AlunoService extends BaseApiService {
         }
     }
 
+    async patchAluno(id, aluno) {
+        try {
+            const res = await this.axiosInstance.patch(`${BASE_URL}/${id}`, { nome: aluno.nome, matricula: aluno.matricula });
+            return res.data;
+        } catch (error) {
+            throw this.parseError(error);
+        }
+    }
+
     async deleteAluno(id) {
         try {
             await this.axiosInstance.delete(`${BASE_URL}/${id}`);
@@ -85,6 +94,39 @@ class AlunoService extends BaseApiService {
     async removerFotoOpcional(id, idFoto) {
         try {
             await this.axiosInstance.delete(`${BASE_URL}/${id}/opcionais/${idFoto}`)    
+        } catch (error) {
+            throw this.parseError(error);
+        }
+    }
+
+    async relacionarIrmaos(id, idsIrmaos) {
+        try {
+            const res = await this.axiosInstance.post(`${BASE_URL}/${id}/irmaos`, idsIrmaos);
+            return res.data;
+        } catch (error) {
+            throw this.parseError(error);
+        }
+    }
+
+    // retorna o grupo atualizado, ou vazio quando o grupo foi desfeito (204)
+    async removerIrmao(id, idIrmao) {
+        try {
+            const res = await this.axiosInstance.delete(`${BASE_URL}/${id}/irmaos/${idIrmao}`);
+            return res.data || null;
+        } catch (error) {
+            throw this.parseError(error);
+        }
+    }
+
+    async substituirIrmao(id, idIrmao, idIrmaoNovo) {
+        try {
+            const config = {
+                headers: {
+                    'content-type': 'application/json'
+                }
+            }
+            const res = await this.axiosInstance.patch(`${BASE_URL}/${id}/irmaos/${idIrmao}`, JSON.stringify(idIrmaoNovo), config);
+            return res.data;
         } catch (error) {
             throw this.parseError(error);
         }

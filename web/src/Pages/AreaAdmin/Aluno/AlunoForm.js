@@ -42,7 +42,8 @@ class AlunoForm extends Component {
                 validacao: this.validador.valido(),
                 canSubmit: false,
                 loading: false,
-                atualizarAluno: false
+                atualizarAluno: false,
+                irmaosPendentes: false
             }
         } else {
             this.state = {
@@ -58,7 +59,8 @@ class AlunoForm extends Component {
                 validacao: this.validador.valido(),
                 canSubmit: false,
                 loading: false,
-                atualizarAluno: false
+                atualizarAluno: false,
+                irmaosPendentes: false
             }
         }
     }
@@ -119,7 +121,10 @@ class AlunoForm extends Component {
         let aluno = this.getAluno();
 
         if (this.state.atualizarAluno) {
-            aluno = await AlunoService.postAluno(aluno)
+            const requisicao = this.state.id
+                ? AlunoService.patchAluno(this.state.id, aluno)
+                : AlunoService.postAluno(aluno);
+            aluno = await requisicao
                 .then(alunoAtualizado => {
                     if (this.state.id) {
                         PopUp.sucesso('Aluno(a) atualizado(a) com sucesso');
@@ -129,8 +134,8 @@ class AlunoForm extends Component {
                     return alunoAtualizado
                 })
                 .catch(error => this.props.handleUnauthorized(error))
-                .catch(() => {
-                    PopUp.erro('Erro no cadastro de aluno');
+                .catch(error => {
+                    PopUp.erro(this.getMensagemErro(error, 'Erro no cadastro de aluno'));
                     this.setState({ canSubmit: true });
                     return undefined
                 });
@@ -138,6 +143,14 @@ class AlunoForm extends Component {
 
         if (aluno == null) {
             return
+        }
+
+        // na edição, irmãos adicionados são gravados pelo endpoint de irmãos; no cadastro já vão no POST do aluno
+        if (this.state.id && this.state.irmaosPendentes) {
+            const vinculados = await this.relacionarIrmaosPendentes(aluno.id);
+            if (!vinculados) {
+                return
+            }
         }
 
         if (this.state.fotos?.length > 0) {
@@ -166,6 +179,34 @@ class AlunoForm extends Component {
 
         this.props.history.push(Rotas.ALUNO_LISTA)
         this.props.history.push(Rotas.ALUNO_EDICAO.replace(':id', aluno.id));
+    }
+
+    async relacionarIrmaosPendentes(idAluno) {
+        // o grupo aceita membros já vinculados, então o envio de todos os ids é idempotente
+        const idsIrmaos = (this.state.irmaoRel?.irmaos || [])
+            .map(irmao => irmao.id)
+            .filter(id => id != null);
+        if (idsIrmaos.length === 0) {
+            return true
+        }
+        try {
+            await AlunoService.relacionarIrmaos(idAluno, idsIrmaos);
+            this.setState({ irmaosPendentes: false });
+            PopUp.sucesso('Irmão(s) vinculado(s) com sucesso');
+            return true
+        } catch (error) {
+            try {
+                this.props.handleUnauthorized(error);
+            } catch (e) {
+                PopUp.erro(this.getMensagemErro(e, 'Erro ao vincular irmão(s)'));
+                this.setState({ canSubmit: true });
+            }
+            return false
+        }
+    }
+
+    getMensagemErro(error, padrao) {
+        return error?.status === 400 && typeof error.data === 'string' ? error.data : padrao;
     }
 
     getAluno() {
@@ -260,12 +301,20 @@ class AlunoForm extends Component {
         this.setState({ fotosOpcionais: fotos });
     }
 
+    // alteração pendente até o Salvar (irmão adicionado, foto de irmão)
     relacionarIrmao(irmaoRel) {
+        // no cadastro os irmãos vão no POST do aluno; na edição, pelo endpoint de irmãos
+        const atualizarAluno = this.state.id ? this.state.atualizarAluno : true;
         if (this.validador.valida(this.state)) {
-            this.setState({ irmaoRel: irmaoRel, canSubmit: true, atualizarAluno: true })
+            this.setState({ irmaoRel: irmaoRel, canSubmit: true, atualizarAluno: atualizarAluno, irmaosPendentes: true })
         } else {
-            this.setState({ irmaoRel: irmaoRel, atualizarAluno: true });
+            this.setState({ irmaoRel: irmaoRel, atualizarAluno: atualizarAluno, irmaosPendentes: true });
         }
+    }
+
+    // alteração já gravada pela API (irmão alterado ou removido)
+    atualizarIrmaoRel(irmaoRel) {
+        this.setState({ irmaoRel: irmaoRel });
     }
 
     async uploadFotosIrmaos(id, fotos) {
@@ -379,6 +428,8 @@ class AlunoForm extends Component {
                         escolaId={this.state.escola.id}
                         irmaoRel={this.state.irmaoRel}
                         relacionarIrmao={irmaoRel => this.relacionarIrmao(irmaoRel)}
+                        atualizarIrmaoRel={irmaoRel => this.atualizarIrmaoRel(irmaoRel)}
+                        handleUnauthorized={this.props.handleUnauthorized}
                         alunoId={this.state.id}
                     />
                     : null

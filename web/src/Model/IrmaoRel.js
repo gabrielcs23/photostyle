@@ -8,7 +8,8 @@ class IrmaoRel {
     constructor(irmaos, fotos, id, idRemover) {
         this.irmaos = [];
         irmaos.forEach(irmao => {
-            if (!idRemover || irmao.id !== idRemover) {
+            // linhas sem aluno selecionado ficam de fora
+            if (irmao.id != null && (!idRemover || irmao.id !== idRemover)) {
                 const irmaoCopia = new Aluno();
                 irmaoCopia.id = irmao.id;
                 irmaoCopia.nome = irmao.nome;

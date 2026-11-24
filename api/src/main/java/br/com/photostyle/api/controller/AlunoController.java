@@ -5,6 +5,7 @@ import br.com.photostyle.api.model.dto.FotoDto;
 import br.com.photostyle.api.model.dto.IrmaoRelDto;
 import br.com.photostyle.api.model.entity.AlunoEntity;
 import br.com.photostyle.api.service.AlunoService;
+import br.com.photostyle.api.service.exception.RegraNegocioException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -59,6 +60,15 @@ public class AlunoController {
         URI uri = uriBuilder.path(RESOURCE_URL + "/{id}").buildAndExpand(entityCreated.getId()).toUri();
 
         return ResponseEntity.created(uri).body(entityCreated);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<AlunoDto> atualizar(@PathVariable @NotNull Long id, @RequestBody AlunoDto aluno) {
+        AlunoDto dto = alunoService.atualizar(id, aluno);
+        if (dto == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(dto);
     }
 
     @DeleteMapping("/{id}")
@@ -132,6 +142,30 @@ public class AlunoController {
         return ResponseEntity.ok(relacionamento);
     }
 
+    @DeleteMapping("/{idAluno}/irmaos/{idIrmao}")
+    public ResponseEntity<IrmaoRelDto> removerIrmao(@PathVariable @NotNull Long idAluno, @PathVariable @NotNull Long idIrmao) {
+        AlunoEntity aluno = alunoService.getEntityPorId(idAluno);
+        if (aluno == null || aluno.getIrmaoRel() == null) {
+            return ResponseEntity.notFound().build();
+        }
+        IrmaoRelDto relacionamento = alunoService.removerIrmao(aluno, idIrmao);
+        if (relacionamento == null) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(relacionamento);
+    }
+
+    @PatchMapping("/{idAluno}/irmaos/{idIrmao}")
+    public ResponseEntity<IrmaoRelDto> substituirIrmao(@PathVariable @NotNull Long idAluno, @PathVariable @NotNull Long idIrmao,
+                                                       @RequestBody @NotNull Long idIrmaoNovo) {
+        AlunoEntity aluno = alunoService.getEntityPorId(idAluno);
+        if (aluno == null || aluno.getIrmaoRel() == null) {
+            return ResponseEntity.notFound().build();
+        }
+        IrmaoRelDto relacionamento = alunoService.substituirIrmao(aluno, idIrmao, idIrmaoNovo);
+        return ResponseEntity.ok(relacionamento);
+    }
+
     @PostMapping("/{idAluno}/foto-irmao")
     public ResponseEntity<FotoDto> adicionarFotoIrmao(@PathVariable @NotNull Long idAluno, @RequestParam("file") MultipartFile foto) {
         AlunoEntity aluno = alunoService.getEntityPorId(idAluno);
@@ -150,6 +184,11 @@ public class AlunoController {
         }
         alunoService.removerFotoIrmao(aluno, idFoto);
         return ResponseEntity.ok().build();
+    }
+
+    @ExceptionHandler(RegraNegocioException.class)
+    public ResponseEntity<String> handleRegraNegocio(RegraNegocioException e) {
+        return ResponseEntity.badRequest().body(e.getMessage());
     }
 
 }

@@ -60,17 +60,11 @@ public class AlunoService extends BaseService<AlunoEntity, AlunoDto> {
             return null;
         }
         AlunoEntity alunoEntity = adapter.dtoToEntity(aluno);
+        // cadastro sempre gera um aluno novo; edição de aluno existente é feita por atualizar
+        alunoEntity.setId(null);
         alunoEntity.setTurma(turma);
         alunoEntity.setEscola(turma.getEscola());
-
-        if (aluno.getId() != null) {
-            AlunoEntity entityAnterior = getEntityPorId(aluno.getId());
-            alunoEntity.setCodigoAcesso(entityAnterior.getCodigoAcesso());
-            alunoEntity.setFotos(entityAnterior.getFotos());
-            alunoEntity.setFotosOpcionais(entityAnterior.getFotosOpcionais());
-        } else {
-            gerarCodigosAcesso(Collections.singletonList(alunoEntity));
-        }
+        gerarCodigosAcesso(Collections.singletonList(alunoEntity));
 
         AlunoEntity entitySaved = repository.save(alunoEntity);
 
@@ -83,6 +77,23 @@ public class AlunoService extends BaseService<AlunoEntity, AlunoDto> {
         }
 
         return adapter.entityToDto(entitySaved);
+    }
+
+    // Edição parcial: altera apenas os campos informados na entidade já gravada, preservando
+    // código de acesso, fotos, turma e grupo de irmãos.
+    @Transactional
+    public AlunoDto atualizar(Long id, AlunoDto dto) {
+        AlunoEntity aluno = getEntityPorId(id);
+        if (aluno == null) {
+            return null;
+        }
+        if (dto.getNome() != null) {
+            aluno.setNome(dto.getNome());
+        }
+        if (dto.getMatricula() != null) {
+            aluno.setMatricula(dto.getMatricula());
+        }
+        return adapter.entityToDto(repository.save(aluno));
     }
 
     // Roda fora da transação de escrita: era a verificação de unicidade por aluno que mantinha
@@ -259,6 +270,14 @@ public class AlunoService extends BaseService<AlunoEntity, AlunoDto> {
 
     public IrmaoRelDto relacionarIrmaos(AlunoEntity aluno, List<Long> idsIrmaos) {
         return irmaoService.relacionaIrmaos(aluno, idsIrmaos);
+    }
+
+    public IrmaoRelDto removerIrmao(AlunoEntity aluno, Long idIrmao) {
+        return irmaoService.removerIrmao(aluno, idIrmao);
+    }
+
+    public IrmaoRelDto substituirIrmao(AlunoEntity aluno, Long idIrmaoAtual, Long idIrmaoNovo) {
+        return irmaoService.substituirIrmao(aluno, idIrmaoAtual, idIrmaoNovo);
     }
 
     public FotoDto adicionarFotoIrmao(AlunoEntity aluno, MultipartFile foto) {

@@ -1,0 +1,24 @@
+/* Botões de ação centralizados na faixa da caixa de seleção, abaixo do rótulo. */
+@media only screen and (min-width: 601px) {
+    .irmao-select-row {
+        display: flex;
+        align-items: stretch;
+    }
+
+    .irmao-select-row .irmao-acoes {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .irmao-select-row .irmao-acoes-botoes {
+        flex: 1;
+        display: flex;
+        align-items: center;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .irmao-select-row .irmao-acoes-rotulo {
+        display: none;
+    }
+}
